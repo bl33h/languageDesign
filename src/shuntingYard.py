@@ -4,6 +4,8 @@
 #Version: I
 #Creation: 02/02/2024
 #Last modification: 06/02/2024
+# References
+# [Sen. (2021). The Shunting Yard Algorithm - Aryak Sen - Medium. Medium. https://medium.com/@aryaks320/the-shunting-yard-algorithm-d2e961965384]
 
 def shuntingYard(infix):
     output = []
