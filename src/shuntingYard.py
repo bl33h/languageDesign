@@ -11,7 +11,7 @@ def shuntingYard(infix):
     output = []
     operators = []
     errors = []
-    precedence = {'*': 3, '+': 3, '|': 1, '.': 2, '?': 3}  # Ajuste de precedencia para '.' a 2
+    precedence = {'*': 3, '+': 3, '|': 1, '.': 2, '?': 3}
 
     for i, token in enumerate(infix):
         if token in '*+?' and (i == 0 or infix[i - 1] in '+*?|('):
