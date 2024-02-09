@@ -17,7 +17,7 @@ if __name__ == "__main__":
     
     nfa.display('nfa_graph', 'NFA Visualization')
 
-    string_w = input("Enter the string w: ")
+    string_w = input("enter the string w: ")
     if nfa_builder.analyzeNFA(string_w):
         print(f"the string'{string_w}' w∈L(r)")
     else:

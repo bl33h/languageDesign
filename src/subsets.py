@@ -43,7 +43,8 @@ class DFAFromNFA:
     def constructDfa(self):
         self.dfa_start_state = self.epsilonClosure([self.nfa.initialState])
         queue = [self.dfa_start_state]
-        self.dfa_states[self.dfa_start_state] = 0  # Mapping DFA state to an index
+        # mapping DFA state to an index
+        self.dfa_states[self.dfa_start_state] = 0  
 
         while queue:
             current_dfa_state = queue.pop(0)
