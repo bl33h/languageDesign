@@ -46,20 +46,26 @@ class dfaFromNfa:
     def constructDfa(self):
         self.dfaStartState = self.epsilonClosure([self.nfa.initialState])
         queue = [self.dfaStartState]
-        # mapping DFA state to an index
-        self.dfaStates[self.dfaStartState] = 0  
+        visited = set()
+        self.dfaStates[self.dfaStartState] = 0
 
         while queue:
             currentDfaState = queue.pop(0)
+            visited.add(currentDfaState)
+
             for symbol in self.nfa.symbols:
                 if symbol != epsilon:
                     nextState = self.epsilonClosure(self.move(currentDfaState, symbol))
-                    if nextState not in self.dfaStates:
+                    if nextState and nextState not in self.dfaStates:  
+                        # nextState is not empty and new checker
                         self.dfaStates[nextState] = len(self.dfaStates)
                         queue.append(nextState)
-                    self.dfaTransitions[currentDfaState][symbol].add(nextState)
-                    if any(s in self.nfa.acceptStates for s in nextState):
+                    # transitions record for existing states
+                    if nextState:  
+                        self.dfaTransitions[currentDfaState][symbol].add(nextState)
+                    if any(s in self.nfa.acceptStates for s in nextState) and nextState not in self.dfaAcceptedStates:
                         self.dfaAcceptedStates.append(nextState)
+        self.dfaAcceptedStates = [state for state in self.dfaStates.keys() if any(s in self.nfa.acceptStates for s in state)]
     
     def simulateDFA(self, inputString):
         print('\n------------\nDFA simulation')
