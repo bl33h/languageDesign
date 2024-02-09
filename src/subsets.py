@@ -4,13 +4,15 @@
 #Version: I
 #Creation: 07/02/2024
 #Last modification: 08/02/2024
+# References
+# GeeksforGeeks. (2022). Converting Epsilon NFA to DFA using Python and Graphviz. https://www.geeksforgeeks.org/converting-epsilon-nfa-to-dfa-using-python-and-graphviz/
 
 from collections import defaultdict
 from graphviz import Digraph
 from thompson import *
 from shuntingYard import *
 
-class DFAFromNFA:
+class dfaFromNfa:
     def __init__(self, nfa):
         self.nfa = nfa
         self.dfa_states = {}
@@ -58,7 +60,7 @@ class DFAFromNFA:
                     if any(s in self.nfa.acceptStates for s in next_state):
                         self.dfa_accept_states.append(next_state)
 
-    def displayDFA(self, fileName='dfa.gv', projectName='deterministic_finite_state_machine'):
+    def displayDFA(self, fileName='dfa.gv', projectName='deterministicFiniteStateMachine'):
         outputDir = 'dfaOutput'
         os.makedirs(outputDir, exist_ok=True)
         dotFilePath = os.path.join(outputDir, fileName)

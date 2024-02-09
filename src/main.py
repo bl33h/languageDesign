@@ -7,7 +7,7 @@
 
 from shuntingYard import shuntingYard   
 from thompson import thompson
-from subsets import DFAFromNFA
+from subsets import dfaFromNfa
 
 if __name__ == "__main__":
     regex_input = input("enter the regular expression: ")
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     nfa_builder = thompson(postfix)
     nfa = nfa_builder.nfa
     
-    nfa.display('nfa_graph', 'NFA Visualization')
+    nfa.display('nfaGraph', 'NFA Visualization')
 
     string_w = input("enter the string w: ")
     if nfa_builder.analyzeNFA(string_w):
@@ -23,5 +23,5 @@ if __name__ == "__main__":
     else:
         print(f"the string'{string_w}' w∉L(r)")
 
-    dfaFromNfa = DFAFromNFA(nfa)
-    dfaFromNfa.displayDFA('dfa_graph', 'DFA Visualization')
+    dfaFromNfa = dfaFromNfa(nfa)
+    dfaFromNfa.displayDFA('dfaGraph', 'DFA Visualization')
