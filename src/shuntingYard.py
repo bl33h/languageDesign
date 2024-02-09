@@ -7,6 +7,7 @@
 # References
 # [Sen. (2021). The Shunting Yard Algorithm - Aryak Sen - Medium. Medium. https://medium.com/@aryaks320/the-shunting-yard-algorithm-d2e961965384]
 
+# ------- postfix algorythm for a regex expression -------
 def shuntingYard(infix):
     output = []
     operators = []

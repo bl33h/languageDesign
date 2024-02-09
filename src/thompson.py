@@ -17,6 +17,7 @@ alphabet = [chr(i) for i in range(ord('A'), ord('z') + 1) if i <= ord('Z') or i 
 epsilon, kleeneStar, unionOperator, concatenationOperator = 'ε', '*', '|', '·'
 openParenthesis, closeParenthesis = '(', ')'
 
+# ------- main method -------
 class regexToAutomaton:
     def __init__(self, symbols=set([])):
         self.states = set()
@@ -121,7 +122,8 @@ class regexToAutomaton:
         graph.attr('node', shape='point')
         graph.edge('', 's' + str(self.initialState))
         graph.render(filename=dotFilePath, directory=outputDir, view=False)
-        
+
+# ------- mcnaughton yamada thompson method to convert regex to nfa -------     
 class thompson:
     def __init__(self, regex):
         self.regex = regex
@@ -241,6 +243,7 @@ class thompson:
         self.nfa = self.regexToAutomatonStack.pop()
         self.nfa.symbols = symbols
 
+    # ------- simulation and graphic display -------    
     def analyzeNFA(self, string):
         print('\n------------\nNFA simulation')
         string = string.replace('@', epsilon)

@@ -12,7 +12,7 @@ from graphviz import Digraph
 from thompson import *
 from shuntingYard import *
 
-# dfa convertion using the nfa output from thompson
+# ------- dfa convertion using the nfa output from thompson -------
 class dfaFromNfa:
     def __init__(self, nfa):
         self.nfa = nfa
@@ -112,23 +112,22 @@ class dfaFromNfa:
         graph.edge('', 's' + str(self.dfaStates[self.dfaStartState]))
         graph.render(filename=dotFilePath, directory=outputDir, view=False)
     
-    # minimize the dfa output
+    # ------- minimize the dfa output -------
     def minimize(self):
-        # accepting and non-accepting states
+        # non accepting states initial partition
         partition = [set(filter(lambda s: s in self.dfaAcceptedStates, self.dfaStates.keys())),
-                    set(filter(lambda s: s not in self.dfaAcceptedStates, self.dfaStates.keys()))]
+                     set(filter(lambda s: s not in self.dfaAcceptedStates, self.dfaStates.keys()))]
 
         newPartition = []
         while partition != newPartition:
-            if newPartition:
-                partition = newPartition
-            newPartition = []
-            for p in partition:
-                subsets = self.refinePartition(p, partition)
-                newPartition.extend(subsets)
+            newPartition = partition if not newPartition else newPartition
+            partition = []
+            for p in newPartition:
+                subsets = self.refinePartition(p, newPartition)
+                partition.extend(subsets if subsets else [p])
 
         # states and transitions based on the new partition update
-        self.statesTransitionsUpdate(newPartition)
+        self.statesTransitionsUpdate(partition)
 
     def refinePartition(self, group, partition):
         newRefGroups = []
@@ -147,47 +146,50 @@ class dfaFromNfa:
     def statesTransitionsUpdate(self, partition):
         newTransitions = defaultdict(lambda: defaultdict(set))
         newAcceptedStates = set()
+        newStates = {}
+        newStateIndex = 0
 
-        for idx, group in enumerate(partition):
-                self.dfaStartState = idx
-                break
+        for group in partition:
+            newStates[frozenset(group)] = newStateIndex
+            if any(state in self.dfaAcceptedStates for state in group):
+                newAcceptedStates.add(newStateIndex)
+            newStateIndex += 1
 
         for group in partition:
             for state in group:
-                if state in self.dfaAcceptedStates:
-                    newAcceptedStates.add(frozenset(group))
                 for symbol, nextStates in self.dfaTransitions[state].items():
                     for nextState in nextStates:
                         for p in partition:
                             if nextState in p:
-                                newTransitions[frozenset(group)][symbol].add(frozenset(p))
+                                newTransitions[newStates[frozenset(group)]][symbol].add(newStates[frozenset(p)])
                                 break
 
-        # state mappings to use the new partition index update
-        self.dfaStates = {frozenset(group): idx for idx, group in enumerate(partition)}
-        self.dfaTransitions = {self.dfaStates[group]: {symbol: {self.dfaStates[ns] for ns in nextStates} for symbol, nextStates in transitions.items()} for group, transitions in newTransitions.items()}
-        self.dfaAcceptedStates = [self.dfaStates[group] for group in newAcceptedStates]
+        self.dfaStates = newStates
+        self.dfaTransitions = newTransitions
+        self.dfaAcceptedStates = list(newAcceptedStates)
 
+        # start state for the minimized dfa set
+        for group in partition:
+            if self.dfaStartState in group:
+                self.dfaStartState = newStates[frozenset(group)]
+                break
+    
+    # ------- simulation and graphic display -------        
     def simulateMinimizedDFA(self, inputString):
         print('\n------------\nminimized DFA simulation')
         currentState = self.dfaStartState
-        print(f"closure: {currentState}")
+        print(f"Start state: {currentState}")
 
         for symbol in inputString:
             print(f"input symbol: {symbol}, current state: {currentState}")
-            if symbol in self.nfa.symbols: 
-                nextStateGroup = next(iter(self.dfaTransitions[currentState].get(symbol, set())), None)
-                if nextStateGroup is not None:
-                    print(f"transition state: {nextStateGroup}")
-                    currentState = nextStateGroup
-                else:
-                    print("no transition found for this symbol. string rejected.")
-                    return False
+            nextState = next(iter(self.dfaTransitions[currentState].get(symbol, set())), None)
+            if nextState is not None:
+                print(f"transition state: {nextState}")
+                currentState = nextState
             else:
-                print("symbol not in DFA alphabet. string rejected.")
+                print("no transition found for this symbol. string rejected.")
                 return False
 
-        # current state accept state checker
         isAccepted = currentState in self.dfaAcceptedStates
         print(f"final state: {currentState}.")
         print(f"\nstring {'accepted' if isAccepted else 'rejected'}.")
