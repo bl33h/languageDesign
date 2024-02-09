@@ -108,70 +108,56 @@ class dfaFromNfa:
     
     # minimize the dfa output
     def minimize(self):
-        states = list(self.dfaStates.keys())
-        equivalentStates = {}
-        # non-final and final states groups
-        equivalentGroups = [set(), set()] 
+        # accepting and non-accepting states
+        partition = [set(filter(lambda s: s in self.dfaAcceptedStates, self.dfaStates.keys())),
+                    set(filter(lambda s: s not in self.dfaAcceptedStates, self.dfaStates.keys()))]
 
-        # equivalent groups based on accepting and non-accepting states
-        for st in states:
-            if st in self.dfaAcceptedStates:
-                equivalentGroups[1].add(st)
-            else:
-                equivalentGroups[0].add(st)
+        newPartition = []
+        while partition != newPartition:
+            if newPartition:
+                partition = newPartition
+            newPartition = []
+            for p in partition:
+                subsets = self.refinePartition(p, partition)
+                newPartition.extend(subsets)
 
-        # distinguishable states identifier
-        def distinguishable(state1, state2):
-            for symbol in self.nfa.symbols:
-                nextState1 = next(iter(self.dfaTransitions[state1][symbol]), None)
-                nextState2 = next(iter(self.dfaTransitions[state2][symbol]), None)
-                if nextState1 != nextState2:
-                    return True
-            return False
+        # states and transitions based on the new partition update
+        self.statesTransitionsUpdate(newPartition)
 
-        currentGroup = 2 
-        while currentGroup < len(equivalentGroups):
-            # new groups for the next iteration
-            newGroups = [set(), set()]  
-            for st in equivalentGroups[currentGroup]:
-                distinguished = False
-                for stEq in equivalentGroups[currentGroup - 1]:
-                    if distinguishable(st, stEq):
-                        distinguished = True
-                        break
-                if distinguished:
-                    newGroups[0].add(st)
-                else:
-                    newGroups[1].add(st)
-            # remove the current group and add the new groups
-            equivalentGroups.pop(currentGroup)  
-            equivalentGroups.extend(newGroups)
-            currentGroup += 1
-
-        # equivalent states dictionary update
-        for i, group in enumerate(equivalentGroups):
+    def refinePartition(self, group, partition):
+        newRefGroups = []
+        for symbol in self.nfa.symbols:
+            if symbol == epsilon:
+                continue
+            symbolGroups = defaultdict(set)
             for state in group:
-                equivalentStates[state] = i
+                for p in partition:
+                    if any(followingState in p for followingState in self.move({state}, symbol)):
+                        symbolGroups[frozenset(p)].add(state)
+                        break
+            newRefGroups.extend(symbolGroups.values())
+        return newRefGroups if newRefGroups else [group]
 
-        # equivalent states minimization
-        minDfaStates = {}
-        minDfaTransitions = defaultdict(lambda: defaultdict(set))
-        minDfaAcceptedStates = set()
+    def statesTransitionsUpdate(self, partition):
+        # new state mappings
+        newStates = {frozenset(group): idx for idx, group in enumerate(partition)}
+        newTransitions = defaultdict(lambda: defaultdict(set))
+        newAcceptedStates = set()
 
-        for state, groupIndex in equivalentStates.items():
-            minDfaStates[groupIndex] = state
-            if state in self.dfaAcceptedStates:
-                minDfaAcceptedStates.add(groupIndex)
-            for symbol, transitions in self.dfaTransitions[state].items():
-                nextState = next(iter(transitions), None)
-                if nextState:
-                    followingGroup = equivalentStates[nextState]
-                    minDfaTransitions[groupIndex][symbol].add(followingGroup)
+        for group in partition:
+            for state in group:
+                if state in self.dfaAcceptedStates:
+                    newAcceptedStates.add(newStates[frozenset(group)])
+                for symbol, nextStates in self.dfaTransitions[state].items():
+                    for followingState in nextStates:
+                        for p in partition:
+                            if followingState in p:
+                                newTransitions[newStates[frozenset(group)]][symbol].add(newStates[frozenset(p)])
+                                break
 
-        # attributes update
-        self.dfaStates = minDfaStates
-        self.dfaTransitions = minDfaTransitions
-        self.dfaAcceptedStates = minDfaAcceptedStates
+        self.dfaStates = {state: idx for idx, state in enumerate(newStates)}
+        self.dfaTransitions = newTransitions
+        self.dfaAcceptedStates = [state for state in newAcceptedStates]
     
     def simulateMinimizedDFA(self, inputString):
         print('\n------------\nminimized DFA simulation')
