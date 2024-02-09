@@ -59,7 +59,31 @@ class dfaFromNfa:
                     self.dfa_transitions[current_dfa_state][symbol].add(next_state)
                     if any(s in self.nfa.acceptStates for s in next_state):
                         self.dfa_accept_states.append(next_state)
+    
+    def simulateDFA(self, inputString):
+        print('\n------------\nDFA simulation')
+        currentState = self.dfa_start_state
+        print(f"closure: {currentState}")
 
+        for symbol in inputString:
+            print(f"input symbol: {symbol}, current state: {currentState}")
+            if symbol in self.nfa.symbols and symbol != epsilon:
+                nextState = next(iter(self.dfa_transitions[currentState][symbol]), None)
+                if nextState:
+                    print(f"transition state: {nextState}")
+                    currentState = nextState
+                else:
+                    print("no transition found. string rejected.")
+                    return False
+            else:
+                print("symbol not in DFA alphabet. string rejected.")
+                return False
+        # current state is an accept state checker
+        isAccepted = currentState in self.dfa_accept_states
+        print(f"final state: {currentState}.")
+        print(f"\nstring {'accepted' if isAccepted else 'rejected'}.")
+        return isAccepted
+    
     def displayDFA(self, fileName='dfa.gv', projectName='deterministicFiniteStateMachine'):
         outputDir = 'dfaOutput'
         os.makedirs(outputDir, exist_ok=True)
