@@ -3,9 +3,7 @@
 #Author: Sara Echeverria
 #Version: I
 #Creation: 06/02/2024
-#Last modification: 08/02/2024
-
-# main.py
+#Last modification: 09/02/2024
 
 from shuntingYard import shuntingYard
 from thompson import thompson
@@ -28,19 +26,24 @@ if __name__ == "__main__":
             print("please, try again.")
 
     # nfa
-    nfa_builder = thompson(postfix)
-    nfa = nfa_builder.nfa
+    nfaCall = thompson(postfix)
+    nfa = nfaCall.nfa
     nfa.display('nfaGraph', 'NFA Visualization')
     string_w = input("enter the string w: ")
-    if nfa_builder.analyzeNFA(string_w):
+    if nfaCall.analyzeNFA(string_w):
         print(f"the string '{string_w}' w∈L(r)")
     else:
         print(f"the string '{string_w}' w∉L(r)")
 
     # dfa
-    dfa_builder = dfaFromNfa(nfa)
-    dfa_builder.displayDFA('dfaGraph', 'DFA Visualization')
-    if dfa_builder.simulateDFA(string_w):
+    dfaCall = dfaFromNfa(nfa)
+    dfaCall.displayDFA('dfaGraph', 'DFA Visualization')
+    if dfaCall.simulateDFA(string_w):
         print(f"the string '{string_w}' also w∈L(r) in DFA simulation.")
     else:
         print(f"the string '{string_w}' also w∉L(r) in DFA simulation.")
+
+    # min dfa
+    minDfaCall = dfaFromNfa(nfa)
+    minDfaCall.minimize()
+    minDfaCall.displayMinimizedDFA('minDfa', 'Minimized DFA Visualization')

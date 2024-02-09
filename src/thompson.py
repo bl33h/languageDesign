@@ -101,7 +101,7 @@ class regexToAutomaton:
         return transitionStates
 
     def display(self, fileName, projectName):
-        # nfaOutput directory exists checker
+        # nfaOutput directory exist_ok checker
         outputDir = 'nfaOutput'
         os.makedirs(outputDir, exist_ok=True)
         dotFilePath = os.path.join(outputDir, fileName)
@@ -263,4 +263,4 @@ class thompson:
         return currentState.intersection(self.nfa.acceptStates)
 
     def displayNFA(self):
-        self.nfa.display('nfa.gv', 'nondeterministic_finite_state_machine')
+        self.nfa.display('nfa.gv', 'nondeterministicFiniteStateMachine')

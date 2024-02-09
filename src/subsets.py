@@ -3,7 +3,7 @@
 #Author: Sara Echeverria
 #Version: I
 #Creation: 07/02/2024
-#Last modification: 08/02/2024
+#Last modification: 09/02/2024
 # References
 # GeeksforGeeks. (2022). Converting Epsilon NFA to DFA using Python and Graphviz. https://www.geeksforgeeks.org/converting-epsilon-nfa-to-dfa-using-python-and-graphviz/
 
@@ -12,13 +12,14 @@ from graphviz import Digraph
 from thompson import *
 from shuntingYard import *
 
+# dfa convertion using the nfa output from thompson
 class dfaFromNfa:
     def __init__(self, nfa):
         self.nfa = nfa
-        self.dfa_states = {}
-        self.dfa_start_state = None
-        self.dfa_accept_states = []
-        self.dfa_transitions = defaultdict(lambda: defaultdict(set))
+        self.dfaStates = {}
+        self.dfaStartState = None
+        self.dfaAcceptedStates = []
+        self.dfaTransitions = defaultdict(lambda: defaultdict(set))
         self.constructDfa()
 
     def epsilonClosure(self, states):
@@ -27,48 +28,48 @@ class dfaFromNfa:
         while stack:
             state = stack.pop()
             if state in self.nfa.transitions:
-                for to_state in self.nfa.transitions[state]:
-                    if epsilon in self.nfa.transitions[state][to_state] and to_state not in closure:
-                        closure.add(to_state)
-                        stack.append(to_state)
+                for toState in self.nfa.transitions[state]:
+                    if epsilon in self.nfa.transitions[state][toState] and toState not in closure:
+                        closure.add(toState)
+                        stack.append(toState)
         return frozenset(closure)
 
     def move(self, states, symbol):
-        next_states = set()
+        nextStates = set()
         for state in states:
             if state in self.nfa.transitions:
-                for to_state, symbols in self.nfa.transitions[state].items():
+                for toState, symbols in self.nfa.transitions[state].items():
                     if symbol in symbols:
-                        next_states.add(to_state)
-        return frozenset(next_states)
+                        nextStates.add(toState)
+        return frozenset(nextStates)
 
     def constructDfa(self):
-        self.dfa_start_state = self.epsilonClosure([self.nfa.initialState])
-        queue = [self.dfa_start_state]
+        self.dfaStartState = self.epsilonClosure([self.nfa.initialState])
+        queue = [self.dfaStartState]
         # mapping DFA state to an index
-        self.dfa_states[self.dfa_start_state] = 0  
+        self.dfaStates[self.dfaStartState] = 0  
 
         while queue:
-            current_dfa_state = queue.pop(0)
+            currentDfaState = queue.pop(0)
             for symbol in self.nfa.symbols:
                 if symbol != epsilon:
-                    next_state = self.epsilonClosure(self.move(current_dfa_state, symbol))
-                    if next_state not in self.dfa_states:
-                        self.dfa_states[next_state] = len(self.dfa_states)
-                        queue.append(next_state)
-                    self.dfa_transitions[current_dfa_state][symbol].add(next_state)
-                    if any(s in self.nfa.acceptStates for s in next_state):
-                        self.dfa_accept_states.append(next_state)
+                    nextState = self.epsilonClosure(self.move(currentDfaState, symbol))
+                    if nextState not in self.dfaStates:
+                        self.dfaStates[nextState] = len(self.dfaStates)
+                        queue.append(nextState)
+                    self.dfaTransitions[currentDfaState][symbol].add(nextState)
+                    if any(s in self.nfa.acceptStates for s in nextState):
+                        self.dfaAcceptedStates.append(nextState)
     
     def simulateDFA(self, inputString):
         print('\n------------\nDFA simulation')
-        currentState = self.dfa_start_state
+        currentState = self.dfaStartState
         print(f"closure: {currentState}")
 
         for symbol in inputString:
             print(f"input symbol: {symbol}, current state: {currentState}")
             if symbol in self.nfa.symbols and symbol != epsilon:
-                nextState = next(iter(self.dfa_transitions[currentState][symbol]), None)
+                nextState = next(iter(self.dfaTransitions[currentState][symbol]), None)
                 if nextState:
                     print(f"transition state: {nextState}")
                     currentState = nextState
@@ -78,8 +79,9 @@ class dfaFromNfa:
             else:
                 print("symbol not in DFA alphabet. string rejected.")
                 return False
+            
         # current state is an accept state checker
-        isAccepted = currentState in self.dfa_accept_states
+        isAccepted = currentState in self.dfaAcceptedStates
         print(f"final state: {currentState}.")
         print(f"\nstring {'accepted' if isAccepted else 'rejected'}.")
         return isAccepted
@@ -91,15 +93,104 @@ class dfaFromNfa:
         graph = Digraph(projectName, filename=fileName, format='png')
         graph.attr(rankdir='LR')
         graph.attr('node', shape='doublecircle')
-        for accept_state in self.dfa_accept_states:
-            graph.node('s' + str(self.dfa_states[accept_state]))
+        for acceptState in self.dfaAcceptedStates:
+            graph.node('s' + str(self.dfaStates[acceptState]))
 
         graph.attr('node', shape='circle')
-        for from_state, transitions in self.dfa_transitions.items():
-            for symbol, to_states in transitions.items():
-                for to_state in to_states:
-                    graph.edge('s' + str(self.dfa_states[from_state]), 's' + str(self.dfa_states[to_state]), label=symbol)
+        for fromState, transitions in self.dfaTransitions.items():
+            for symbol, toStates in transitions.items():
+                for toState in toStates:
+                    graph.edge('s' + str(self.dfaStates[fromState]), 's' + str(self.dfaStates[toState]), label=symbol)
 
         graph.attr('node', shape='point')
-        graph.edge('', 's' + str(self.dfa_states[self.dfa_start_state]))
+        graph.edge('', 's' + str(self.dfaStates[self.dfaStartState]))
+        graph.render(filename=dotFilePath, directory=outputDir, view=False)
+    
+    # minimize the dfa output
+    def minimize(self):
+        states = list(self.dfaStates.keys())
+        equivalentStates = {}
+        # non-final and final states groups
+        equivalentGroups = [set(), set()] 
+
+        # equivalent groups based on accepting and non-accepting states
+        for st in states:
+            if st in self.dfaAcceptedStates:
+                equivalentGroups[1].add(st)
+            else:
+                equivalentGroups[0].add(st)
+
+        # distinguishable states identifier
+        def distinguishable(state1, state2):
+            for symbol in self.nfa.symbols:
+                nextState1 = next(iter(self.dfaTransitions[state1][symbol]), None)
+                nextState2 = next(iter(self.dfaTransitions[state2][symbol]), None)
+                if nextState1 != nextState2:
+                    return True
+            return False
+
+        currentGroup = 2 
+        while currentGroup < len(equivalentGroups):
+            # new groups for the next iteration
+            newGroups = [set(), set()]  
+            for st in equivalentGroups[currentGroup]:
+                distinguished = False
+                for stEq in equivalentGroups[currentGroup - 1]:
+                    if distinguishable(st, stEq):
+                        distinguished = True
+                        break
+                if distinguished:
+                    newGroups[0].add(st)
+                else:
+                    newGroups[1].add(st)
+            # remove the current group and add the new groups
+            equivalentGroups.pop(currentGroup)  
+            equivalentGroups.extend(newGroups)
+            currentGroup += 1
+
+        # equivalent states dictionary update
+        for i, group in enumerate(equivalentGroups):
+            for state in group:
+                equivalentStates[state] = i
+
+        # equivalent states minimization
+        minDfaStates = {}
+        minDfaTransitions = defaultdict(lambda: defaultdict(set))
+        minDfaAcceptedStates = set()
+
+        for state, groupIndex in equivalentStates.items():
+            minDfaStates[groupIndex] = state
+            if state in self.dfaAcceptedStates:
+                minDfaAcceptedStates.add(groupIndex)
+            for symbol, transitions in self.dfaTransitions[state].items():
+                nextState = next(iter(transitions), None)
+                if nextState:
+                    followingGroup = equivalentStates[nextState]
+                    minDfaTransitions[groupIndex][symbol].add(followingGroup)
+
+        # attributes update
+        self.dfaStates = minDfaStates
+        self.dfaTransitions = minDfaTransitions
+        self.dfaAcceptedStates = minDfaAcceptedStates
+        
+    def displayMinimizedDFA(self, fileName='minimizedDfa.gv', projectName='minimizedDeterministicFiniteStateMachine'):
+        outputDir = 'minDfaOutput'
+        os.makedirs(outputDir, exist_ok=True)
+        dotFilePath = os.path.join(outputDir, fileName)
+        graph = Digraph(projectName, filename=fileName, format='png')
+        graph.attr(rankdir='LR')
+        graph.attr('node', shape='doublecircle')
+
+        for acceptState in self.dfaAcceptedStates:
+            graph.node('s' + str(acceptState))
+
+        graph.attr('node', shape='circle')
+
+        for fromState, transitions in self.dfaTransitions.items():
+            for symbol, toStates in transitions.items():
+                for toState in toStates:
+                    graph.edge('s' + str(fromState), 's' + str(toState), label=symbol)
+
+        graph.attr('node', shape='point')
+        graph.edge('', 's' + str(self.dfaStartState))
         graph.render(filename=dotFilePath, directory=outputDir, view=False)
