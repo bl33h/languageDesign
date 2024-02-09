@@ -137,28 +137,31 @@ class dfaFromNfa:
                         break
             newRefGroups.extend(symbolGroups.values())
         return newRefGroups if newRefGroups else [group]
-
+    
     def statesTransitionsUpdate(self, partition):
-        # new state mappings
-        newStates = {frozenset(group): idx for idx, group in enumerate(partition)}
         newTransitions = defaultdict(lambda: defaultdict(set))
         newAcceptedStates = set()
+
+        for idx, group in enumerate(partition):
+                self.dfaStartState = idx
+                break
 
         for group in partition:
             for state in group:
                 if state in self.dfaAcceptedStates:
-                    newAcceptedStates.add(newStates[frozenset(group)])
+                    newAcceptedStates.add(frozenset(group))
                 for symbol, nextStates in self.dfaTransitions[state].items():
-                    for followingState in nextStates:
+                    for nextState in nextStates:
                         for p in partition:
-                            if followingState in p:
-                                newTransitions[newStates[frozenset(group)]][symbol].add(newStates[frozenset(p)])
+                            if nextState in p:
+                                newTransitions[frozenset(group)][symbol].add(frozenset(p))
                                 break
 
-        self.dfaStates = {state: idx for idx, state in enumerate(newStates)}
-        self.dfaTransitions = newTransitions
-        self.dfaAcceptedStates = [state for state in newAcceptedStates]
-    
+        # state mappings to use the new partition index update
+        self.dfaStates = {frozenset(group): idx for idx, group in enumerate(partition)}
+        self.dfaTransitions = {self.dfaStates[group]: {symbol: {self.dfaStates[ns] for ns in nextStates} for symbol, nextStates in transitions.items()} for group, transitions in newTransitions.items()}
+        self.dfaAcceptedStates = [self.dfaStates[group] for group in newAcceptedStates]
+
     def simulateMinimizedDFA(self, inputString):
         print('\n------------\nminimized DFA simulation')
         currentState = self.dfaStartState
