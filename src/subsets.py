@@ -17,7 +17,7 @@ class DFAFromNFA:
         self.dfa_start_state = None
         self.dfa_accept_states = []
         self.dfa_transitions = defaultdict(lambda: defaultdict(set))
-        self.construct_dfa()
+        self.constructDfa()
 
     def epsilonClosure(self, states):
         closure = set(states)
@@ -40,7 +40,7 @@ class DFAFromNFA:
                         next_states.add(to_state)
         return frozenset(next_states)
 
-    def construct_dfa(self):
+    def constructDfa(self):
         self.dfa_start_state = self.epsilonClosure([self.nfa.initialState])
         queue = [self.dfa_start_state]
         self.dfa_states[self.dfa_start_state] = 0  # Mapping DFA state to an index
