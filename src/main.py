@@ -29,21 +29,25 @@ if __name__ == "__main__":
     nfaCall = thompson(postfix)
     nfa = nfaCall.nfa
     nfa.display('nfaGraph', 'NFA Visualization')
-    string_w = input("enter the string w: ")
-    if nfaCall.analyzeNFA(string_w):
-        print(f"the string '{string_w}' w∈L(r)")
+    wString = input("enter the string w: ")
+    if nfaCall.analyzeNFA(wString):
+        print(f"the string '{wString}' w∈L(r)")
     else:
-        print(f"the string '{string_w}' w∉L(r)")
+        print(f"the string '{wString}' w∉L(r)")
 
     # dfa
     dfaCall = dfaFromNfa(nfa)
     dfaCall.displayDFA('dfaGraph', 'DFA Visualization')
-    if dfaCall.simulateDFA(string_w):
-        print(f"the string '{string_w}' also w∈L(r) in DFA simulation.")
+    if dfaCall.simulateDFA(wString):
+        print(f"the string '{wString}' also w∈L(r) in DFA simulation.")
     else:
-        print(f"the string '{string_w}' also w∉L(r) in DFA simulation.")
+        print(f"the string '{wString}' also w∉L(r) in DFA simulation.")
 
     # min dfa
     minDfaCall = dfaFromNfa(nfa)
     minDfaCall.minimize()
     minDfaCall.displayMinimizedDFA('minDfa', 'Minimized DFA Visualization')
+    if dfaCall.simulateMinimizedDFA(wString):
+        print(f"the string '{wString}' also w∈L(r) in min DFA simulation.")
+    else:
+        print(f"the string '{wString}' also w∉L(r) in min DFA simulation.")

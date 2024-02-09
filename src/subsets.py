@@ -172,6 +172,31 @@ class dfaFromNfa:
         self.dfaStates = minDfaStates
         self.dfaTransitions = minDfaTransitions
         self.dfaAcceptedStates = minDfaAcceptedStates
+    
+    def simulateMinimizedDFA(self, inputString):
+        print('\n------------\nminimized DFA simulation')
+        currentState = self.dfaStartState
+        print(f"closure: {currentState}")
+
+        for symbol in inputString:
+            print(f"input symbol: {symbol}, current state: {currentState}")
+            if symbol in self.nfa.symbols: 
+                nextStateGroup = next(iter(self.dfaTransitions[currentState].get(symbol, set())), None)
+                if nextStateGroup is not None:
+                    print(f"transition state: {nextStateGroup}")
+                    currentState = nextStateGroup
+                else:
+                    print("no transition found for this symbol. string rejected.")
+                    return False
+            else:
+                print("symbol not in DFA alphabet. string rejected.")
+                return False
+
+        # current state accept state checker
+        isAccepted = currentState in self.dfaAcceptedStates
+        print(f"final state: {currentState}.")
+        print(f"\nstring {'accepted' if isAccepted else 'rejected'}.")
+        return isAccepted
         
     def displayMinimizedDFA(self, fileName='minimizedDfa.gv', projectName='minimizedDeterministicFiniteStateMachine'):
         outputDir = 'minDfaOutput'
