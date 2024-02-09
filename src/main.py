@@ -3,7 +3,7 @@
 #Author: Sara Echeverria
 #Version: I
 #Creation: 06/02/2024
-#Last modification: 06/02/2024
+#Last modification: 08/02/2024
 
 from shuntingYard import shuntingYard   
 from thompson import thompson
