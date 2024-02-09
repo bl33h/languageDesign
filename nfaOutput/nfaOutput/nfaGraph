@@ -1,0 +1,13 @@
+digraph "NFA Visualization" {
+	rankdir=LR
+	node [shape=doublecircle]
+	s6
+	node [shape=circle]
+	s4 -> s5 [label="ε"]
+	s2 -> s3 [label="ε"]
+	s1 -> s2 [label=1]
+	s3 -> s4 [label=1]
+	s5 -> s6 [label=0]
+	node [shape=point]
+	"" -> s1
+}

@@ -24,8 +24,10 @@ def shuntingYard(infix):
         elif token == ')':
             while operators and operators[-1] != '(':
                 output.append(operators.pop())
-            if operators: operators.pop()
-            else: errors.append("error: unbalanced parentheses. missing opening '('.")
+            if operators:
+                operators.pop()
+            else:
+                errors.append("error: unbalanced parentheses. missing opening '('.")
         elif token in precedence:
             while operators and precedence.get(operators[-1], 0) >= precedence[token]:
                 output.append(operators.pop())
@@ -38,8 +40,6 @@ def shuntingYard(infix):
         output.append(operators.pop())
 
     if not errors:
-        return ''.join(output)
+        return True, ''.join(output)
     else:
-        for error in errors:
-            print(error)
-        print("please, try again.")
+        return False, errors
