@@ -243,7 +243,6 @@ class thompson:
         self.nfa = self.regexToAutomatonStack.pop()
         self.nfa.symbols = symbols
 
-    # ------- simulation and graphic display -------    
     def analyzeNFA(self, string):
         print('\n------------\nNFA simulation')
         string = string.replace('@', epsilon)
