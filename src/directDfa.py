@@ -277,7 +277,7 @@ class directDfaBuilder:
             return self.trapstate
 
     def simulate(self, txt):
-        print('\n------------\nDFA simulation')
+        print('\n------------\ndirect DFA simulation')
         current = self.startstate
         print(f"closure: {current}")
 
