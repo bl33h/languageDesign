@@ -14,8 +14,8 @@ from graphviz import Digraph
 import os
 
 alphabet = [chr(i) for i in range(ord('A'), ord('z') + 1) if i <= ord('Z') or i >= ord('a')] + [str(i) for i in range(10)]
-epsilon, kleeneStar, unionOperator, concatenationOperator, optionalOperator = 'ε', '*', '|', '·', '?'
-openParenthesis, closeParenthesis = '(', ')'
+epsilon, kleeneStar, orOperator, concatenationOperator, optionalOperator, plusOperator = 'ε', '*', '|', '·', '?', '+'
+openParentheses, closedParentheses = '(', ')'
 
 # ------- main method -------
 class regexToAutomaton:
@@ -130,13 +130,15 @@ class thompson:
         self.createNFA()
 
     def comparePrecedence(op):
-        if op == unionOperator:
+        if op == orOperator:
             return 1
         elif op == concatenationOperator:
             return 2
         elif op == kleeneStar:
             return 3
         elif op == optionalOperator:
+            return 3
+        elif op == plusOperator:
             return 3
         else:       
             return 0
@@ -166,7 +168,34 @@ class thompson:
         
         return optionalRegexToAutomaton
         
+    def handlePlus(self, a):
+        # Update the states of automaton 'a' to ensure there's no overlap with the new states we're going to add
+        [a, m1] = a.updateStates(2)
         
+        # Initialize the new automaton for handling '+'
+        initialState = 1  # This will be the new initial state
+        nextState = m1    # This will be the new accept state, ensuring we have moved beyond all states in 'a'
+        
+        plusAutomaton = regexToAutomaton(a.symbols)
+        plusAutomaton.initialize(initialState)
+        plusAutomaton.acceptState(nextState)
+        
+        # Create an epsilon transition from the new initial state to the initial state of 'a'
+        plusAutomaton.createTransition(initialState, a.initialState, epsilon)
+        
+        # For every accept state of 'a', create two transitions:
+        # 1. An epsilon transition back to the initial state of 'a' to allow for repeated occurrences
+        # 2. An epsilon transition to the new accept state to allow for the sequence to end
+        for acceptState in a.acceptStates:
+            plusAutomaton.createTransition(acceptState, a.initialState, epsilon)
+            plusAutomaton.createTransition(acceptState, nextState, epsilon)
+        
+        # Include the transitions from 'a' into the new automaton
+        plusAutomaton.saveTransitions(a.transitions)
+
+        return plusAutomaton
+
+
     def handleUnion(a, b):   
         [a, m1] = a.updateStates(2)
         [b, m2] = b.updateStates(m1)
@@ -218,8 +247,8 @@ class thompson:
         for ch in self.regex:
             if ch in alphabet:
                 symbols.add(ch)
-            if ch in alphabet or ch == openParenthesis:
-                if prev != concatenationOperator and (prev in alphabet or prev in [kleeneStar, closeParenthesis]): 
+            if ch in alphabet or ch == openParentheses:
+                if prev != concatenationOperator and (prev in alphabet or prev in [kleeneStar, closedParentheses]): 
                     temp += concatenationOperator
             temp += ch
             prev = ch
@@ -229,10 +258,10 @@ class thompson:
         for ch in self.regex:
             if ch in alphabet:
                 temp += ch 
-            elif ch == openParenthesis:
+            elif ch == openParentheses:
                 stack.append(ch) 
-            elif ch == closeParenthesis:
-                while stack[-1] != openParenthesis:
+            elif ch == closedParentheses:
+                while stack[-1] != openParentheses:
                     temp += stack.pop()
                 stack.pop()    
             else:
@@ -248,7 +277,7 @@ class thompson:
         for ch in self.regex:
             if ch in alphabet:
                 self.regexToAutomatonStack.append(thompson.handleSymbol(ch)) 
-            elif ch == unionOperator:
+            elif ch == orOperator:
                 b = self.regexToAutomatonStack.pop()
                 a = self.regexToAutomatonStack.pop()
                 self.regexToAutomatonStack.append(thompson.handleUnion(a, b)) 
@@ -262,6 +291,9 @@ class thompson:
             elif ch == optionalOperator:
                 a = self.regexToAutomatonStack.pop()
                 self.regexToAutomatonStack.append(self.handleOpt(a))
+            elif ch == plusOperator:
+                a = self.regexToAutomatonStack.pop()
+                self.regexToAutomatonStack.append(self.handlePlus(a))
         self.nfa = self.regexToAutomatonStack.pop()
         self.nfa.symbols = symbols
 

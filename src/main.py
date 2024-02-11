@@ -86,6 +86,6 @@ if __name__ == "__main__":
             print("invalid option. please try again.")
 
         # ask if the user wants to do another task after each action, except for exiting
-        keepG = input("co you want to do another task? (yes/no): ")
+        keepG = input("do you want to do another task? (yes/no): ")
         if keepG.lower() != 'yes':
             break
