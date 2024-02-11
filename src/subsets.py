@@ -1,6 +1,6 @@
 #Copyright (C), 2024-2025, bl33h
 #FileName: subsets.py
-#Author: Sara Echeverria
+#Author: Sara Echeverria 
 #Version: I
 #Creation: 07/02/2024
 #Last modification: 09/02/2024

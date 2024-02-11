@@ -3,7 +3,7 @@ It's a project that provides a comprehensive toolkit for generating and visualiz
 
 <p align="center">
   <br>
-  <img src="https://media.giphy.com/media/citBl9yPwnUOs/giphy.gif" alt="pic" width="500">
+  <img src="https://mechomotive.com/wp-content/uploads/2021/07/I1-11.gif" alt="pic" width="500">
   <br>
 </p>
 
@@ -32,7 +32,7 @@ The main features of the application include:
 - Simulation: Simulates the operation of the DFA on input strings, determining whether the strings are accepted by the automaton.
 
 ## How To Use
-To clone and run this application, you'll need [Git](https://git-scm.com), [Python](https://www.python.org/downloads/) and  [Graphviz](https://graphviz.org)installed on your computer. From your command line:
+To clone and run this application, you'll need [Git](https://git-scm.com), [Python](https://www.python.org/downloads/) and  [Graphviz](https://graphviz.org) installed on your computer. From your command line:
 
 ```bash
 # Clone this repository

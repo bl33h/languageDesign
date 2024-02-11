@@ -1,6 +1,6 @@
 #Copyright (C), 2024-2025, bl33h
 #FileName: regexToAutomaton.py
-#Author: Sara Echeverria
+#Author: Sara Echeverria 
 #Version: I
 #Creation: 11/02/2024
 #Last modification: 07/02/2024
