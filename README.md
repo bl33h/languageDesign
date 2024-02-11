@@ -39,7 +39,7 @@ To clone and run this application, you'll need [Git](https://git-scm.com), [Pyth
 $ git clone https://github.com/bl33h/languageDesign/tree/finiteAutomataKit
 
 # Branch switch
-$ git checkout finiteAutomataKit
+$ git checkout finiteAutomatonKit
 
 # Run the program
 $ cd src
