@@ -273,11 +273,25 @@ class directDfaBuilder:
         except KeyError:
             return self.trapstate
 
-    def simulate(self,txt):
-        current=self.startstate
+    def simulate(self, txt):
+        print('\n------------\nDFA simulation')
+        current = self.startstate
+        print(f"closure: {current}")
+
         for c in txt:
-            current=self.move(current,c)
-        return current in self.finalstates
+            print(f"input symbol: {c}, current state: {current}")
+            nextState = self.move(current, c)
+            if nextState != self.trapstate:
+                print(f"transition state: {nextState}")
+                current = nextState
+            else:
+                print("no transition found. string rejected.")
+                return False
+
+        isAccepted = current in self.finalstates
+        print(f"final state: {current}.")
+        print(f"\nstring {'accepted' if isAccepted else 'rejected'}.")
+        return isAccepted
 
     # transition table construction [9.]
     def transitionTable(self):
