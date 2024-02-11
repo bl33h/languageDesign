@@ -6,8 +6,9 @@
 # Last modification: 09/02/2024
 
 from shuntingYard import shuntingYard
-from thompson import thompson
 from directDfa import directMethodDfa
+from thompson import thompson
+from pprint import pprint
 from subsets import *
 
 def mainMenu():
@@ -70,11 +71,18 @@ if __name__ == "__main__":
             regexInput = input("enter the regular expression: ")
             directDfaBuilder = directMethodDfa(regexInput)
             directDfaBuilder.displayDirectDFA(fileName='directDfaGraph', projectName='DirectMethodDFA')
+            transitionTable = directDfaBuilder.transitionTable()
             wString = input("enter the string w: ")
             if directDfaBuilder.simulate(wString):
                 print(f"the string '{wString}' w∈L(r)")
             else:
                 print(f"the string '{wString}' w∉L(r)")
+            
+            print("\n------------\ntransition table")
+            for state, transitions in transitionTable.items():
+                transitions_str = '\n'.join([f"{symbol} -> {nextState}" for symbol, nextState in transitions.items()])
+                print(f"state {state}: {transitions_str}")
+                    
             keepG = input("do you want to do another task? (yes/no): ")
             if keepG.lower() != 'yes':
                 break

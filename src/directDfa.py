@@ -287,7 +287,7 @@ class directDfaBuilder:
             else:
                 print("no transition found. string rejected.")
                 return False
-
+        
         isAccepted = current in self.finalstates
         print(f"final state: {current}.")
         print(f"\nstring {'accepted' if isAccepted else 'rejected'}.")
