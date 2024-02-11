@@ -7,6 +7,7 @@
 
 from shuntingYard import shuntingYard
 from thompson import thompson
+from directDfa import directMethodDfa
 from subsets import *
 
 def mainMenu():
@@ -16,7 +17,7 @@ def mainMenu():
     print("- to exit insert [3.]")
     choice = input("\n option selected: ")
     return choice
-
+    
 if __name__ == "__main__":
     while True:
         choice = mainMenu()
@@ -24,8 +25,8 @@ if __name__ == "__main__":
         # regex to NFA and DFA with its minimization
         if choice == '1':
             while True:
-                regex_input = input("enter the regular expression: ")
-                success, result = shuntingYard(regex_input)
+                regexInput = input("enter the regular expression: ")
+                success, result = shuntingYard(regexInput)
 
                 if success:
                     postfix = result
@@ -39,7 +40,7 @@ if __name__ == "__main__":
             nfaCall = thompson(postfix)
             nfa = nfaCall.nfa
             nfa.display('nfaGraph', 'NFA Visualization')
-            wString = input("Enter the string w: ")
+            wString = input("enter the string w: ")
             if nfaCall.analyzeNFA(wString):
                 print(f"the string '{wString}' w∈L(r)")
             else:
@@ -60,15 +61,22 @@ if __name__ == "__main__":
             else:
                 print(f"the string '{wString}' also w∉L(r) in min DFA simulation.")
             
-            another_task = input("do you want to do another task? (yes/no): ")
-            if another_task.lower() != 'yes':
+            keepG = input("do you want to do another task? (yes/no): ")
+            if keepG.lower() != 'yes':
                 break
         
         # regex to NFA by direct method
         elif choice == '2':
-            print("hello")
-            another_task = input("do you want to do another task? (yes/no): ")
-            if another_task.lower() != 'yes':
+            regexInput = input("enter the regular expression: ")
+            directDfaBuilder = directMethodDfa(regexInput)
+            directDfaBuilder.displayDirectDFA(fileName='directDfaGraph', projectName='DirectMethodDFA')
+            wString = input("enter the string w: ")
+            if directDfaBuilder.simulate(wString):
+                print(f"the string '{wString}' w∈L(r)")
+            else:
+                print(f"the string '{wString}' w∉L(r)")
+            keepG = input("do you want to do another task? (yes/no): ")
+            if keepG.lower() != 'yes':
                 break
         
         # exit
