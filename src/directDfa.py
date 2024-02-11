@@ -3,7 +3,7 @@
 #Author: Sara Echeverria
 #Version: I
 #Creation: 06/02/2024
-#Last modification: 09/02/2024
+#Last modification: 11/02/2024
 
 from string import *
 from graphviz import Digraph
@@ -135,13 +135,13 @@ class syntaxTree:
             self.generate(rt.c2)
             rt.c1=Node(next(self.__z))
             self.generate(rt.c1)
-        rt.nullable=calcNullable(rt)
+        rt.nullable=nullableFunc(rt)
         rt.firstpos=firstPosition(rt)
         rt.lastpos=lastPosition(rt)
         followingPosition(rt)
         
 # leaves labeled [3.] & nullable function [4.]
-def calcNullable(n:Node):
+def nullableFunc(n:Node):
     if n is None:
         return False
     # leaf node
@@ -151,10 +151,11 @@ def calcNullable(n:Node):
             return True
         if n._id:
             return False
+    # operators
     if n.v==op['|']:
-        return calcNullable(n.c1) or calcNullable(n.c2)
+        return nullableFunc(n.c1) or nullableFunc(n.c2)
     if n.v==op['.']:
-        return calcNullable(n.c1) and calcNullable(n.c2)
+        return nullableFunc(n.c1) and nullableFunc(n.c2)
     if n.v==op['*']:
         return True
 
@@ -300,6 +301,27 @@ class directDfaBuilder:
 
     def __getitem__(self,state):
         return self.__dtrans[state]
+
+# error management
+def errorManagement (regex):
+    # operations without operands
+    if regex.startswith('*') or regex.startswith('?') or regex.startswith('+')or regex.startswith('|') or regex.startswith('.'):
+        return "error: operation without operands."
+
+    # balanced parentheses
+    openParentheses = 0
+    for char in regex:
+        if char == '(':
+            openParentheses += 1
+        elif char == ')':
+            openParentheses -= 1
+            if openParentheses < 0: 
+                return "error: unmatched closing parentheses."
+    
+    if openParentheses > 0:
+        return "error: unmatched opening parentheses."
+    
+    return "OK"
 
 # main function
 def directMethodDfa(regex):

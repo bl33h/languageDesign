@@ -3,12 +3,11 @@
 # Author: Sara Echeverria
 # Version: I
 # Creation: 06/02/2024
-# Last modification: 09/02/2024
+# Last modification: 11/02/2024
 
 from shuntingYard import shuntingYard
-from directDfa import directMethodDfa
+from directDfa import directMethodDfa, errorManagement
 from thompson import thompson
-from pprint import pprint
 from subsets import *
 
 def mainMenu():
@@ -68,7 +67,16 @@ if __name__ == "__main__":
         
         # regex to NFA by direct method
         elif choice == '2':
-            regexInput = input("enter the regular expression: ")
+            while True:  # Add a loop to keep asking until a valid regex is provided
+                regexInput = input("enter the regular expression: ")
+                validationMessage = errorManagement(regexInput)
+
+                if validationMessage == "OK":
+                    break
+                else:
+                    print(validationMessage)
+                    print("please re-enter the regular expression.")
+                
             directDfaBuilder = directMethodDfa(regexInput)
             directDfaBuilder.displayDirectDFA(fileName='directDfaGraph', projectName='DirectMethodDFA')
             transitionTable = directDfaBuilder.transitionTable()
@@ -78,7 +86,7 @@ if __name__ == "__main__":
             else:
                 print(f"the string '{wString}' w∉L(r)")
             
-            print("\n------------\ntransition table")
+            print("\n------------\ntransitions table")
             for state, transitions in transitionTable.items():
                 transitions_str = '\n'.join([f"{symbol} -> {nextState}" for symbol, nextState in transitions.items()])
                 print(f"state {state}: {transitions_str}")

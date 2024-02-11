@@ -2,7 +2,7 @@
 #FileName: regexToAutomaton.py
 #Author: Sara Echeverria
 #Version: I
-#Creation: 06/02/2024
+#Creation: 11/02/2024
 #Last modification: 07/02/2024
 # References
 # [Attaching NFA Fragments together (regexToAutomaton). (n.d.). Stack Overflow. https://stackoverflow.com/questions/50916898/attaching-nfa-fragments-together-regexToAutomaton]
