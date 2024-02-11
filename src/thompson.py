@@ -1,4 +1,4 @@
-#Copyright (C), 2024-2025, bl33h
+#Copyright (C), 2024-2025, bl33h 
 #FileName: regexToAutomaton.py
 #Author: Sara Echeverria 
 #Version: I
