@@ -1,0 +1,12 @@
+digraph DirectMethodDFA {
+	rankdir=LR
+	start [label="" shape=none]
+	node [shape=doublecircle]
+	s1 [label=s1]
+	node [shape=circle]
+	s0 [label=s0]
+	start -> s0
+	s0 -> s0 [label=a]
+	s0 -> s0 [label=b]
+	s0 -> s1 [label=c]
+}

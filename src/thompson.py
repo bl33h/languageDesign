@@ -14,7 +14,7 @@ from graphviz import Digraph
 import os
 
 alphabet = [chr(i) for i in range(ord('A'), ord('z') + 1) if i <= ord('Z') or i >= ord('a')] + [str(i) for i in range(10)]
-epsilon, kleeneStar, unionOperator, concatenationOperator = 'ε', '*', '|', '·'
+epsilon, kleeneStar, unionOperator, concatenationOperator, optionalOperator = 'ε', '*', '|', '·', '?'
 openParenthesis, closeParenthesis = '(', ')'
 
 # ------- main method -------
@@ -136,6 +136,8 @@ class thompson:
             return 2
         elif op == kleeneStar:
             return 3
+        elif op == optionalOperator:
+            return 3
         else:       
             return 0
 
@@ -148,6 +150,23 @@ class thompson:
         basicregexToAutomaton.createTransition(initialState, nextState, inputSymbol)
         return basicregexToAutomaton
 
+    def handleOpt(self, a):
+        [a, m1] = a.updateStates(2)
+        initialState = 1
+        nextState = m1
+        optionalRegexToAutomaton = regexToAutomaton(a.symbols)
+        optionalRegexToAutomaton.initialize(initialState)
+        optionalRegexToAutomaton.acceptState(nextState)
+        
+        # create an epsilon transition from the initial state to the new accept state to make the element optional
+        optionalRegexToAutomaton.createTransition(initialState, a.initialState, epsilon)
+        optionalRegexToAutomaton.createTransition(a.acceptStates[0], nextState, epsilon)
+        optionalRegexToAutomaton.createTransition(initialState, nextState, epsilon)
+        optionalRegexToAutomaton.saveTransitions(a.transitions)
+        
+        return optionalRegexToAutomaton
+        
+        
     def handleUnion(a, b):   
         [a, m1] = a.updateStates(2)
         [b, m2] = b.updateStates(m1)
@@ -240,6 +259,9 @@ class thompson:
             elif ch == kleeneStar:
                 a = self.regexToAutomatonStack.pop()
                 self.regexToAutomatonStack.append(thompson.handleKleeneStar(a))
+            elif ch == optionalOperator:
+                a = self.regexToAutomatonStack.pop()
+                self.regexToAutomatonStack.append(self.handleOpt(a))
         self.nfa = self.regexToAutomatonStack.pop()
         self.nfa.symbols = symbols
 
