@@ -169,34 +169,29 @@ class thompson:
         return optionalRegexToAutomaton
         
     def handlePlus(self, a):
-        # Update the states of automaton 'a' to ensure there's no overlap with the new states we're going to add
         [a, m1] = a.updateStates(2)
         
-        # Initialize the new automaton for handling '+'
-        initialState = 1  # This will be the new initial state
-        nextState = m1    # This will be the new accept state, ensuring we have moved beyond all states in 'a'
+        initialState = 1
+        nextState = m1
         
         plusAutomaton = regexToAutomaton(a.symbols)
         plusAutomaton.initialize(initialState)
         plusAutomaton.acceptState(nextState)
         
-        # Create an epsilon transition from the new initial state to the initial state of 'a'
+        # create an epsilon transition from the new initial state to the initial state of 'a'
         plusAutomaton.createTransition(initialState, a.initialState, epsilon)
         
-        # For every accept state of 'a', create two transitions:
-        # 1. An epsilon transition back to the initial state of 'a' to allow for repeated occurrences
-        # 2. An epsilon transition to the new accept state to allow for the sequence to end
+        # for every accept state of 'a', create two transitions
         for acceptState in a.acceptStates:
             plusAutomaton.createTransition(acceptState, a.initialState, epsilon)
             plusAutomaton.createTransition(acceptState, nextState, epsilon)
         
-        # Include the transitions from 'a' into the new automaton
         plusAutomaton.saveTransitions(a.transitions)
 
         return plusAutomaton
 
 
-    def handleUnion(a, b):   
+    def handlerOr(a, b):   
         [a, m1] = a.updateStates(2)
         [b, m2] = b.updateStates(m1)
         initialState = 1
@@ -280,7 +275,7 @@ class thompson:
             elif ch == orOperator:
                 b = self.regexToAutomatonStack.pop()
                 a = self.regexToAutomatonStack.pop()
-                self.regexToAutomatonStack.append(thompson.handleUnion(a, b)) 
+                self.regexToAutomatonStack.append(thompson.handlerOr(a, b)) 
             elif ch == concatenationOperator:
                 b = self.regexToAutomatonStack.pop()
                 a = self.regexToAutomatonStack.pop()
