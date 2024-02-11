@@ -4,6 +4,8 @@
 #Version: I
 #Creation: 06/02/2024
 #Last modification: 11/02/2024
+# References
+# [Urbina. (2022). DFA DIRECTO. Google Docs. https://docs.google.com/presentation/d/1XTelAJ3XDQ49NNDzGuTGTrVueULPrZIT/edit#slide=id.p15]
 
 from string import *
 from graphviz import Digraph
