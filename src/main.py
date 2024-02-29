@@ -5,9 +5,10 @@
 # Creation: 06/02/2024
 # Last modification: 11/02/2024
 
-from directDfa import directMethodDfa, errorManagement
-from thompson import thompson
-from subsets import *
+from directDfa.regexUtilities import errorManagement
+from directDfa.directDfaBuilder import directMethodDfa
+from oldSchoolDfa.thompson import thompson
+from oldSchoolDfa.subsets import *
 
 def mainMenu():
     print("\n------- welcome to your finite automaton kit generator -------")

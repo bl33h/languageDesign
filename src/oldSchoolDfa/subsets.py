@@ -9,8 +9,8 @@
 
 from collections import defaultdict
 from graphviz import Digraph
-from thompson import *
-from shuntingYard import *
+from oldSchoolDfa.thompson import *
+from oldSchoolDfa.shuntingYard import *
 
 # ------- dfa convertion using the nfa output from thompson -------
 class dfaFromNfa:
