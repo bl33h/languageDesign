@@ -11,6 +11,10 @@ from collections import defaultdict
 from graphviz import Digraph
 import os
 
+alphabet = [chr(i) for i in range(ord('A'), ord('z') + 1) if i <= ord('Z') or i >= ord('a')] + [str(i) for i in range(10)]
+epsilon, kleeneStar, orOperator, concatenationOperator, optionalOperator, plusOperator = 'ε', '*', '|', '·', '?', '+'
+openParentheses, closedParentheses = '(', ')'
+
 class regexToAutomaton:
     def __init__(self, symbols=set([])):
         self.states = set()
