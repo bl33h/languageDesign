@@ -7,40 +7,111 @@
 # References
 # [Sen. (2021). The Shunting Yard Algorithm - Aryak Sen - Medium. Medium. https://medium.com/@aryaks320/the-shunting-yard-algorithm-d2e961965384]
 
-# ------- postfix algorythm for a regex expression -------
-def shuntingYard(infix):
-    output = []
-    operators = []
-    errors = []
-    precedence = {'*': 3, '+': 3, '|': 1, '.': 2, '?': 3}
+from collections import defaultdict
+from graphviz import Digraph
+import os
 
-    for i, token in enumerate(infix):
-        if token in '*+?' and (i == 0 or infix[i - 1] in '+*?|('):
-            errors.append(f"error: operation {token} without operands.")
-            break
-        elif token.isalnum() or token in '[-]ε':
-            output.append(token)
-        elif token == '(':
-            operators.append(token)
-        elif token == ')':
-            while operators and operators[-1] != '(':
-                output.append(operators.pop())
-            if operators:
-                operators.pop()
-            else:
-                errors.append("error: unbalanced parentheses. missing opening '('.")
-        elif token in precedence:
-            while operators and precedence.get(operators[-1], 0) >= precedence[token]:
-                output.append(operators.pop())
-            operators.append(token)
+class regexToAutomaton:
+    def __init__(self, symbols=set([])):
+        self.states = set()
+        self.symbols = symbols    
+        self.transitions = defaultdict(defaultdict)
+        self.initialState = None
+        self.acceptStates = []
 
-    while operators:
-        if operators[-1] == '(':
-            errors.append("error: unbalanced parentheses. missing closing ')'.")
-            break
-        output.append(operators.pop())
+    def initialize(self, state):
+        self.initialState = state
+        self.states.add(state)
 
-    if not errors:
-        return True, ''.join(output)
-    else:
-        return False, errors
+    def acceptState(self, state):
+        if isinstance(state, int):
+            state = [state]
+        for s in state:
+            if s not in self.acceptStates:
+                self.acceptStates.append(s)
+
+    def createTransition(self, fromState, toState, inputSymbol):   
+        if isinstance(inputSymbol, str):
+            inputSymbol = set([inputSymbol])
+        self.states.add(fromState)
+        self.states.add(toState)
+        if fromState in self.transitions and toState in self.transitions[fromState]:
+            self.transitions[fromState][toState] = self.transitions[fromState][toState].union(inputSymbol)
+        else:
+            self.transitions[fromState][toState] = inputSymbol
+
+    def saveTransitions(self, transitions):  
+        for fromState, toStates in transitions.items():
+            for state in toStates:
+                self.createTransition(fromState, state, toStates[state])
+
+    def updateStates(self, startNum):
+        translation = {}
+        for i in self.states:
+            translation[i] = startNum
+            startNum += 1
+        # new regexToAutomaton with the same symbols
+        updated = regexToAutomaton(self.symbols)  
+        updated.initialize(translation[self.initialState])
+        # new accept states
+        updated.acceptState([translation[s] for s in self.acceptStates])  
+        
+        for fromState, toStates in self.transitions.items():
+            for state in toStates:
+                updated.createTransition(translation[fromState], translation[state], toStates[state])
+        return [updated, startNum]
+
+    def updateEquivalentStates(self, positions):
+        updated = regexToAutomaton(self.symbols)
+        for fromState, toStates in self.transitions.items():
+            for state in toStates:
+                updated.createTransition(positions[fromState], positions[state], toStates[state])
+        updated.initialize(positions[self.initialState])
+        for s in self.acceptStates:
+            updated.acceptState(positions[s])
+        return updated
+
+    def epsilonManagement (self, findState):
+        allStates = set()
+        states = [findState]
+        while states:
+            state = states.pop()
+            allStates.add(state)
+            if state in self.transitions:
+                for toState in self.transitions[state]:
+                    if epsilon in self.transitions[state][toState] and toState not in allStates:
+                        states.append(toState)
+        return allStates
+
+    def otherTransitions(self, state, symbolKey):
+        if isinstance(state, int):
+            state = [state]
+        transitionStates = set()
+        for st in state:
+            if st in self.transitions:
+                for toState in self.transitions[st]:
+                    if symbolKey in self.transitions[st][toState]:
+                        transitionStates.add(toState)
+        return transitionStates
+
+    def display(self, fileName, projectName):
+        # nfaOutput directory exist_ok checker
+        outputDir = 'nfaOutput'
+        os.makedirs(outputDir, exist_ok=True)
+        dotFilePath = os.path.join(outputDir, fileName)
+        # create the graph
+        graph = Digraph(projectName, filename=fileName, format='png')
+        graph.attr(rankdir='LR')
+        graph.attr('node', shape='doublecircle')
+        for acceptState in self.acceptStates:
+            graph.node('s' + str(acceptState))
+
+        graph.attr('node', shape='circle')
+        for fromState, toStates in self.transitions.items():
+            for toState in toStates:
+                label = '|'.join(toStates[toState])
+                graph.edge('s' + str(fromState), 's' + str(toState), label=label)
+
+        graph.attr('node', shape='point')
+        graph.edge('', 's' + str(self.initialState))
+        graph.render(filename=dotFilePath, directory=outputDir, view=False)
