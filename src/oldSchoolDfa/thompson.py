@@ -56,7 +56,7 @@ class thompson:
         return optionalRegexToAutomaton
 
         
-    def handlePlus(self, a):
+    def handlePlus(a):
         [a, m1] = a.updateStates(2)
         initialState = 1
         nextState = m1
@@ -68,9 +68,8 @@ class thompson:
         for acceptState in a.acceptStates:
             plusAutomaton.createTransition(acceptState, a.initialState, epsilon)
             plusAutomaton.createTransition(acceptState, nextState, epsilon)
-        
-        plusAutomaton.saveTransitions(a.transitions)
 
+        plusAutomaton.saveTransitions(a.transitions)
         return plusAutomaton
 
 
@@ -171,7 +170,7 @@ class thompson:
                 self.regexToAutomatonStack.append(thompson.handleOpt(a))
             elif ch == plusOperator:
                 a = self.regexToAutomatonStack.pop()
-                self.regexToAutomatonStack.append(self.handlePlus(a))
+                self.regexToAutomatonStack.append(thompson.handlePlus(a))
         self.nfa = self.regexToAutomatonStack.pop()
         self.nfa.symbols = symbols
 
