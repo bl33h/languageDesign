@@ -114,61 +114,105 @@ class dfaFromNfa:
     
     # ------- minimize the dfa output -------
     def minimize(self):
-        # non accepting states initial partition
-        partition = [set(filter(lambda s: s in self.dfaAcceptedStates, self.dfaStates.keys())),
-                     set(filter(lambda s: s not in self.dfaAcceptedStates, self.dfaStates.keys()))]
+        partition = [set(filter(lambda s: s not in self.dfaAcceptedStates, self.dfaStates.keys())),
+                    set(self.dfaAcceptedStates)]
 
-        newPartition = []
-        while partition != newPartition:
-            newPartition = partition if not newPartition else newPartition
-            partition = []
-            for p in newPartition:
-                subsets = self.refinePartition(p, newPartition)
-                partition.extend(subsets if subsets else [p])
+        def find_partition(state, partition):
+            for block in partition:
+                if state in block:
+                    return block
+            return None
 
-        # states and transitions based on the new partition update
-        self.statesTransitionsUpdate(partition)
+        while True:
+            new_partition = []
+            for block in partition:
+                block_partition = {}
+                for state in block:
+                    key = frozenset(
+                        (symbol, frozenset(find_partition(next(iter(self.dfaTransitions[state].get(symbol, set())), None), partition) or []))
+                        for symbol in self.nfa.symbols if symbol != epsilon
+                    )
+                    if key in block_partition:
+                        block_partition[key].add(state)
+                    else:
+                        block_partition[key] = {state}
+                new_partition.extend(list(block_partition.values()))
+
+            if set(map(frozenset, new_partition)) == set(map(frozenset, partition)):
+                break
+            partition = new_partition
+
+        new_states = {}
+        new_transitions = defaultdict(lambda: defaultdict(set))
+        new_accepted_states = []
+
+        for i, block in enumerate(partition):
+            new_state_id = frozenset(block)
+            for state in block:
+                new_states[state] = i
+                if state in self.dfaAcceptedStates:
+                    new_accepted_states.append(i)
+                    break
+
+        for block in partition:
+            representative = next(iter(block))
+            for symbol in self.nfa.symbols:
+                if symbol != epsilon:
+                    target_state = next(iter(self.dfaTransitions[representative].get(symbol, set())), None)
+                    if target_state is not None:
+                        for p_block in partition:
+                            if target_state in p_block:
+                                new_transitions[new_states[representative]][symbol].add(new_states[next(iter(p_block))])
+                                break
+
+        self.dfaStates = {frozenset(block): i for i, block in enumerate(partition)}
+        self.dfaTransitions = new_transitions
+        self.dfaAcceptedStates = list(set(new_accepted_states))
+        self.dfaStartState = new_states[self.dfaStartState]
 
     def refinePartition(self, group, partition):
-        newRefGroups = []
-        for symbol in self.nfa.symbols:
-            if symbol == epsilon:
-                continue
-            symbolGroups = defaultdict(set)
-            for state in group:
+        newRefGroups = defaultdict(set)
+        for state in group:
+            for symbol in self.nfa.symbols:
+                if symbol == epsilon:
+                    continue
+                found = False
                 for p in partition:
-                    if any(followingState in p for followingState in self.move({state}, symbol)):
-                        symbolGroups[frozenset(p)].add(state)
+                    if any(nextState in p for nextState in self.move({state}, symbol)):
+                        newRefGroups[p].add(state)
+                        found = True
                         break
-            newRefGroups.extend(symbolGroups.values())
-        return newRefGroups if newRefGroups else [group]
-    
-    def statesTransitionsUpdate(self, partition):
-        newTransitions = defaultdict(lambda: defaultdict(set))
-        newAcceptedStates = set()
-        newStates = {}
-        newStateIndex = 0
+                if not found:
+                    newRefGroups[frozenset()].add(state)
+        return list(newRefGroups.values()) if newRefGroups else [group]
 
+    def statesTransitionsUpdate(self, partition):
+        newStateIndex = 0
+        newStates = {}
+        newAcceptedStates = set()
+        newTransitions = defaultdict(lambda: defaultdict(set))
+
+        # Assigning new state indices
         for group in partition:
             newStates[frozenset(group)] = newStateIndex
             if any(state in self.dfaAcceptedStates for state in group):
                 newAcceptedStates.add(newStateIndex)
             newStateIndex += 1
 
+        # Rebuilding transitions for the new states
         for group in partition:
+            newState = newStates[frozenset(group)]
             for state in group:
-                for symbol, nextStates in self.dfaTransitions[state].items():
-                    for nextState in nextStates:
-                        for p in partition:
-                            if nextState in p:
-                                newTransitions[newStates[frozenset(group)]][symbol].add(newStates[frozenset(p)])
-                                break
+                for symbol, toStates in self.dfaTransitions[state].items():
+                    for toState in toStates:
+                        newToState = [newStates[frozenset(p)] for p in partition if toState in p][0]
+                        newTransitions[newState][symbol].add(newToState)
 
-        self.dfaStates = newStates
+        self.dfaStates = {frozenset(group): i for i, group in enumerate(partition)}
         self.dfaTransitions = newTransitions
         self.dfaAcceptedStates = list(newAcceptedStates)
 
-        # start state for the minimized dfa set
+        # Updating the start state for the minimized DFA
         for group in partition:
             if self.dfaStartState in group:
                 self.dfaStartState = newStates[frozenset(group)]

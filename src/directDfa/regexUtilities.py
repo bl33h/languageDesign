@@ -37,7 +37,7 @@ def concatenationOp(rgx:list[int]):
     z=[rgx[0]]
     x,y=[op['*'],symbols[')'],op['|']],[symbols['('],op['|']]
     for i in range(1,len(rgx)):
-        if not (rgx[i] in x or rgx[i-1] in y): z.append(op['.'])
+        if not (rgx[i] in x or rgx[i-1] in y): z.append(op['·'])
         z.append(rgx[i])
     z+=[op['.'],symbols['#']]
     return z
