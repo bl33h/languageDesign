@@ -1,1 +1,1 @@
-# languageDesign
+# languageDesign - lexical analyzer
