@@ -88,8 +88,12 @@ expressionString = lambda rgx: repr(''.join([chr(i) if i < 1e5 else r_opSymbols[
 
 # error management
 def errorManagement (regex):
+    # empty input
+    if not regex:
+        return "error: please input a regex."
+    
     # operations without operands
-    if regex.startswith('*') or regex.startswith('?') or regex.startswith('+')or regex.startswith('|') or regex.startswith('.'):
+    if regex.startswith('*') or regex.startswith('?') or regex.startswith('+')or regex.startswith('|') or regex.startswith('·'):
         return "error: operation without operands."
 
     # balanced parentheses
@@ -104,5 +108,9 @@ def errorManagement (regex):
     
     if openParentheses > 0:
         return "error: unmatched opening parentheses."
+    
+    # check for a||b pattern
+    if '||' in regex:
+        return "error: adjacent OR operators without operand in between."
     
     return "OK"
