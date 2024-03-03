@@ -145,11 +145,13 @@ class dfaFromNfa:
         new_states = {}
         new_transitions = defaultdict(lambda: defaultdict(set))
         new_accepted_states = []
+        reverse_state_mapping = {}
 
         for i, block in enumerate(partition):
             new_state_id = frozenset(block)
             for state in block:
                 new_states[state] = i
+                reverse_state_mapping[i] = new_state_id  # Reverse mapping to find the block from new state index
                 if state in self.dfaAcceptedStates:
                     new_accepted_states.append(i)
                     break
@@ -165,10 +167,15 @@ class dfaFromNfa:
                                 new_transitions[new_states[representative]][symbol].add(new_states[next(iter(p_block))])
                                 break
 
-        self.dfaStates = {frozenset(block): i for i, block in enumerate(partition)}
+        self.dfaStates = {reverse_state_mapping[i]: i for i in range(len(partition))}
         self.dfaTransitions = new_transitions
         self.dfaAcceptedStates = list(set(new_accepted_states))
-        self.dfaStartState = new_states[self.dfaStartState]
+
+        # Correctly updating the start state
+        for i, block in enumerate(partition):
+            if self.dfaStartState in block:
+                self.dfaStartState = i
+                break
 
     def refinePartition(self, group, partition):
         newRefGroups = defaultdict(set)
