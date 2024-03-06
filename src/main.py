@@ -8,6 +8,7 @@
 from directDfa.directDfaBuilder import directMethodDfa
 from directDfa.regexUtilities import errorManagement
 from lexicalAnalyzer.reader import yalexParser
+from lexicalAnalyzer.ui import simpleUserInt
 from oldSchoolDfa.thompson import thompson
 from oldSchoolDfa.subsets import *
 
@@ -83,10 +84,8 @@ if __name__ == "__main__":
                 print(f"State {state}: {transitions_str}")
                 
         elif choice == '3':
-            file_path = 'src/yalexFiles/low.yal'
-            char_sets, rules = yalexParser(file_path)
-            print("character sets:", char_sets)
-            print("\nrules:", rules)
+            app = simpleUserInt()
+            app.mainloop()
         
         elif choice == '4':
             break
