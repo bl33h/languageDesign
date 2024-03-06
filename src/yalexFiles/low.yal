@@ -1,0 +1,30 @@
+  (* place any
+  
+  
+  header here *)
+
+	let delim = [' ''\t''\n']
+ let ws = delim+ 
+let letter = ['A'-'Z''a'-'z']
+
+let digit = ['0123456789']
+   let id = letter (letter | digit)*
+let equal = ["="]
+
+rule tokens = 
+    ws  {return NONE}
+  
+	| id  {  
+				if t.value = 0: return ID
+				else:
+					return NONE
+
+	}         (* change for a valid action that returns the token *)
+  
+	| '+'       { return PLUS }
+  	| '*'       { return TIMES }
+  	| '('       { return LPAREN }
+  	| ')'       { return RPAREN }
+	| '*'       { return STARTCOMMENT }
+
+(* place any trailer here *)

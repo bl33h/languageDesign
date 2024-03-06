@@ -5,8 +5,9 @@
 # Creation: 06/02/2024
 # Last modification: 11/02/2024
 
-from directDfa.regexUtilities import errorManagement
 from directDfa.directDfaBuilder import directMethodDfa
+from directDfa.regexUtilities import errorManagement
+from lexicalAnalyzer.reader import yalexParser
 from oldSchoolDfa.thompson import thompson
 from oldSchoolDfa.subsets import *
 
@@ -14,7 +15,8 @@ def mainMenu():
     print("\n------- welcome to your finite automaton kit generator -------")
     print("- for regex to NFA and DFA with its minimization insert [1.]")
     print("- for regex to NFA by direct method insert [2.]")
-    print("- to exit insert [3.]")
+    print("- for a lexical analyzer insert [3.]")
+    print("- to exit insert [4.]")
     choice = input("\nOption selected: ")
     return choice
     
@@ -79,8 +81,14 @@ if __name__ == "__main__":
             for state, transitions in transitionTable.items():
                 transitions_str = ', '.join([f"{symbol} -> {nextState}" for symbol, nextState in transitions.items()])
                 print(f"State {state}: {transitions_str}")
-        
+                
         elif choice == '3':
+            file_path = 'src/yalexFiles/low.yal'
+            char_sets, rules = yalexParser(file_path)
+            print("character sets:", char_sets)
+            print("\nrules:", rules)
+        
+        elif choice == '4':
             break
 
         else:
