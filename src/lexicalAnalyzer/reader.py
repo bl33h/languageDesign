@@ -15,13 +15,13 @@ def yalexParser(file_path):
             line = line.strip()
             if line.startswith('let'):
                 parts = line.split('=')
-                name_part = parts[0].strip()
-                name = name_part.split()[1]
+                namePart = parts[0].strip()
+                name = namePart.split()[1]
                 chars = parts[1].strip().strip('[]')
                 charSetsDict[name] = chars
             elif line.startswith('rule'):
-                rule_name = line.split('=')[0].split()[1].strip()
-                currentSection = rule_name
+                ruleName = line.split('=')[0].split()[1].strip()
+                currentSection = ruleName
                 rulesDict[currentSection] = ''
             elif currentSection and line:
                 rulesDict[currentSection] += line + '\n'
