@@ -10,10 +10,10 @@ from directDfa.regexUtilities import *
 # ------- explicit shunting yard -------
 class explicitShuntingYard(object):
     def __init__(self, expression):
-        self.infix = expression
         self.precedence = {'*': 3, '+': 3, '?': 3,'.': 2, '|': 1, '(': 0, ')': 0, '': 0}
         self.operators = ['*', '.', '|', '+', '?']
-
+        self.infix = expression
+    
     # manages the conversion from infix to postfix with explicit concatenation
     def explicitPostfixConv(self):
         infixRegex = []
