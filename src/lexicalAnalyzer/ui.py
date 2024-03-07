@@ -6,9 +6,11 @@
 # Last modification: 07/03/2024
 
 from tkinter import filedialog, scrolledtext, messagebox
-from lexicalAnalyzer.reader import yalexParser
-from lexicalAnalyzer.reader import *
-from oldSchoolDfa.subsets import *
+from directDfa.directDfaBuilder import *
+from directDfa.syntaxTree import *
+from directDfa.regexUtilities import *
+from directDfa.config import *
+from lexicalAnalyzer.parser import *
 import tkinter as tk
 import sys
 
@@ -119,10 +121,25 @@ class simpleUserInt(tk.Tk):
         sys.stderr = textRedirector(self.outputA)
 
         try:
-            yalexInput = self.currentOpenFile
-            charSets, rules = yalexParser(yalexInput)
-            print("\n--> character sets:", charSets)
-            print("\n--> rules:", rules)
+            yal = yalexParser(self.currentOpenFile)
+            word, _ = yal.read()
+            Obj = explicitShuntingYard(word)
+            postfixExp = Obj.explicitPostfixConv()
+            alphabet = Obj.getAlphabet()
+            augmentedExpression = augmentedRegex(postfixExp)
+
+            print()
+            ls = [l.label if not l.isSpecialChar else repr(l.label) for l in augmentedExpression]
+            print("=> postfix regex:\n", "".join(ls))
+            print()
+
+            print("-----  direct dfa from yal file  -----")
+            print("features:")
+            T = directDfaBuilder(word, postfixExp, alphabet)
+            dfaD = T.directDfaFromSynTree()
+            print(dfaD)
+            print()
+            displayDirectDfa(dfaD)
             messagebox.showinfo("Analyze Lexically", "Analysis Completed Successfully")
             
         except Exception as e:
