@@ -8,12 +8,12 @@
 # ------- handles the symbols after the explicit concatenation -------
 class explicitSymbols():
     def __init__(self, symbol):
-        self.label = symbol
-        self.isOperator = False
         self.isSpecialChar = False
-        self.token = None
         self.isFinalSymbol = False
-    
+        self.isOperator = False
+        self.label = symbol
+        self.token = None
+        
     def setType(self, isOperator):
         self.isOperator = isOperator
         
