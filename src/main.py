@@ -14,7 +14,6 @@ def main():
     ct.set_appearance_mode("light")
     win.title("bl33h's compiler")
     
-    # Add the following line to set the window icon
     win.iconbitmap("src/assets/icon.ico")
     
     etiWelcome = ct.CTkLabel(win, text="Welcome to the bl33h's compiler builder", font=("Arial", 16, "bold"), text_color="#454B70")
