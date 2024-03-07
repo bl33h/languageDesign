@@ -1,3 +1,10 @@
+# Copyright (C), 2024-2025, bl33h 
+# FileName: reader.py
+# Author: Sara Echeverria
+# Version: I
+# Creation: 06/03/2024
+# Last modification: 06/03/2024
+
 from tkinter import filedialog, scrolledtext, messagebox
 from lexicalAnalyzer.reader import yalexParser
 from lexicalAnalyzer.reader import *

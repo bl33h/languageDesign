@@ -13,6 +13,8 @@ def yalexParser(file_path):
     with open(file_path, 'r') as file:
         for line in file:
             line = line.strip()
+            if(line.startswith('(*')):
+                continue
             if line.startswith('let'):
                 parts = line.split('=')
                 namePart = parts[0].strip()
