@@ -9,7 +9,10 @@ from tkinter import *
 import customtkinter as ct
 from lexicalAnalyzer.ui import simpleUserInt
 
+win = None
+
 def main():
+    global win
     win = ct.CTk(fg_color="#ececfc")
     ct.set_appearance_mode("light")
     win.title("bl33h's compiler")
@@ -37,6 +40,8 @@ def main():
     win.mainloop()
 
 def showLexicalAnalyzerUI():
+    global win
+    win.destroy()
     app = simpleUserInt()
     app.mainloop()
     

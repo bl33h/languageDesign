@@ -42,7 +42,7 @@ class simpleUserInt(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("bl33h's Lexical Analyzer")
-        self.geometry('800x600')
+        self.geometry('1000x800')
         self.iconbitmap('src/assets/icon.ico')
         self.widgetsCreation()
 
@@ -77,7 +77,6 @@ class simpleUserInt(tk.Tk):
         # terminal
         self.outputA = scrolledtext.ScrolledText(self, height=10, background='#454B70', foreground='white')
         self.outputA.pack(expand=False, fill='x', side='bottom')
-        self.outputA.insert(tk.END, "Output:\n")
         self.outputA.config(state='disabled')
 
     def onCodeChanged(self, event=None):
