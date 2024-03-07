@@ -3,7 +3,7 @@
 # Author: Sara Echeverria
 # Version: I
 # Creation: 06/03/2024
-# Last modification: 06/03/2024
+# Last modification: 07/03/2024
 
 from tkinter import filedialog, scrolledtext, messagebox
 from lexicalAnalyzer.reader import yalexParser
@@ -41,9 +41,9 @@ class lineNumbersText(tk.Text):
 class simpleUserInt(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title('bl33hs IDE')
+        self.title("bl33h's Lexical Analyzer")
         self.geometry('800x600')
-        self.currentOpenFile = None
+        self.iconbitmap('src/assets/icon.ico')
         self.widgetsCreation()
 
     def widgetsCreation(self):
@@ -52,7 +52,7 @@ class simpleUserInt(tk.Tk):
         self.config(menu=barMenu)
 
         fileMenu = tk.Menu(barMenu, tearoff=0)
-        fileMenu.add_command(label="Open", command=self.open_file)
+        fileMenu.add_command(label="Open", command=self.openFile)
         fileMenu.add_command(label="Save", command=self.saveFile)
         barMenu.add_cascade(label="File", menu=fileMenu)
 
@@ -83,7 +83,7 @@ class simpleUserInt(tk.Tk):
     def onCodeChanged(self, event=None):
         self.lineNumbers.update_lineNumbers(self.codeEditor)
 
-    def open_file(self):
+    def openFile(self):
         filePath = filedialog.askopenfilename()
         if not filePath:
             return
