@@ -30,7 +30,7 @@ class lineNumbersText(tk.Text):
         super().__init__(*args, **kwargs)
         self.config(state='disabled', bg='#797fa2', fg='#dbdcf3')
 
-    def update_lineNumbers(self, codeEditor):
+    def updateLineNumbers(self, codeEditor):
         self.config(state='normal')
         self.delete('1.0', 'end')
         num_lines = int(codeEditor.index('end-1c').split('.')[0])
@@ -72,7 +72,7 @@ class simpleUserInt(tk.Tk):
         self.codeEditor = scrolledtext.ScrolledText(editorFrame, undo=True, wrap='none', bg='#ececfc', fg='#000000')
         self.codeEditor.pack(expand=True, fill='both')
         self.codeEditor.bind('<KeyRelease>', self.onCodeChanged)
-        self.codeEditor.bind('<KeyPress>', lambda e: self.lineNumbers.update_lineNumbers(self.codeEditor))
+        self.codeEditor.bind('<KeyPress>', lambda e: self.lineNumbers.updateLineNumbers(self.codeEditor))
 
         # terminal
         self.outputA = scrolledtext.ScrolledText(self, height=10, background='#454B70', foreground='white')
@@ -80,7 +80,7 @@ class simpleUserInt(tk.Tk):
         self.outputA.config(state='disabled')
 
     def onCodeChanged(self, event=None):
-        self.lineNumbers.update_lineNumbers(self.codeEditor)
+        self.lineNumbers.updateLineNumbers(self.codeEditor)
 
     def openFile(self):
         filePath = filedialog.askopenfilename()
@@ -124,8 +124,10 @@ class simpleUserInt(tk.Tk):
             print("\n--> character sets:", charSets)
             print("\n--> rules:", rules)
             messagebox.showinfo("Analyze Lexically", "Analysis Completed Successfully")
+            
         except Exception as e:
             print(f"\nan error occurred: {e}")
+            
         finally:
             # restore original stdout and stderr
             sys.stdout = originalStdout

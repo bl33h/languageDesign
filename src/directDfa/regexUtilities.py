@@ -3,90 +3,137 @@
 # Author: Sara Echeverria
 # Version: I
 # Creation: 06/02/2024
-# Last modification: 29/02/2024
+# Last modification: 07/03/2024
 
-from string import *
-from directDfa.config import *
+# ------- handles the symbols after the explicit concatenation -------
+class explicitSymbols():
+    def __init__(self, symbol):
+        self.label = symbol
+        self.isOperator = False
+        self.isSpecialChar = False
+        self.token = None
+        self.isFinalSymbol = False
+    
+    def setType(self, isOperator):
+        self.isOperator = isOperator
+        
+    def setSpecialType(self, isSpecial):
+        self.isSpecialChar = isSpecial
 
-# augmented expression [1.]
-def augmentedRegex(rgx: str):
-    def l(s):
-        q=[symbols['(']]
-        for i in s:
-            q.append(ord(i))
-            q.append(op['|'])
-        q.pop()
-        q.append(symbols[')'])
-        return q
-    repl={
-        '\d':l(digits),
-        '\s':l(whitespace),
-        '\w':l(ascii_letters+digits+'_'),
-        '.': l(printable.replace('\n',''))
-    }
-    z=iter(rgx)
-    a=[]
-    for i in z:
-        if i=='\\': i+=next(z)
-        if i in repl: a.extend(repl[i])
-        elif i in opSymbols and i!='#': a.append(opSymbols[i])
-        else: a.append(ord(i[-1]))
-    return optionalOp(a)
+    def setToken(self, newToken):
+        self.token = newToken
+        
+    def setFinalSymbol(self, isFinal):
+        self.isFinalSymbol = isFinal
+    
+    def __str__(self):
+        if(self.isSpecialChar):
+            return repr(self.label).replace("'", "")
+        
+        return self.label
+    
+    def __repr__(self):
+        return str(self)
 
-def concatenationOp(rgx:list[int]):
-    z=[rgx[0]]
-    x,y=[op['*'],symbols[')'],op['|']],[symbols['('],op['|']]
-    for i in range(1,len(rgx)):
-        if not (rgx[i] in x or rgx[i-1] in y): z.append(op['.'])
-        z.append(rgx[i])
-    z+=[op['.'],symbols['#']]
-    return z
+# ------- handles the transitions after the explicit concatenation -------
+class explicitTransitions():
+    def __init__(self, inState, symbol, fnState):
+        self.inState = inState
+        self.symbol = symbol
+        self.fnState = fnState
+        
+    def __str__(self):
+        return f"{self.inState}-{self.symbol}-{self.fnState}"
+    
+    def __repr__(self):
+        return str(self)
+    
+    def __eq__(self, other):
+        if isinstance(other, explicitTransitions):
+            return self.inState == other.inState and self.symbol == other.symbol and self.fnState == other.fnState
+        return False
 
-def optionalOp(rgx:list[int]):
-    b=[]
-    for i in rgx:
-        if i!=op['?'] and i!=op['+']: b.append(i)
+# ------- handles the token definitions -------
+class defs():
+    def __init__(self, name, desc, func=None):
+        self.name = name
+        self.desc = desc
+        self.func = func
+
+    def __str__(self) -> str:
+        return f"{self.name}: {self.desc}"
+
+    def __repr__(self):
+        return str(self)
+    
+    def tokensFeatures(self):
+        if self.desc == None:
+            valDesc = "no description." 
         else:
-            c,j=0,[]
-            while b:
-                j.append(b.pop())
-                if j[-1]==symbols['(']: c+=1
-                if j[-1]==symbols[')']: c-=1
-                if c==0: break
-            if not j or c!=0: raise Exception('Invalid')
-            j.reverse()
-            b.append(symbols['('])
-            b.extend(j)
-            if i==op['?']:
-                b+=[op['|'],symbols['ε']]
-            else: # +
-                b.extend(j); b.append(op['*'])
-            b.append(symbols[')'])
-    return b
+            if any(s.isSpecialChar == True for s in self.desc):
+                tempLD = []
+                for i in self.desc:
+                    if i.isSpecialChar:
+                        tempLD.append(repr(i.label).replace("'", ""))
+                    else:
+                        tempLD.append(i.label.replace("'", ""))
+                valDesc = ''.join(tempLD)
+            else:
+                tempLD = [s.label for s in self.desc]
+                valDesc = ''.join(tempLD)
+        
+        valFunc = "without function." if self.func is None else self.func
+        
+        return f"\t- token: {self.name}\n\t   description: {valDesc}\n\t   function: {valFunc}"
+    
+    def __eq__(self, other):
+        if isinstance(other, defs):
+            return self.name == other.name
+        return False  
+    
+# ------- manages the stack operations for a neat outcome -------
+class manageExpression():
+    def __init__(self):
+        self.manageExpression = []
+    
+    # get the element at position i
+    def getElement(self, i):
+        return self.manageExpression[i]
+    
+    # get the size
+    def size(self):
+        return len(self.manageExpression)
+    
+    # empty checker
+    def isEmpty(self):
+        return True if (self.size() == 0) else False
+    
+    # push operation
+    def push(self, element):
+        self.manageExpression.append(element)
+    
+    # pop operation
+    def pop(self):
+        return self.manageExpression.pop() if (not self.isEmpty()) else "empty stack." 
+    
+    # get the last element
+    def peek(self):
+        return self.manageExpression[-1] if (not self.isEmpty()) else "empty stack." 
 
-def manageExpression(rgx:list[int])->list[int]:
-    opr,out=[],[]; z={op['*'],op['.'],op['|']}
-    for c in rgx:
-        if c in z:
-            while opr and opr[-1]!=symbols['('] and opr[-1]>=c:
-                out.append(opr.pop())
-            opr.append(c)
-        elif c==symbols['(']:
-            opr.append(c)
-        elif c==symbols[')']:
-            while opr and opr[-1]!=symbols['(']:
-                out.append(opr.pop())
-            if not opr or opr.pop()!=symbols['(']: raise Exception('invalid')
-        else:
-            out.append(c)
-    while opr:
-        if opr[-1]==symbols['(']: raise Exception('invalid')
-        out.append(opr.pop())
-    return out
-
-expressionString = lambda rgx: repr(''.join([chr(i) if i < 1e5 else r_opSymbols[i] for i in rgx]))
-
-# error management
+# ------- automaton information -------
+class automatonInfo():
+    def __init__(self, initialState, acceptenceStates, numStates, explicitTransitions, states):
+        self.numStates = numStates
+        self.states = states
+        self.initialState = initialState
+        self.finalStates = acceptenceStates
+        self.explicitTransitions = explicitTransitions
+        self.alphabet = None
+    
+    def __str__(self):
+        return f"- states: {self.states}\n- acceptance states: {self.finalStates}"
+    
+# ------- error management -------
 def errorManagement (regex):
     # empty input
     if not regex:
