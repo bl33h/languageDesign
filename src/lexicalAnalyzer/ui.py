@@ -7,10 +7,10 @@
 
 from tkinter import filedialog, scrolledtext, messagebox
 from directDfa.directDfaBuilder import *
-from directDfa.syntaxTree import *
 from directDfa.regexUtilities import *
-from directDfa.config import *
 from lexicalAnalyzer.parser import *
+from directDfa.syntaxTree import *
+from directDfa.config import *
 import tkinter as tk
 import sys
 
