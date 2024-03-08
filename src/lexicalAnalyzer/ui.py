@@ -3,7 +3,7 @@
 # Author: Sara Echeverria
 # Version: I
 # Creation: 06/03/2024
-# Last modification: 07/03/2024
+# Last modification: 08/03/2024
 
 from tkinter import filedialog, scrolledtext, messagebox
 from directDfa.directDfaBuilder import *
@@ -122,34 +122,28 @@ class simpleUserInt(tk.Tk):
 
         try:
             yal = yalexParser(self.currentOpenFile)
-            unprocessedRegex, processedRegex, _= yal.read()
+            _, processedRegex, _= yal.read()
             
             # explicit shunting yard for the unprocessed and processed regex
-            Obj = explicitShuntingYard(unprocessedRegex)
             Obj2 = explicitShuntingYard(processedRegex)
             
             # explicit postfix conversion for the unprocessed and processed regex (explicit concatenation)
-            unpPostfixRegex = Obj.explicitPostfixConv()
             procPostfixRegex = Obj2.explicitPostfixConv()
             
             # get alphabet from the infix
-            alphabet = Obj.getAlphabet()
+            alphabet = Obj2.getAlphabet()
             
             # place the augmented expression in a list
-            augmentedExpression = augmentedRegex(unpPostfixRegex)
+            augmentedExpression = augmentedRegex(procPostfixRegex)
 
-            # pr
-            print()
             ls = [l.label if not l.isSpecialChar else repr(l.label) for l in augmentedExpression]
             print("=> postfix regex:\n", "".join(ls))
-            print()
 
             print("-----  direct dfa from yal file  -----")
             print("features:")
-            yalSynTree = directDfaBuilder(unprocessedRegex, procPostfixRegex, alphabet)
+            yalSynTree = directDfaBuilder(processedRegex, procPostfixRegex, alphabet)
             yalexDirectDfa = yalSynTree.directDfaFromSynTree()
             print(yalexDirectDfa)
-            print()
             displayDirectDfa(yalexDirectDfa)
             messagebox.showinfo("Analyze Lexically", "Analysis Completed Successfully")
             
