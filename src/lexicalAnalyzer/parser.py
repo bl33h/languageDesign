@@ -54,7 +54,7 @@ class yalexParser():
             if newLine:
                 emptyLines.append(temp.strip())
                 
-        Errors = []
+        errors = []
 
         for pos, cleanLine in enumerate(emptyLines):
             split_line_temp = cleanLine.strip().split("=", 1)
@@ -68,9 +68,9 @@ class yalexParser():
                     break
                 else:
                     er = leftSide.strip().split(" ")[0]
-                    Errors.append((None, leftSide, f"{er} not defined !error"))
+                    errors.append((None, leftSide, f"{er} not defined !error"))
             else:
-                Errors.append((None, split_line_temp[0], "assignment !error"))
+                errors.append((None, split_line_temp[0], "assignment !error"))
         
         print("\n=> definitions:")
         for i in self.offDefinitions:
@@ -123,7 +123,7 @@ class yalexParser():
 
         if(self.rules != []):
             self.rules.remove(self.rules[0])
-            self.tempRegex, self.tempRegexV2 = self.regexByRules(self.rules)
+            self.tempRegex, self.tempProcessedRegex = self.regexByRules(self.rules)
             
             print("=> processed tokens and definitions:")
             for definition in self.definitionsCleaner:
@@ -134,10 +134,11 @@ class yalexParser():
                 
             ls = [l.label for l in self.tempRegex]
             self.finalRegex = self.getFinalRegex(self.tempRegex)
+            self.processedFinalRegex = self.getFinalRegex(self.tempProcessedRegex)
             ls = [l.label if not l.isSpecialChar else repr(l.label) for l in self.finalRegex]
             print("=> infix regex:\n", "".join(ls))
 
-        return (self.finalRegex, self.definitionsCleaner)
+        return (self.finalRegex, self.processedFinalRegex, self.definitionsCleaner)
 
     def hasEscapeChars(self, line):
         escCharacters = ['\\','\n', '\r', '\t', '\b', '\f', '\v', '\a']

@@ -44,7 +44,7 @@ class simpleUserInt(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("bl33h's Lexical Analyzer")
-        self.geometry('1000x800')
+        self.geometry('1350x920')
         self.iconbitmap('src/assets/icon.ico')
         self.widgetsCreation()
 
@@ -122,12 +122,23 @@ class simpleUserInt(tk.Tk):
 
         try:
             yal = yalexParser(self.currentOpenFile)
-            word, _ = yal.read()
-            Obj = explicitShuntingYard(word)
-            postfixExp = Obj.explicitPostfixConv()
+            unprocessedRegex, processedRegex, _= yal.read()
+            
+            # explicit shunting yard for the unprocessed and processed regex
+            Obj = explicitShuntingYard(unprocessedRegex)
+            Obj2 = explicitShuntingYard(processedRegex)
+            
+            # explicit postfix conversion for the unprocessed and processed regex (explicit concatenation)
+            unpPostfixRegex = Obj.explicitPostfixConv()
+            procPostfixRegex = Obj2.explicitPostfixConv()
+            
+            # get alphabet from the infix
             alphabet = Obj.getAlphabet()
-            augmentedExpression = augmentedRegex(postfixExp)
+            
+            # place the augmented expression in a list
+            augmentedExpression = augmentedRegex(unpPostfixRegex)
 
+            # pr
             print()
             ls = [l.label if not l.isSpecialChar else repr(l.label) for l in augmentedExpression]
             print("=> postfix regex:\n", "".join(ls))
@@ -135,11 +146,11 @@ class simpleUserInt(tk.Tk):
 
             print("-----  direct dfa from yal file  -----")
             print("features:")
-            T = directDfaBuilder(word, postfixExp, alphabet)
-            dfaD = T.directDfaFromSynTree()
-            print(dfaD)
+            yalSynTree = directDfaBuilder(unprocessedRegex, procPostfixRegex, alphabet)
+            yalexDirectDfa = yalSynTree.directDfaFromSynTree()
+            print(yalexDirectDfa)
             print()
-            displayDirectDfa(dfaD)
+            displayDirectDfa(yalexDirectDfa)
             messagebox.showinfo("Analyze Lexically", "Analysis Completed Successfully")
             
         except Exception as e:
