@@ -121,6 +121,7 @@ class simpleUserInt(tk.Tk):
         sys.stderr = textRedirector(self.outputA)
 
         try:
+            print("\n\nreading the yalex file...")
             yal = yalexParser(self.currentOpenFile)
             _, processedRegex, _= yal.read()
             
@@ -137,9 +138,9 @@ class simpleUserInt(tk.Tk):
             augmentedExpression = augmentedRegex(procPostfixRegex)
 
             ls = [l.label if not l.isSpecialChar else repr(l.label) for l in augmentedExpression]
-            print("=> postfix regex:\n", "".join(ls))
+            print("\n=> postfix regex:\n", "".join(ls))
 
-            print("-----  direct dfa from yal file  -----")
+            print("\n-----  direct dfa from yal file  -----")
             print("features:")
             yalSynTree = directDfaBuilder(processedRegex, procPostfixRegex, alphabet)
             yalexDirectDfa = yalSynTree.directDfaFromSynTree()

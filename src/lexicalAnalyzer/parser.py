@@ -200,9 +200,7 @@ class yalexParser():
         
         print("\n=> definitions:")
         for i in self.offDefinitions:
-            print("\t","-"*30)
             print("\t-> ", i)
-            print("\t","-"*30)
 
         for defin in self.offDefinitions:
             symDescription = defin.split('=', 1)
@@ -253,9 +251,9 @@ class yalexParser():
             
             print("=> processed tokens and definitions:")
             for definition in self.definitionsCleaner:
-                print("-"*40)
+                print("_"*70)
                 print(definition.tokensFeatures())
-                print("-"*40)
+                print("_"*70)
                 print()
                 
             ls = [l.label for l in self.tempRegex]
