@@ -39,11 +39,11 @@ class directDfaBuilder():
     # automaton construction using the syntax tree
     def directDfaFromSynTree(self):
         buildDirectDfa = syntaxTree(self.postfix)
-        self.Tree = buildDirectDfa.generateTree()        
-        self.Tree.getPositions()
+        self.tree = buildDirectDfa.generateTree()        
+        self.tree.getPositions()
         
         # stablish D as the initial state (roots first position) [8.] & accepting states stablishment with # [10.]
-        finalSynTree = self.Tree.labeledNode(self.Tree)
+        finalSynTree = self.tree.labeledNode(self.tree)
         inState = sorted(finalSynTree[0][1])
         tokenTransitions = [None]
         acceptenceStates = []
@@ -52,6 +52,15 @@ class directDfaBuilder():
         statesNumber = 1
         rfpStates = []
         names = {}
+        
+        # rfp states construction
+        for i in finalSynTree:
+            for j in i:
+                if (type(j) == list):
+                    j = j.sort()
+            
+            if (i[0].label == '#'):
+                statesNumber = i[4]
         
         rfpStates.append(inState)
         rfpStatesMarked = []
@@ -89,7 +98,7 @@ class directDfaBuilder():
                                         transitions.append(explicitTransitions(t, el[0], U))
                                         break
                                     
-        
+        # state naming                           
         for newState in rfpStatesMarked:
             if(newState != []):
                 name = 's' + str(len(names))

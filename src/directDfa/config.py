@@ -13,7 +13,6 @@ class explicitShuntingYard(object):
         self.precedence = {'*': 3, '+': 3, '?': 3,'.': 2, '|': 1, '(': 0, ')': 0, '': 0}
         self.operators = ['*', '.', '|', '+', '?']
         self.infix = expression
-        self.HighestPrecedence = 5
     
     # manages the conversion from infix to postfix with explicit concatenation
     def explicitPostfixConv(self):
@@ -39,22 +38,22 @@ class explicitShuntingYard(object):
                 if (element.isOperator):
                     if(element.label in '*+?)'):
                         if(not self.infix[index + 1].isOperator or self.infix[index + 1].label == '('):
-                            dotSym = explicitSymbols('.')
-                            dotSym.setType(True)
-                            currentInfixRegex.append(dotSym) 
+                            dotSymbol = explicitSymbols('.')
+                            dotSymbol.setType(True)
+                            currentInfixRegex.append(dotSymbol) 
                 elif (not element.isOperator):
                     if(not self.infix[index + 1].isOperator):
-                        dotSym = explicitSymbols('.')
-                        dotSym.setType(True)
-                        currentInfixRegex.append(dotSym) 
+                        dotSymbol = explicitSymbols('.')
+                        dotSymbol.setType(True)
+                        currentInfixRegex.append(dotSymbol) 
                     elif(self.infix[index + 1].label == '('):
-                        dotSym = explicitSymbols('.')
-                        dotSym.setType(True)
-                        currentInfixRegex.append(dotSym) 
+                        dotSymbol = explicitSymbols('.')
+                        dotSymbol.setType(True)
+                        currentInfixRegex.append(dotSymbol) 
                     elif(self.infix[index + 1].label == 'ε'):
-                        dotSym = explicitSymbols('.')
-                        dotSym.setType(True)
-                        currentInfixRegex.append(dotSym) 
+                        dotSymbol = explicitSymbols('.')
+                        dotSymbol.setType(True)
+                        currentInfixRegex.append(dotSymbol) 
         
         # precedence placement
         for element in currentInfixRegex:
