@@ -126,12 +126,12 @@ class automatonInfo():
         self.numStates = numStates
         self.states = states
         self.initialState = initialState
-        self.finalStates = acceptenceStates
+        self.acceptenceStates = acceptenceStates
         self.explicitTransitions = explicitTransitions
         self.alphabet = None
     
     def __str__(self):
-        return f"- states: {self.states}\n- acceptance states: {self.finalStates}"
+        return f"- states: {self.states}\n- acceptance states: {self.acceptenceStates}"
     
 # ------- error management -------
 def errorManagement (regex):

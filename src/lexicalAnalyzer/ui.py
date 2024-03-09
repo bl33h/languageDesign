@@ -123,21 +123,24 @@ class simpleUserInt(tk.Tk):
         try:
             print("\n\nreading the yalex file...")
             yal = yalexParser(self.currentOpenFile)
-            _, processedRegex, _= yal.read()
+            unprocessedRegex, processedRegex, _= yal.read()
             
             # explicit shunting yard for the unprocessed and processed regex
+            Obj = explicitShuntingYard(unprocessedRegex)
             Obj2 = explicitShuntingYard(processedRegex)
             
             # explicit postfix conversion for the unprocessed and processed regex (explicit concatenation)
+            unpPostfixRegex = Obj.explicitPostfixConv()
             procPostfixRegex = Obj2.explicitPostfixConv()
             
             # get alphabet from the infix
             alphabet = Obj2.getAlphabet()
             
             # place the augmented expression in a list
-            augmentedExpression = augmentedRegex(procPostfixRegex)
+            augmentedExpression = augmentedRegex(unpPostfixRegex)
 
             ls = [l.label if not l.isSpecialChar else repr(l.label) for l in augmentedExpression]
+            
             print("\n=> postfix regex:\n", "".join(ls))
 
             print("\n-----  direct dfa from yal file  -----")

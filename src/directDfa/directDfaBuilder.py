@@ -126,19 +126,19 @@ def displayDirectDfa(dfa):
     graph.attr(rankdir='LR')
 
     for state in dfa.states:
-        if state == dfa.initialState and state in dfa.finalStates:
+        if state == dfa.initialState and state in dfa.acceptenceStates:
             graph.node(str(state), shape='doublecircle')
             
         if state == dfa.initialState:
             graph.edge('start', str(state))
             graph.node('start', shape='point')
-        elif state in dfa.finalStates:
+        elif state in dfa.acceptenceStates:
             graph.node(str(state), shape='doublecircle')
         else:
             graph.node(str(state), shape='circle')
 
     for explicitTransitions in dfa.explicitTransitions:
-        origen, explicitSymbols, destino = explicitTransitions.inState, explicitTransitions.symbol, explicitTransitions.fnState
-        graph.edge(str(origen), str(destino), label=str(explicitSymbols))
+        origin, explicitSymbols, destiny = explicitTransitions.inState, explicitTransitions.symbol, explicitTransitions.fnState
+        graph.edge(str(origin), str(destiny), label=str(explicitSymbols))
         
     graph.render()

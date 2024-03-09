@@ -185,8 +185,9 @@ class yalexParser():
         for pos, cleanLine in enumerate(emptyLines):
             temporarySplit = cleanLine.strip().split("=", 1)
             if len(temporarySplit) == 2:
-                leftSide, rightSide = (el.strip() for el in temporarySplit)
+                leftSide, _ = (el.strip() for el in temporarySplit)
                 if(leftSide.strip().split(" ")[0].lower() == "let"):
+                    
                     self.offDefinitions.append(cleanLine)
                 elif(leftSide.strip().split(" ")[0].lower() == "rule"):
                     for i in range(pos, len(emptyLines)):
