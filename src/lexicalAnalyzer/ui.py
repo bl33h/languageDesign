@@ -18,15 +18,14 @@ class textRedirector(object):
     def __init__(self, widget):
         self.widget = widget
 
+    # write function
     def write(self, str):
         self.widget.config(state='normal')
         self.widget.insert('end', str)
         self.widget.see('end')
         self.widget.config(state='disabled')
 
-    def flush(self):
-        pass
-
+# line numbers for the code editor
 class lineNumbersText(tk.Text):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -40,6 +39,7 @@ class lineNumbersText(tk.Text):
         self.insert('1.0', lineNumberString)
         self.config(state='disabled')
 
+# main class for the user interface
 class simpleUserInt(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -48,6 +48,7 @@ class simpleUserInt(tk.Tk):
         self.iconbitmap('src/assets/icon.ico')
         self.widgetsCreation()
 
+    # widgets creation for the user interface
     def widgetsCreation(self):
         # menu for file operations and running code
         barMenu = tk.Menu(self)
@@ -80,10 +81,22 @@ class simpleUserInt(tk.Tk):
         self.outputA = scrolledtext.ScrolledText(self, height=10, background='#454B70', foreground='white')
         self.outputA.pack(expand=False, fill='x', side='bottom')
         self.outputA.config(state='disabled')
+        
+        # clear terminal button
+        clearTerminalButton = tk.Button(self, text="Clear Terminal", command=self.clearTerminal)
+        clearTerminalButton.pack(expand=False, fill='x', side='bottom')
 
+    # clear terminal function
+    def clearTerminal(self):
+        self.outputA.config(state='normal')
+        self.outputA.delete('1.0', tk.END)
+        self.outputA.config(state='disabled')
+    
+    # code changed event
     def onCodeChanged(self, event=None):
         self.lineNumbers.updateLineNumbers(self.codeEditor)
 
+    # open file function
     def openFile(self):
         filePath = filedialog.askopenfilename()
         if not filePath:
@@ -98,6 +111,7 @@ class simpleUserInt(tk.Tk):
         self.outputA.insert(tk.END, "\nFile opened: " + self.currentOpenFile)
         self.outputA.config(state='disabled')
 
+    # save file function
     def saveFile(self):
         if self.currentOpenFile is None:
             filePath = filedialog.asksaveasfilename(defaultextension="txt")
@@ -109,6 +123,7 @@ class simpleUserInt(tk.Tk):
             file.write(code)
             messagebox.showinfo("Save", "File Saved Successfully")
 
+    # analyze lexically function (calls the parser)
     def analyzeLexically(self):
         if not self.currentOpenFile:
             messagebox.showwarning("Warning", "Please open and save a file first.")
@@ -150,7 +165,8 @@ class simpleUserInt(tk.Tk):
             print(yalexDirectDfa)
             displayDirectDfa(yalexDirectDfa)
             messagebox.showinfo("Analyze Lexically", "Analysis Completed Successfully")
-            
+        
+        # error handling
         except Exception as e:
             print(f"\nan error occurred: {e}")
             

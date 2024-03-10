@@ -3,7 +3,7 @@
 let delim = ['\t']
 let ws = delim+
 let digit = ['0'-'9']
-let id = digit+
+let id = digit?
 
 rule tokens =
     ws
