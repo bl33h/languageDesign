@@ -1,5 +1,5 @@
 # languageDesign - lexical analyzer
-It's an advanced toolkit that integrates lexical analysis, parsing of regular expressions, syntax tree generation, direct DFA construction, and automata visualization. Leveraging powerful algorithms and a user-friendly interface
+It's an advanced toolkit that integrates lexical analysis, parsing of regular expressions, syntax tree generation, direct DFA construction, and automata visualization. Leveraging powerful algorithms and a user-friendly interface.
 
 <p align="center">
   <br>
