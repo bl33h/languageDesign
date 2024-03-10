@@ -22,7 +22,7 @@ def main():
     etiWelcome = ct.CTkLabel(win, text="Welcome to the bl33h's compiler builder", font=("Arial", 16, "bold"), text_color="#454B70")
     etiWelcome.pack(pady=7)
     
-    etiWelcome2 = ct.CTkLabel(win, text="Below you will find the first two phases to build a compiler: Lexical and syntactic analyzer.", font=("Arial", 11, "normal"), text_color="#2D3041")
+    etiWelcome2 = ct.CTkLabel(win, text="Below you will find the first two phases to build a compiler: Lexical Analysis and Syntactic Analysis.", font=("Arial", 11, "normal"), text_color="#2D3041")
     etiWelcome3 = ct.CTkLabel(win, text="For both parts, the respective algorithms have been implemented correctly.", font=("Arial", 11, "normal"), text_color="#2D3041")
     etiWelcome2.pack(pady=0)
     etiWelcome3.pack(pady=7)
