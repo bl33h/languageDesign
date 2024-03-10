@@ -1,0 +1,14 @@
+(* this is a lexical analyzer *)
+
+let delim = ['\t']
+let ws = delim+
+let digit = ['0'-'9']
+let id = digit+
+
+rule tokens =
+    ws
+  | id        { return ID }               
+  | '+'       { return PLUS }
+  | '*'       { return TIMES }
+  
+(* any trailer *)
