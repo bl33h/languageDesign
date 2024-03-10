@@ -44,10 +44,11 @@ class simpleUserInt(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("bl33h's Lexical Analyzer")
-        self.geometry('1350x920')
         self.iconbitmap('src/assets/icon.ico')
+        self.currentOpenFile = None
+        self.geometry('1350x920')
         self.widgetsCreation()
-
+        
     # widgets creation for the user interface
     def widgetsCreation(self):
         # menu for file operations and running code
