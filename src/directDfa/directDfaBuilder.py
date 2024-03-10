@@ -150,4 +150,4 @@ def displayDirectDfa(dfa):
         origin, explicitSymbols, destiny = explicitTransitions.inState, explicitTransitions.symbol, explicitTransitions.fnState
         graph.edge(str(origin), str(destiny), label=str(explicitSymbols))
         
-    graph.render()
+    graph.render(view=True)
