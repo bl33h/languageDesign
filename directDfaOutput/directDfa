@@ -1,0 +1,15 @@
+digraph DirectMethodDFA {
+	rankdir=LR
+	start -> s0
+	start [shape=point]
+	s1 [shape=circle]
+	s2 [shape=circle]
+	s3 [shape=doublecircle]
+	s0 -> s1 [label="+"]
+	s0 -> s2 [label=0]
+	s0 -> s2 [label=A]
+	s0 -> s2 [label=B]
+	s0 -> s2 [label=C]
+	s1 -> s3 [label="#+"]
+	s2 -> s3 [label="#id"]
+}

@@ -9,13 +9,16 @@
 
 from directDfa.regexUtilities import *  
 
+# check if the line has escape characters
 def hasEscapeChars(line):
         escCharacters = ['\\','\n', '\r', '\t', '\b', '\f', '\v', '\a']
+        
         for i in escCharacters:
             if i in line:
                 return True
         return False
 
+# special characters list
 def specialCharsList(line):
     listAscii = []
     i = 0
@@ -48,6 +51,7 @@ def specialCharsList(line):
 
     return listAscii
 
+# ascii convertion
 def asciiConvertion(asciiCodes):
     regexAscii = []
     currentSymbol = explicitSymbols('|')
@@ -74,6 +78,7 @@ def asciiConvertion(asciiCodes):
     regexAscii.append(closedParenSym)
     return regexAscii
 
+# place the regex ranges [1.]
 def placeRegexRanges(line):
     ranges = []
     line = line.replace("'", '')
@@ -88,6 +93,7 @@ def placeRegexRanges(line):
                 ranges.append([start, end])
     return ranges
 
+# place the regex ranges [2.]
 def regexRanges(ranges):
     regexRanges = []
     newRanges = []
@@ -115,6 +121,7 @@ def regexRanges(ranges):
     regexRanges.append(closedParenSym)
     return regexRanges
 
+# place the description structure
 def descriptionStructure(desc):
     desc = desc.replace('"', '').replace("'", '').replace(" ", "")
     newDesc = []

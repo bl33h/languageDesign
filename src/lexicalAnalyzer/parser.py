@@ -11,13 +11,15 @@ from lexicalAnalyzer.parserUtilities import *
 
 class yalexParser():
     def __init__(self, file):
-        self.file = file
-        self.finalRegex = ""
-        self.offDefinitions = []
         self.definitionsCleaner = []
-        self.rules = []
+        self.offDefinitions = []
+        self.finalRegex = ""
         self.tempRegex = ""
+        self.file = file
+        self.rules = []
+        
     
+    # constructs the regex by the rules
     def regexByRules(self, rules):
             regextL = []
             regexSymbols = []
@@ -25,11 +27,12 @@ class yalexParser():
             currentSymbol.setType(True)
             tempRules = []
 
+            # rules lines identifier
             for line in rules:
                 line = line.replace("'", '')
                 line = line.replace('"', '')
-        
                 line = line.strip()
+                
                 if(line[0] == '|'):
                     tempRules.append(currentSymbol)
                     tempRules.append(line[1:])
@@ -39,6 +42,8 @@ class yalexParser():
             rulesList = []
             tempLi = []
             tempEl = ""
+            
+            # list of the rules by element
             for element in tempRules:
                 if(element == tempRules[-1]):
                     rulesList.append([element.strip()])
@@ -52,11 +57,13 @@ class yalexParser():
                     tempEl += element.strip()+" "
                 
             listTokensDef = []
-            for TokenDef in rulesList:
-                if type(TokenDef) == explicitSymbols and TokenDef.label == '|' and TokenDef.isOperator:
+            
+            # list of the tokens and their definitions
+            for tokenDef in rulesList:
+                if type(tokenDef) == explicitSymbols and tokenDef.label == '|' and tokenDef.isOperator:
                     continue
                 else:
-                    parts = TokenDef[0].strip().split(" ", 1)  
+                    parts = tokenDef[0].strip().split(" ", 1)  
                     if len(parts) == 1:
                         listTokensDef.append([parts[0].strip(), None])
                     else:
@@ -65,9 +72,9 @@ class yalexParser():
                         else:
                             listTokensDef.append([parts[0].strip(), parts[1].strip()])
 
+            # list of the names of the tokens
             for el in listTokensDef:
                 name, func = el
-                
                 regextL.append(name.strip())
                 
                 for defi in self.definitionsCleaner:
@@ -79,6 +86,7 @@ class yalexParser():
                     newDef = defs(name, None, func)
                     self.definitionsCleaner.append(newDef)
             
+            # list where each element from regextL is followed by the current symbol
             for symbol in regextL:
                 sym = explicitSymbols(symbol)
                 regexSymbols.append(sym)
@@ -87,6 +95,7 @@ class yalexParser():
             regexSymbols = regexSymbols[:-1]
             newRegexcurrentSymbol = []
             
+            # checks if the first element is not an operator
             for i, elem in enumerate(regexSymbols):
                 if (not elem.isOperator) or i == 0:
                     newRegexcurrentSymbol.append(elem)
@@ -95,19 +104,23 @@ class yalexParser():
                     newSim = explicitSymbols('#'+prevSym.label) 
                     newRegexcurrentSymbol.append(newSim)
 
+            # checks if the last element is not an operator
             if newRegexcurrentSymbol[-1].label != '|':
                 prevSym = newRegexcurrentSymbol[-1]
                 newSim = explicitSymbols('#'+prevSym.label) 
                 newRegexcurrentSymbol.append(newSim)
             
-            finalRegexSymbols = []  
+            finalRegexSymbols = []
+            
+            # new list creation where all second elements are followed by the current symbol
             for i in range(len(newRegexcurrentSymbol)):
                 finalRegexSymbols.append(newRegexcurrentSymbol[i])
                 if (i+1) % 2 == 0 and i != len(newRegexcurrentSymbol)-1:
                     finalRegexSymbols.append(currentSymbol)
                     
             return (regexSymbols, finalRegexSymbols)
-        
+    
+    # checks if the token is terminal
     def isTerminal(self, token):
         for defi in self.definitionsCleaner:
             if (defi.name == token.label):
@@ -115,12 +128,14 @@ class yalexParser():
                     return False
         return True
     
+    # gets the definitions of the token
     def getDefinitions(self, token):
         for defi in self.definitionsCleaner:
             if (defi.name == token.label):
                 if(defi.desc != None):
                     return defi.desc
-            
+    
+    # reads the tokens        
     def tokensReader(self, actualT, newRegex):
         for tok in actualT:
             if(not self.isTerminal(tok)):
@@ -138,12 +153,14 @@ class yalexParser():
                 newRegex.append(newSym)
         return newRegex
     
+    # gets the final regex
     def getFinalRegex(self, finalRegex):
         finalRegex = finalRegex
         newRegex = []
         actualRegex = self.tokensReader(finalRegex, newRegex)
         return actualRegex
 
+    # reads the yalex file [main method]
     def read(self):
         with open(self.file, 'r') as file:
             lines = file.readlines()
@@ -182,6 +199,7 @@ class yalexParser():
                 
         errors = []
 
+        # checks if the brackets are balanced
         for pos, cleanLine in enumerate(emptyLines):
             temporarySplit = cleanLine.strip().split("=", 1)
             if len(temporarySplit) == 2:
@@ -205,10 +223,12 @@ class yalexParser():
             else:
                 errors.append((None, temporarySplit[0], "assignment !error"))
         
+        # shows the information
         print("\n=> definitions:")
         for i in self.offDefinitions:
             print("\t-> ", i)
 
+        # element processing from the definitions and description conversion to regex
         for defin in self.offDefinitions:
             symDescription = defin.split('=', 1)
             name = symDescription[0].split(' ')[1]
@@ -252,6 +272,7 @@ class yalexParser():
                 
         print()
 
+        # processed tokens and definitions
         if(self.rules != []):
             self.rules.remove(self.rules[0])
             self.tempRegex, self.tempProcessedRegex = self.regexByRules(self.rules)
@@ -262,13 +283,15 @@ class yalexParser():
                 print(definition.tokensFeatures())
                 print("_"*70)
                 print()
-                
+            
+            # new labels list from each element
             ls = [l.label for l in self.tempRegex]
             self.finalRegex = self.getFinalRegex(self.tempRegex)
             self.processedFinalRegex = self.getFinalRegex(self.tempProcessedRegex)
             ls = [l.label if not l.isSpecialChar else repr(l.label) for l in self.finalRegex]
             print("=> infix regex:\n", "".join(ls))
             
+            # concatenation checker
             pfnErrorChecker = "".join([l.label for l in self.processedFinalRegex])
             errorOccurred, result = errorManagement(pfnErrorChecker)
             if errorOccurred:
