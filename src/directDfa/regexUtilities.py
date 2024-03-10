@@ -137,11 +137,7 @@ class automatonInfo():
 def errorManagement (regex):
     # empty input
     if not regex:
-        return "error: please input a regex."
-    
-    # operations without operands
-    if regex.startswith('*') or regex.startswith('?') or regex.startswith('+')or regex.startswith('|') or regex.startswith('·'):
-        return "error: operation without operands."
+        return (True, "error: please try again.")
 
     # balanced parentheses
     openParentheses = 0
@@ -151,13 +147,13 @@ def errorManagement (regex):
         elif char == ')':
             openParentheses -= 1
             if openParentheses < 0: 
-                return "error: unmatched closing parentheses."
+                return (True, "error: unmatched closing parentheses.")
     
     if openParentheses > 0:
-        return "error: unmatched opening parentheses."
+        return (True, "error: unmatched opening parentheses.")
     
     # check for a||b pattern
     if '||' in regex:
-        return "error: adjacent OR operators without operand in between."
+        return (True, "error: adjacent OR operators without operand in between.")
     
-    return "OK"
+    return (False, "OK")

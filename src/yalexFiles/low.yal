@@ -5,7 +5,7 @@ let digit = ['0']
 let id = (letter|digit)
 
 rule tokens = 
-    id        { return ID }            
-  | '+'     { return PLUS }
+    id        { return ID }
+  | '+'     { return PLUS }            
 
 (* any trailer *)

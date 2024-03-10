@@ -262,5 +262,12 @@ class yalexParser():
             self.processedFinalRegex = self.getFinalRegex(self.tempProcessedRegex)
             ls = [l.label if not l.isSpecialChar else repr(l.label) for l in self.finalRegex]
             print("=> infix regex:\n", "".join(ls))
-
-        return (self.finalRegex, self.processedFinalRegex, self.definitionsCleaner)
+            
+            processedFinalRegex_str = "".join([l.label for l in self.processedFinalRegex])
+            error_occurred, result = errorManagement(processedFinalRegex_str)
+            if error_occurred:
+                print(result)
+                print("------- !check your yalex file -------")  # Added instruction for the user
+                raise Exception("terminating the process, fix the issue and try again.")
+            else: 
+                return (self.finalRegex, self.processedFinalRegex, self.definitionsCleaner)
