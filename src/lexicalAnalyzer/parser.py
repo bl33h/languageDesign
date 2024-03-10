@@ -263,9 +263,9 @@ class yalexParser():
             ls = [l.label if not l.isSpecialChar else repr(l.label) for l in self.finalRegex]
             print("=> infix regex:\n", "".join(ls))
             
-            processedFinalRegex_str = "".join([l.label for l in self.processedFinalRegex])
-            error_occurred, result = errorManagement(processedFinalRegex_str)
-            if error_occurred:
+            pfnErrorChecker = "".join([l.label for l in self.processedFinalRegex])
+            errorOccurred, result = errorManagement(pfnErrorChecker)
+            if errorOccurred:
                 print(result)
                 print("------- !check your yalex file -------")  # Added instruction for the user
                 raise Exception("terminating the process, fix the issue and try again.")
