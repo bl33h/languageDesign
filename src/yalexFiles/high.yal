@@ -19,4 +19,4 @@ rule tokens =
   | '('       { return LPAREN }
   | ')'       { return RPAREN }
 
-(* any trailer  *)
+(* any trailer *)
