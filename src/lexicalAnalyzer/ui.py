@@ -77,6 +77,7 @@ class simpleUserInt(tk.Tk):
         self.codeEditor.pack(expand=True, fill='both')
         self.codeEditor.bind('<KeyRelease>', self.onCodeChanged)
         self.codeEditor.bind('<KeyPress>', lambda e: self.lineNumbers.updateLineNumbers(self.codeEditor))
+        self.lineNumbers.updateLineNumbers(self.codeEditor)
 
         # terminal
         self.outputA = scrolledtext.ScrolledText(self, height=10, background='#454B70', foreground='white')
@@ -107,6 +108,8 @@ class simpleUserInt(tk.Tk):
         with open(filePath, 'r') as file:
             self.codeEditor.delete('1.0', tk.END)
             self.codeEditor.insert('1.0', file.read())
+        # Update line numbers after loading file
+        self.lineNumbers.updateLineNumbers(self.codeEditor)
         self.outputA.config(state='normal')
         self.outputA.delete('1.0', tk.END)
         self.outputA.insert(tk.END, "\nFile opened: " + self.currentOpenFile)
