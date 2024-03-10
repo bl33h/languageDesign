@@ -3,7 +3,7 @@
 # Author: Sara Echeverria
 # Version: I
 # Creation: 06/03/2024
-# Last modification: 08/03/2024
+# Last modification: 10/03/2024
 # References
 # [Rosetta Code. (2023). Compiler/lexical analyzer. https://rosettacode.org/wiki/Compiler/lexical_analyzer#Python]
 

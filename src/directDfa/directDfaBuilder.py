@@ -1,8 +1,8 @@
 #Copyright (C), 2024-2025, bl33h 
 #FileName: directDfa.py
 #Author: Sara Echeverria
-#Version: I
-#Creation: 06/02/2024
+#Version: I 
+#Creation: 06/02/2024 
 #Last modification: 07/03/2024
 # References
 # [Urbina. (2022). DFA DIRECTO. Google Docs. https://docs.google.com/presentation/d/1XTelAJ3XDQ49NNDzGuTGTrVueULPrZIT/edit#slide=id.p15]

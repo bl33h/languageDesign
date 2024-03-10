@@ -3,13 +3,14 @@
 # Author: Sara Echeverria
 # Version: I
 # Creation: 06/03/2024
-# Last modification: 08/03/2024
+# Last modification: 10/03/2024
 
 from tkinter import filedialog, scrolledtext, messagebox
 from directDfa.directDfaBuilder import *
 from directDfa.regexUtilities import *
 from lexicalAnalyzer.parser import *
 from directDfa.syntaxTree import *
+from tkinter import PanedWindow
 from directDfa.config import *
 import tkinter as tk
 import sys
@@ -64,9 +65,13 @@ class simpleUserInt(tk.Tk):
         analyzeMenu.add_command(label="Analyze Lexically", command=self.analyzeLexically)
         barMenu.add_cascade(label="Analyze", menu=analyzeMenu)
 
-        # container for line numbers and code editor
-        editorFrame = tk.Frame(self)
-        editorFrame.pack(expand=True, fill='both')
+        # main paned window
+        mainPane = PanedWindow(self, orient='vertical', sashrelief='raised', sashwidth=5)
+        mainPane.pack(fill='both', expand=True)
+
+        # editor and line numbers pane
+        editorFrame = tk.Frame(mainPane)
+        mainPane.add(editorFrame, height=600)
 
         # line numbers
         self.lineNumbers = lineNumbersText(editorFrame, width=4)
@@ -79,14 +84,17 @@ class simpleUserInt(tk.Tk):
         self.codeEditor.bind('<KeyPress>', lambda e: self.lineNumbers.updateLineNumbers(self.codeEditor))
         self.lineNumbers.updateLineNumbers(self.codeEditor)
 
-        # terminal
-        self.outputA = scrolledtext.ScrolledText(self, height=10, background='#454B70', foreground='white')
-        self.outputA.pack(expand=False, fill='x', side='bottom')
-        self.outputA.config(state='disabled')
-        
+        # terminal pane
+        terminalFrame = tk.Frame(mainPane)
+        mainPane.add(terminalFrame, height=300)
+
         # clear terminal button
-        clearTerminalButton = tk.Button(self, text="Clear Terminal", command=self.clearTerminal)
-        clearTerminalButton.pack(expand=False, fill='x', side='bottom')
+        clearTerminalButton = tk.Button(terminalFrame, text="Clear Terminal", command=self.clearTerminal)
+        clearTerminalButton.pack(fill='x', side='top')  # Changed side from 'bottom' to 'top'
+
+        self.outputA = scrolledtext.ScrolledText(terminalFrame, height=10, background='#454B70', foreground='white')
+        self.outputA.pack(expand=True, fill='both')
+        self.outputA.config(state='disabled')
 
     # clear terminal function
     def clearTerminal(self):

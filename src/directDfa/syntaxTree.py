@@ -3,7 +3,7 @@
 # Author: Sara Echeverria
 # Version: I
 # Creation: 06/02/2024
-# Last modification: 07/03/2024
+# Last modification: 07/03/2024 
 
 # ------- node class for syntax tree construction -------
 class node():
