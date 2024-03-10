@@ -137,7 +137,7 @@ class automatonInfo():
 def errorManagement (regex):
     # empty input
     if not regex:
-        return (True, "error: please try again.")
+        return (True, "error: no expression found.")
 
     # balanced parentheses
     openParentheses = 0

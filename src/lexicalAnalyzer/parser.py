@@ -187,8 +187,14 @@ class yalexParser():
             if len(temporarySplit) == 2:
                 leftSide, _ = (el.strip() for el in temporarySplit)
                 if(leftSide.strip().split(" ")[0].lower() == "let"):
-                    
-                    self.offDefinitions.append(cleanLine)
+                    errorOccurred, result = bracketBalanceCheck(cleanLine)
+                    if errorOccurred:
+                        print(result)
+                        print(f"in line: {pos+1}")
+                        print("------- !check your yalex file -------")
+                        raise Exception("terminating the process, fix the issue and try again.")
+                    else:
+                        self.offDefinitions.append(cleanLine)
                 elif(leftSide.strip().split(" ")[0].lower() == "rule"):
                     for i in range(pos, len(emptyLines)):
                         self.rules.append(emptyLines[i].strip())                     
@@ -267,7 +273,7 @@ class yalexParser():
             errorOccurred, result = errorManagement(pfnErrorChecker)
             if errorOccurred:
                 print(result)
-                print("------- !check your yalex file -------")  # Added instruction for the user
+                print("------- !check your yalex file -------")
                 raise Exception("terminating the process, fix the issue and try again.")
             else: 
                 return (self.finalRegex, self.processedFinalRegex, self.definitionsCleaner)

@@ -180,3 +180,19 @@ def descriptionStructure(desc):
     newDesc.insert(0, openParenSym)
     newDesc.append(closedParenSym)
     return newDesc
+
+# rules bracket balance check
+def bracketBalanceCheck(line):
+        openBrackets = 0
+        for char in line:
+            if char == '[':
+                openBrackets += 1
+            elif char == ']':
+                openBrackets -= 1
+                if openBrackets < 0: 
+                    return (True, "error: unmatched closing bracket.")
+        
+        if openBrackets > 0:
+            return (True, "error: unmatched opening bracket.")
+        
+        return (False, "")
