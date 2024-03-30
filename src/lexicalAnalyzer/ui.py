@@ -91,7 +91,7 @@ class simpleUserInt(tk.Tk):
 
         # clear terminal button
         clearTerminalButton = tk.Button(terminalFrame, text="Clear Terminal", command=self.clearTerminal)
-        clearTerminalButton.pack(fill='x', side='top')  # Changed side from 'bottom' to 'top'
+        clearTerminalButton.pack(fill='x', side='top')
 
         self.outputA = scrolledtext.ScrolledText(terminalFrame, height=10, background='#454B70', foreground='white')
         self.outputA.pack(expand=True, fill='both')
