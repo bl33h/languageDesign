@@ -63,6 +63,7 @@ class simpleUserInt(tk.Tk):
 
         analyzeMenu = tk.Menu(barMenu, tearoff=0)
         analyzeMenu.add_command(label="Analyze Lexically", command=self.analyzeLexically)
+        analyzeMenu.add_command(label="Identify Tokens", command=self.identifyTokens)
         barMenu.add_cascade(label="Analyze", menu=analyzeMenu)
 
         # main paned window
@@ -134,6 +135,9 @@ class simpleUserInt(tk.Tk):
             code = self.codeEditor.get('1.0', tk.END)
             file.write(code)
             messagebox.showinfo("Save", "File Saved Successfully")
+    
+    def identifyTokens(self):
+        messagebox.showinfo("Tokens Identifier", "Token identification is not yet implemented.")
 
     # analyze lexically function (calls the parser)
     def analyzeLexically(self):
