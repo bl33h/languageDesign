@@ -18,7 +18,6 @@ class yalexParser():
         self.file = file
         self.rules = []
         
-    
     # constructs the regex by the rules
     def regexByRules(self, rules):
             regextL = []
