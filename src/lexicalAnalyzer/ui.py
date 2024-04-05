@@ -13,7 +13,9 @@ from directDfa.syntaxTree import *
 from tkinter import PanedWindow
 from directDfa.config import *
 import tkinter as tk
+import pickle
 import sys
+import os
 
 class textRedirector(object):
     def __init__(self, widget):
@@ -189,4 +191,68 @@ class simpleUserInt(tk.Tk):
             sys.stderr = originalStderr
     
     def identifyTokens(self):
-        self.analyzeLexically()
+        if not self.currentOpenFile:
+            messagebox.showwarning("Warning", "Please open and save a file first.")
+            return
+        
+        # redirect stdout and stderr
+        originalStdout = sys.stdout
+        originalStderr = sys.stderr
+        sys.stdout = textRedirector(self.outputA)
+        sys.stderr = textRedirector(self.outputA)
+
+        try:
+            print("\n\nreading the yalex file...")
+            yal = yalexParser(self.currentOpenFile)
+            unprocessedRegex, processedRegex, _= yal.read()
+            
+            # explicit shunting yard for the unprocessed and processed regex
+            Obj = explicitShuntingYard(unprocessedRegex)
+            Obj2 = explicitShuntingYard(processedRegex)
+            
+            # explicit postfix conversion for the unprocessed and processed regex (explicit concatenation)
+            unpPostfixRegex = Obj.explicitPostfixConv()
+            procPostfixRegex = Obj2.explicitPostfixConv()
+            
+            # get alphabet from the infix
+            alphabet = Obj2.getAlphabet()
+            
+            # place the augmented expression in a list
+            augmentedExpression = augmentedRegex(unpPostfixRegex)
+
+            ls = [l.label if not l.isSpecialChar else repr(l.label) for l in augmentedExpression]
+            
+            print("\n=> postfix regex:\n", "".join(ls))
+
+            print("\n-----  direct dfa from yal file  -----")
+            print("features:")
+            yalSynTree = directDfaBuilder(processedRegex, procPostfixRegex, alphabet)
+            yalexDirectDfa = yalSynTree.directDfaFromSynTree()
+            print(yalexDirectDfa)
+            displayDirectDfa(yalexDirectDfa)
+            messagebox.showinfo("Identify Tokens", "Tokens Identified Successfully")
+            
+            # remove the yal extension from the current file
+            base_filename = os.path.basename(self.currentOpenFile)
+            filename_without_extension, _ = os.path.splitext(base_filename)
+
+            # placec the pickle file in the tokenIdentifiers directory
+            pickle_directory = os.path.join("C:", os.sep, "Users", "sarap", "OneDrive", "Escritorio", "languageDesign", "src", "tokenIdentifiers")
+            pickle_path = os.path.join(pickle_directory, filename_without_extension)
+
+            if not os.path.exists(pickle_directory):
+                os.makedirs(pickle_directory)
+
+            with open(pickle_path, 'wb') as f:
+                pickle.dump(yalexDirectDfa, f)
+                pickle.dump(_, f)
+                
+        # error handling
+        except Exception as e:
+            print(f"\nan error occurred: {e}")
+            
+        finally:
+            # restore original stdout and stderr
+            sys.stdout = originalStdout
+            sys.stderr = originalStderr
+        
