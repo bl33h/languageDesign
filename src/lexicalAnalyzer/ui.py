@@ -236,7 +236,7 @@ class simpleUserInt(tk.Tk):
             # processed dfa
             yalSynTree = directDfaBuilder(processedRegex, procPostfixRegex, alphabet)
             yalexDirectDfa = yalSynTree.directDfaFromSynTree()
-            yalSynTree.alphabet = unpAlphabet
+            yalSynTree.alphabet = alphabet
             print(yalexDirectDfa)
             
             # show the success message
