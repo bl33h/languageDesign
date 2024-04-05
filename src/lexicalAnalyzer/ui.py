@@ -229,7 +229,6 @@ class simpleUserInt(tk.Tk):
             yalSynTree = directDfaBuilder(processedRegex, procPostfixRegex, alphabet)
             yalexDirectDfa = yalSynTree.directDfaFromSynTree()
             print(yalexDirectDfa)
-            displayDirectDfa(yalexDirectDfa)
             messagebox.showinfo("Identify Tokens", "Tokens Identified Successfully")
             
             # remove the yal extension from the current file
@@ -237,7 +236,7 @@ class simpleUserInt(tk.Tk):
             noExtensionFile, _ = os.path.splitext(baseFileName)
 
             # construct the relative path to the tokenIdentifiers directory
-            relativePath = os.path.join("..", "tokenIdentifiers")
+            relativePath = os.path.join("..", "identifiedTokens")
             pickleDirectory = os.path.normpath(os.path.join(os.path.dirname(__file__), relativePath))
             picklePath = os.path.join(pickleDirectory, noExtensionFile)
 
@@ -261,4 +260,3 @@ class simpleUserInt(tk.Tk):
             # restore original stdout and stderr
             sys.stdout = originalStdout
             sys.stderr = originalStderr
-        
