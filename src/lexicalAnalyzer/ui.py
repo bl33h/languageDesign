@@ -233,19 +233,25 @@ class simpleUserInt(tk.Tk):
             messagebox.showinfo("Identify Tokens", "Tokens Identified Successfully")
             
             # remove the yal extension from the current file
-            base_filename = os.path.basename(self.currentOpenFile)
-            filename_without_extension, _ = os.path.splitext(base_filename)
+            baseFileName = os.path.basename(self.currentOpenFile)
+            noExtensionFile, _ = os.path.splitext(baseFileName)
 
-            # placec the pickle file in the tokenIdentifiers directory
-            pickle_directory = os.path.join("C:", os.sep, "Users", "sarap", "OneDrive", "Escritorio", "languageDesign", "src", "tokenIdentifiers")
-            pickle_path = os.path.join(pickle_directory, filename_without_extension)
+            # construct the relative path to the tokenIdentifiers directory
+            relativePath = os.path.join("..", "tokenIdentifiers")
+            pickleDirectory = os.path.normpath(os.path.join(os.path.dirname(__file__), relativePath))
+            picklePath = os.path.join(pickleDirectory, noExtensionFile)
 
-            if not os.path.exists(pickle_directory):
-                os.makedirs(pickle_directory)
+            # create the directory if it doesn't exist
+            if not os.path.exists(pickleDirectory):
+                os.makedirs(pickleDirectory)
 
-            with open(pickle_path, 'wb') as f:
+            # save the DFA to a pickle file
+            with open(picklePath, 'wb') as f:
+                pickle.dump(yalexDirectDfa, f)
                 pickle.dump(yalexDirectDfa, f)
                 pickle.dump(_, f)
+
+            print("\n ✓Token identification and saving completed successfully.")
                 
         # error handling
         except Exception as e:
