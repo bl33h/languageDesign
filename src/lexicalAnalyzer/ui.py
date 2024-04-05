@@ -3,7 +3,7 @@
 # Author: Sara Echeverria
 # Version: I
 # Creation: 06/03/2024
-# Last modification: 10/03/2024
+# Last modification: 05/04/2024
 
 from tkinter import filedialog, scrolledtext, messagebox
 from directDfa.directDfaBuilder import *
@@ -135,9 +135,6 @@ class simpleUserInt(tk.Tk):
             code = self.codeEditor.get('1.0', tk.END)
             file.write(code)
             messagebox.showinfo("Save", "File Saved Successfully")
-    
-    def identifyTokens(self):
-        messagebox.showinfo("Tokens Identifier", "Token identification is not yet implemented.")
 
     # analyze lexically function (calls the parser)
     def analyzeLexically(self):
@@ -190,3 +187,6 @@ class simpleUserInt(tk.Tk):
             # restore original stdout and stderr
             sys.stdout = originalStdout
             sys.stderr = originalStderr
+    
+    def identifyTokens(self):
+        self.analyzeLexically()
