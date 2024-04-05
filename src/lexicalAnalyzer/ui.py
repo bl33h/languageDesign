@@ -215,6 +215,7 @@ class simpleUserInt(tk.Tk):
             procPostfixRegex = Obj2.explicitPostfixConv()
             
             # get alphabet from the infix
+            unpAlphabet = Obj.getAlphabet()
             alphabet = Obj2.getAlphabet()
             
             # place the augmented expression in a list
@@ -226,9 +227,19 @@ class simpleUserInt(tk.Tk):
 
             print("\n-----  direct dfa from yal file  -----")
             print("features:")
+            
+            # unprocessed dfa
+            unpYalSynTree = directDfaBuilder(unprocessedRegex, unpPostfixRegex, unpAlphabet)
+            unpYalexDirectDfa = unpYalSynTree.directDfaFromSynTree()
+            unpYalSynTree.unpAlphabet = unpAlphabet
+
+            # processed dfa
             yalSynTree = directDfaBuilder(processedRegex, procPostfixRegex, alphabet)
             yalexDirectDfa = yalSynTree.directDfaFromSynTree()
+            yalSynTree.alphabet = unpAlphabet
             print(yalexDirectDfa)
+            
+            # show the success message
             messagebox.showinfo("Identify Tokens", "Tokens Identified Successfully")
             
             # remove the yal extension from the current file
@@ -246,7 +257,7 @@ class simpleUserInt(tk.Tk):
 
             # save the DFA to a pickle file
             with open(picklePath, 'wb') as f:
-                pickle.dump(yalexDirectDfa, f)
+                pickle.dump(unpYalexDirectDfa, f)
                 pickle.dump(yalexDirectDfa, f)
                 pickle.dump(_, f)
 
