@@ -1,0 +1,28 @@
+(* this is a lexical analyzer *)
+
+let delim = [' ''\t''\n']
+let characters = ['+''*''-''/']
+let ws = delim+
+let capLetter = ['A'-'Z']
+let lowerCaseLetter = ['a'-'z']
+let digit = ['0'-'9']
+let lowerLetter = lowerCaseLetter*
+let capitalLetter= capLetter*
+
+rule tokens =
+    ws          { return WHITESPACE }
+  | characters  { return CHARACTERS }
+  | "/*"        { return LEFTCOMMENT }
+  | "→"         { return ARROW }
+  | "*/"        { return RIGHTCOMMENT }
+  | "%token"    { return TOKEN }
+  | "IGNORE"    { return IGNORE }
+  | lowerLetter { return word }
+  | capitalLetter { return WORD }
+  | digit+      { return NUMBER }
+  | "%%"        { return SPLIT }  
+  | ":"         { return TWOPOINTS }
+  | ";"         { return FINISHDECLARATION }
+      
+
+(* any trailer *)

@@ -3,9 +3,35 @@
 # Author: Sara Echeverria
 import pickle
 tokens = []
-with open('tokens/lowTokens', 'rb') as f:
+with open('tokens/tokenizerTokens', 'rb') as f:
 	tokens = pickle.load(f)
 
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
 	if symbol == '	':
 		None
 	if symbol == '	':
@@ -20,7 +46,7 @@ def tokens_returns(symbol):
 
 for token in tokens:
 	if(token[1] == '!Error'):
-		print(f'→ Lexeme: {token[0]} | !No token found, lexical error')
+		print(f'→ Lexeme: {token[0]} | !No token found')
 	else:
 		temp = ''
 		if '\n' in token[0] or token[0] == ' ' or token[0] == '':

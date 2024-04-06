@@ -82,7 +82,7 @@ class tokenizer():
         resultTokens = []
         for token in listTokens:
             if(token[1] == 'Error'):
-                print(f"→ Lexeme: {token[0]} | !No token found, lexical error")
+                print(f"→ Lexeme: {token[0]} | !No token found")
             else:
                 temp = ""
                 if "\n" in token[0] or token[0] == " " or token[0] == "":
@@ -146,7 +146,7 @@ class tokenizer():
             f.write("\n\treturn symbol\n")
             f.write("\nfor token in tokens:\n")
             f.write("\tif(token[1] == '!Error'):\n")
-            f.write("\t\tprint(f'→ Lexeme: {token[0]} | !No token found, lexical error')\n")
+            f.write("\t\tprint(f'→ Lexeme: {token[0]} | !No token found')\n")
             f.write("\telse:\n")
             f.write("\t\ttemp = ''\n")
             f.write("\t\tif '\\n' in token[0] or token[0] == ' ' or token[0] == '':\n")
@@ -157,7 +157,7 @@ class tokenizer():
             f.write("\n\n")
 
 # --- main ---
-name = 'low'     
+name = 'tokenizer'     
 tokenizerReader = tokenizer(f'src/identifiedTokens/{name}', 'src/yalexFiles/entry.txt')
 listToks = tokenizerReader.simulate()
 
