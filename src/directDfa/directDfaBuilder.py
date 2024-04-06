@@ -46,9 +46,9 @@ class directDfaBuilder():
         finalSynTree = self.tree.labeledNode(self.tree)
         inState = sorted(finalSynTree[0][1])
         tokenTransitions = [None]
-        acceptenceStates = []
-        transitions = []
+        acceptedStates = []
         initialState = None
+        transitions = []
         statesNumber = 1
         rfpStates = []
         names = {}
@@ -122,9 +122,9 @@ class directDfaBuilder():
                 initialState = key
             
             if statesNumber in values:
-                acceptenceStates.append(key)
+                acceptedStates.append(key)
                 
-        return automatonInfo(initialState, acceptenceStates, len(names), finalTransitions, list(names.keys()))
+        return automatonInfo(initialState, acceptedStates, len(names), finalTransitions, list(names.keys()))
 
 # ------- display the direct dfa media -------
 def displayDirectDfa(dfa):
@@ -135,13 +135,13 @@ def displayDirectDfa(dfa):
     graph.attr(rankdir='LR')
 
     for state in dfa.states:
-        if state == dfa.initialState and state in dfa.acceptenceStates:
+        if state == dfa.initialState and state in dfa.acceptedStates:
             graph.node(str(state), shape='doublecircle')
             
         if state == dfa.initialState:
             graph.edge('start', str(state))
             graph.node('start', shape='point')
-        elif state in dfa.acceptenceStates:
+        elif state in dfa.acceptedStates:
             graph.node(str(state), shape='doublecircle')
         else:
             graph.node(str(state), shape='circle')

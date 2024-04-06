@@ -153,7 +153,7 @@ class simpleUserInt(tk.Tk):
         try:
             print("\n\nreading the yalex file...")
             yal = yalexParser(self.currentOpenFile)
-            unprocessedRegex, processedRegex, _= yal.read()
+            unprocessedRegex, processedRegex, yalDefs= yal.read()
             
             # explicit shunting yard for the unprocessed and processed regex
             Obj = explicitShuntingYard(unprocessedRegex)
@@ -204,7 +204,7 @@ class simpleUserInt(tk.Tk):
         try:
             print("\n\nreading the yalex file...")
             yal = yalexParser(self.currentOpenFile)
-            unprocessedRegex, processedRegex, _= yal.read()
+            unprocessedRegex, processedRegex, yalDefs= yal.read()
             
             # explicit shunting yard for the unprocessed and processed regex
             Obj = explicitShuntingYard(unprocessedRegex)
@@ -259,7 +259,7 @@ class simpleUserInt(tk.Tk):
             with open(picklePath, 'wb') as f:
                 pickle.dump(unpYalexDirectDfa, f)
                 pickle.dump(yalexDirectDfa, f)
-                pickle.dump(_, f)
+                pickle.dump(yalDefs, f)
 
             print("\n ✓Token identification and saving completed successfully.")
                 
