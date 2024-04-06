@@ -1,28 +1,30 @@
 (* this is a lexical analyzer *)
 
-let delim = [' ''\t''\n']
-let characters = ['+''*''-''/']
-let ws = delim+
+let delim = [' ''\n']
 let capLetter = ['A'-'Z']
 let lowerCaseLetter = ['a'-'z']
 let digit = ['0'-'9']
 let lowerLetter = lowerCaseLetter*
 let capitalLetter= capLetter*
+let number = digit+
+let ws = delim+
 
 rule tokens =
-    ws          { return WHITESPACE }
-  | characters  { return CHARACTERS }
-  | "/*"        { return LEFTCOMMENT }
-  | "→"         { return ARROW }
-  | "*/"        { return RIGHTCOMMENT }
-  | "%token"    { return TOKEN }
-  | "IGNORE"    { return IGNORE }
-  | lowerLetter { return word }
+  | ws            { return WHITESPACE }
+  | '+'           { return PLUS }
+  | '*'           { return CHAR }
+  | '.'           { return DOT }
+  | '-'           { return MINUS }
+  | '$'           { return DOLLAR }
+  | '/'           { return DIVIDE }
+  | "%token"      { return TOKEN }
+  | lowerLetter   { return word }
   | capitalLetter { return WORD }
-  | digit+      { return NUMBER }
-  | "%%"        { return SPLIT }  
-  | ":"         { return TWOPOINTS }
-  | ";"         { return FINISHDECLARATION }
+  | number        { return NUMBER }
+  | ":"           { return TWOPOINTS }
+  | ";"           { return FINISHDECLARATION }
+  | '('           { return LPAREN }
+  | ')'           { return RPAREN }
       
 
 (* any trailer *)

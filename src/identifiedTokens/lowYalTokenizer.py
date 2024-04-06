@@ -3,31 +3,9 @@
 # Author: Sara Echeverria
 import pickle
 tokens = []
-with open('tokens/tokenizerTokens', 'rb') as f:
+with open('tokens/lowTokens', 'rb') as f:
 	tokens = pickle.load(f)
 
-	if symbol == '	':
-		None
-	if symbol == '	':
-		None
-	if symbol == '	':
-		None
-	if symbol == '	':
-		None
-	if symbol == '	':
-		None
-	if symbol == '	':
-		None
-	if symbol == '	':
-		None
-	if symbol == '	':
-		None
-	if symbol == '	':
-		None
-	if symbol == '	':
-		None
-	if symbol == '	':
-		None
 	if symbol == '	':
 		None
 	if symbol == '	':

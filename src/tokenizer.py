@@ -8,6 +8,7 @@
 from directDfa.regexUtilities import getTransitionSymbols, getAcceptanceStates, getAcceptanceTokenStates
 from lexicalAnalyzer.tokenUtilities import *
 import pickle
+import re
 
 class tokenizer():
     def __init__(self, nameFile, inputFile):
@@ -61,7 +62,14 @@ class tokenizer():
     
     # --- tokens ---
     # get the token
+    import re
+
     def getTokens(self, symbol, state):
+        # First, check if the symbol is a number
+        if re.match(r'^\d+(\.\d+)?$', symbol):
+            return 'number'  # Adjust the return value based on your token naming conventions
+
+        # Existing logic to match symbols to tokens starts here
         for unpKey, value in self.equalStates.items():
             if state in value:
                 for procKey,procValue in self.dicTokens.items():
@@ -71,11 +79,16 @@ class tokenizer():
                 if symbol == self.dicTokens[unpKey]:
                     return self.dicTokens[unpKey]
                 else:
-                    return self.dicTokens[unpKey]
+                    return "!No token found"
+        
             else:
                 for unpKey, value in self.allTokens.items():
                     if value == self.acceptedStates[state] or value in self.acceptedStates[state]:
                         return self.dicTokens[unpKey]
+
+        # If no matching token was found, you might want to return a default case,
+        # such as an error token or a log message, depending on your error handling.
+        return "!No token found"  # Adjust as needed based on your error handling strategy
     
     # print the tokens
     def tokensList(self, listTokens):
