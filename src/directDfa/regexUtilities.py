@@ -13,16 +13,21 @@ class explicitSymbols():
         self.isOperator = False
         self.label = symbol
         self.token = None
-        
+    
+    # --- set the type of the symbol ---
+    # is it an operator?
     def setType(self, isOperator):
         self.isOperator = isOperator
-        
+    
+    # is it a special character?
     def setSpecialType(self, isSpecial):
         self.isSpecialChar = isSpecial
 
+    # is it a token?
     def setToken(self, newToken):
         self.token = newToken
-        
+    
+    # is it a final symbol?
     def setFinalSymbol(self, isFinal):
         self.isFinalSymbol = isFinal
     
@@ -122,17 +127,89 @@ class manageExpression():
 
 # ------- automaton information -------
 class automatonInfo():
-    def __init__(self, initialState, acceptenceStates, numStates, explicitTransitions, states):
+    def __init__(self, initialState, acceptedStates, numStates, explicitTransitions, states):
+        self.explicitTransitions = explicitTransitions
+        self.acceptedStates = acceptedStates
+        self.initialState = initialState
         self.numStates = numStates
         self.states = states
-        self.initialState = initialState
-        self.acceptenceStates = acceptenceStates
-        self.explicitTransitions = explicitTransitions
         self.alphabet = None
     
     def __str__(self):
-        return f"- states: {self.states}\n- acceptance states: {self.acceptenceStates}"
+        return f"- states: {self.states}\n- acceptance states: {self.acceptedStates}"
     
+# ------- related to the tokens -------
+# get the symbols
+def getTransitionSymbols(finalState, transitions):
+    acceptedTransitions = []
+    transitionSymbols = {}
+    
+    # get the transitions
+    for trans in transitions:
+        for lastState in finalState:
+            if(trans.fnState == lastState):
+                if trans not in acceptedTransitions:
+                    acceptedTransitions.append(trans)
+    
+    # get the symbols
+    for trans in acceptedTransitions:
+        transitionSymbols[trans.inState] = trans.symbol.label.strip("#")
+
+    return transitionSymbols
+
+# get the final states
+def getAcceptanceStates(acceptedStates, transitions):
+    acceptedTransitions = []
+    acceptanceStates = {}
+    
+    # get the transitions
+    for trans in transitions:
+        for lastState in acceptedStates:
+            if(trans.fnState == lastState):
+                if trans not in acceptedTransitions:
+                    acceptedTransitions.append(trans)
+    
+    # get the final states
+    for trans in acceptedTransitions:
+        if (trans.fnState not in acceptanceStates):
+            acceptanceStates[trans.fnState] = [trans.symbol.label]
+        else:
+            if (trans.symbol.label not in acceptanceStates[trans.fnState]):
+                acceptanceStates[trans.fnState].append(trans.symbol.label)
+        
+    return acceptanceStates
+
+# get the final states with tokens
+def getAcceptanceTokenStates(acceptedStates, transitions):
+    acceptanceTokenStates = []
+    
+    # get the final states
+    for trans in transitions:
+        for lastState in acceptedStates:
+            if(trans.fnState == lastState):
+                if trans.inState not in acceptanceTokenStates:
+                    acceptanceTokenStates.append(trans.inState)
+                    
+    acceptedTransitions = []
+    acceptanceStates = {}
+    
+    # get the transitions
+    for trans in transitions:
+        for lastState in acceptanceTokenStates:
+            if(trans.fnState == lastState):
+                if trans not in acceptedTransitions:
+                    acceptedTransitions.append(trans)
+    
+    # get the final states with tokens                
+    for trans in acceptedTransitions:
+        if (trans.fnState not in acceptanceStates):
+            acceptanceStates[trans.fnState] = [trans.symbol.label]
+        else:
+            if (trans.symbol.label not in acceptanceStates[trans.fnState]):
+                acceptanceStates[trans.fnState].append(trans.symbol.label)
+                    
+    return acceptanceStates
+
 # ------- error management -------
 def errorManagement (regex):
     # empty input
