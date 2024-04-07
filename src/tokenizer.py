@@ -8,7 +8,6 @@
 from directDfa.regexUtilities import getTransitionSymbols, getAcceptanceStates, getAcceptanceTokenStates
 from lexicalAnalyzer.tokenUtilities import *
 import pickle
-import re
 
 class tokenizer():
     def __init__(self, nameFile, inputFile):
@@ -62,14 +61,7 @@ class tokenizer():
     
     # --- tokens ---
     # get the token
-    import re
-
     def getTokens(self, symbol, state):
-        # First, check if the symbol is a number
-        if re.match(r'^\d+(\.\d+)?$', symbol):
-            return 'number'  # Adjust the return value based on your token naming conventions
-
-        # Existing logic to match symbols to tokens starts here
         for unpKey, value in self.equalStates.items():
             if state in value:
                 for procKey,procValue in self.dicTokens.items():
@@ -79,16 +71,12 @@ class tokenizer():
                 if symbol == self.dicTokens[unpKey]:
                     return self.dicTokens[unpKey]
                 else:
-                    return "!No token found"
+                    return self.dicTokens[unpKey]
         
             else:
                 for unpKey, value in self.allTokens.items():
                     if value == self.acceptedStates[state] or value in self.acceptedStates[state]:
                         return self.dicTokens[unpKey]
-
-        # If no matching token was found, you might want to return a default case,
-        # such as an error token or a log message, depending on your error handling.
-        return "!No token found"  # Adjust as needed based on your error handling strategy
     
     # print the tokens
     def tokensList(self, listTokens):
@@ -119,11 +107,11 @@ class tokenizer():
         return self.newListTokens
     
     # place the brackets 
-    def bracketsIdentifier(self, texto):
-        openingBracket = texto.find("{")
-        closingBracket = texto.rfind("}")
+    def bracketsIdentifier(self, stringC):
+        openingBracket = stringC.find("{")
+        closingBracket = stringC.rfind("}")
         if openingBracket >= 0 and closingBracket >= 0:
-            return texto[openingBracket+1:closingBracket].strip()
+            return stringC[openingBracket+1:closingBracket].strip()
         else:
             return None
     
@@ -136,16 +124,38 @@ class tokenizer():
             f.write("# Copyright (C), 2024-2025, bl33h\n")
             f.write("# File: A tokenizer for the yaleX file\n")
             f.write("# Author: Sara Echeverria")
+            f.write("\n")
             
             # imports
             f.write("\nimport pickle\n")
             
             # variables
             f.write("tokens = []\n")
+            f.write("word = 'word'\n")
+            f.write("WORD = 'WORD'\n")
+            f.write("NUMBER = 7\n")
+            f.write("WHITESPACE = ' '\n")
+            f.write("PLUS = '+'\n")
+            f.write("TIMES = '*'\n")
+            f.write("DOT = '.'\n")
+            f.write("MINUS = '-'\n")
+            f.write("PERCENTAGE = '%'\n")
+            f.write("CHARACTER = '_'\n")
+            f.write("DOLLAR = '$'\n")
+            f.write("DIVIDE = '/'\n")
+            f.write("TOKEN = '%' + 'token'\n")
+            f.write("TWOPOINTS = ':'\n")
+            f.write("FINISHDECLARATION = ';'\n")
+            f.write("LPAREN = '('\n")
+            f.write("RPAREN = ')'\n")
+            f.write("EQUALS = '='\n")
+            f.write("AND = '&'\n")
+            f.write("GREATERCHAR = '<'\n")
             
             # load the tokens
-            f.write(f"with open('tokens/{name}Tokens', 'rb') as f:\n")
+            f.write(f"\nwith open('{name}Tokens', 'rb') as f:\n")
             f.write("\ttokens = pickle.load(f)\n\n")
+            f.write("def tokenReturns(symbol):\n")
             
             
             # returns the token
@@ -155,7 +165,6 @@ class tokenizer():
                     f.write(f"\tif symbol == '{element[0]}':\n\t\t{func}\n")
             
             # methods
-            f.write("def tokens_returns(symbol):\n")
             f.write("\n\treturn symbol\n")
             f.write("\nfor token in tokens:\n")
             f.write("\tif(token[1] == '!Error'):\n")
@@ -166,8 +175,7 @@ class tokenizer():
             f.write("\t\t\ttemp = repr(token[0])\n")
             f.write("\t\telse:\n")
             f.write("\t\t\ttemp = token[0]\n")
-            f.write("\t\tprint(f'→ Lexeme: {temp} | >Token: {tokens_returns(token[1])}')\n")
-            f.write("\n\n")
+            f.write("\t\tprint(f'→ Lexeme: {temp} | >Token: {tokenReturns(token[1])}')")
 
 # --- main ---
 name = 'tokenizer'     

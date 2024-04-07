@@ -12,7 +12,7 @@ let ws = delim+
 rule tokens =
   | ws            { return WHITESPACE }
   | '+'           { return PLUS }
-  | '*'           { return CHAR }
+  | '*'           { return TIMES }
   | '.'           { return DOT }
   | '-'           { return MINUS }
   | '%'           { return PERCENTAGE }
@@ -27,7 +27,7 @@ rule tokens =
   | ";"           { return FINISHDECLARATION }
   | '('           { return LPAREN }
   | ')'           { return RPAREN }
-  | '='           { return EQUAL }
+  | '='           { return EQUALS }
   | '&'           { return AND }
   | '<'           { return SMALLERCHAR }
   | '<'           { return GREATERCHAR }
