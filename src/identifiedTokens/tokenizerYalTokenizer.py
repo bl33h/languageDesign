@@ -46,6 +46,16 @@ with open('tokens/tokenizerTokens', 'rb') as f:
 		None
 	if symbol == '	':
 		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
+	if symbol == '	':
+		None
 def tokens_returns(symbol):
 
 	return symbol
