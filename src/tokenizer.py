@@ -8,6 +8,9 @@
 from directDfa.regexUtilities import getTransitionSymbols, getAcceptanceStates, getAcceptanceTokenStates
 from lexicalAnalyzer.tokenUtilities import *
 import pickle
+import sys
+
+sys.path.append('C:\\Users\\sarap\\OneDrive\\Escritorio\\languageDesign\\src')
 
 class tokenizer():
     def __init__(self, nameFile, inputFile):
@@ -25,7 +28,9 @@ class tokenizer():
         self.cleanDefinitions = [] 
         
         for definition in self.yalDefs:
-            self.cleanDefinitions.append(definition.tokensFeatures())
+            self.cleanDefinitions.append(definition.actualCleanDefinition())
+        
+        print(self.cleanDefinitions)
 
         # --- get the acceptance states and the tokens ---
         self.acceptedStates = getAcceptanceStates(self.unpYalexDirectDfa.acceptedStates, self.unpYalexDirectDfa.explicitTransitions)
@@ -115,9 +120,10 @@ class tokenizer():
         else:
             return None
     
-    # make the tokenizerReaderner (the .py generated file)
+    # make the tokenizerReader (the .py generated file)
     def tokenizerBuilder(self, name):
-        self.tokenizerFile = f"{self.name}YalTokenizer.py"
+        self.tokenizerFile = f"src/yalexTokensIdentifier/{name}TokensDetector.py"
+            
         with open(self.tokenizerFile, "w", encoding="utf-8") as f:
             
             # header
@@ -130,7 +136,6 @@ class tokenizer():
             f.write("\nimport pickle\n")
             
             # variables
-            f.write("tokens = []\n")
             f.write("word = 'word'\n")
             f.write("WORD = 'WORD'\n")
             f.write("NUMBER = 7\n")
@@ -151,12 +156,12 @@ class tokenizer():
             f.write("EQUALS = '='\n")
             f.write("AND = '&'\n")
             f.write("GREATERCHAR = '<'\n")
+            f.write("tokens = []\n")
             
             # load the tokens
             f.write(f"\nwith open('{name}Tokens', 'rb') as f:\n")
-            f.write("\ttokens = pickle.load(f)\n\n")
+            f.write("\ntokens = pickle.load(f)\n\n")
             f.write("def tokenReturns(symbol):\n")
-            
             
             # returns the token
             for element in self.cleanDefinitions:

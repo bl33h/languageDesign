@@ -91,6 +91,26 @@ class defs():
         
         return f"\t- token: {self.name}\n\t   description: {valDesc}\n\t   function: {valFunc}"
     
+    def actualCleanDefinition(self):
+        if self.desc == None:
+            valDesc = "no description." 
+        else:
+            if any(s.isSpecialChar == True for s in self.desc):
+                tempLD = []
+                for i in self.desc:
+                    if i.isSpecialChar:
+                        tempLD.append(repr(i.label).replace("'", ""))
+                    else:
+                        tempLD.append(i.label.replace("'", ""))
+                valDesc = ''.join(tempLD)
+            else:
+                tempLD = [s.label for s in self.desc]
+                valDesc = ''.join(tempLD)
+        
+        valFunc = "without function." if self.func is None else self.func
+        
+        return (self.name, valDesc, valFunc)
+    
     def __eq__(self, other):
         if isinstance(other, defs):
             return self.name == other.name

@@ -3,11 +3,10 @@
 # Author: Sara Echeverria
 
 import pickle
-tokens = []
 word = 'word'
 WORD = 'WORD'
-NUMBER = 'NUMBER'
-WHITESPACE = 'ws'
+NUMBER = 7
+WHITESPACE = ' '
 PLUS = '+'
 TIMES = '*'
 DOT = '.'
@@ -24,11 +23,21 @@ RPAREN = ')'
 EQUALS = '='
 AND = '&'
 GREATERCHAR = '<'
+tokens = []
 
 with open('tokenizerTokens', 'rb') as f:
-	tokens = pickle.load(f)
+
+tokens = pickle.load(f)
 
 def tokenReturns(symbol):
+	if symbol == 'delim':
+		None
+	if symbol == 'capLetter':
+		None
+	if symbol == 'lowerCaseLetter':
+		None
+	if symbol == 'digit':
+		None
 	if symbol == 'lowerLetter':
 		return word
 	if symbol == 'capitalLetter':
@@ -37,6 +46,8 @@ def tokenReturns(symbol):
 		return NUMBER
 	if symbol == 'ws':
 		return WHITESPACE
+	if symbol == '':
+		None
 	if symbol == '+':
 		return PLUS
 	if symbol == '*':
