@@ -348,7 +348,7 @@ class yalpParser():
                                 inState = k
                                 break
                 print(el)
-                print("-"*50)
+                print("_"*50)
             print("\n")
         
         lr0 = automatonInfo(inState, [finState], len(finalStates.keys()), transitions, list(finalStates.keys()))
