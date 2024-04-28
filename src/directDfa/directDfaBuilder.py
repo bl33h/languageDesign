@@ -131,7 +131,7 @@ def displayDirectDfa(dfa):
     outputDir = 'directDfaOutput'
     os.makedirs(outputDir, exist_ok=True)
     dotFilePath = os.path.join(outputDir, 'directDfa')
-    graph = Digraph('DirectMethodDFA', filename=dotFilePath, format='png')
+    graph = Digraph('DirectconstructionMethodDFA', filename=dotFilePath, format='png')
     graph.attr(rankdir='LR')
 
     for state in dfa.states:
@@ -153,7 +153,7 @@ def displayDirectDfa(dfa):
     graph.render(view=True)
     
 # ------- display the LR0 automaton -------
-def displayLR0(dfa, metodo):
+def displayLR0(dfa, constructionMethod):
     outputDir = 'LR0Output'
     os.makedirs(outputDir, exist_ok=True)
     dotFilePath = os.path.join(outputDir, 'LR0')
