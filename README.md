@@ -1,1 +1,1 @@
-# languageDesign - syntax analyzer
+# languageDesign - syntactic tokens
