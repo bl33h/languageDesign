@@ -127,10 +127,14 @@ class tokenizer():
             f.write("# Author: Sara Echeverria")
             f.write("\n")
             
-            # imports
             f.write("\nimport pickle\n")
             
+            # list
+            f.write("\n# tokens list\n")
+            f.write("tokens = []\n\n")
+            
             # variables
+            f.write("# returns\n")
             f.write("word = 'word'\n")
             f.write("WORD = 'WORD'\n")
             f.write("NUMBER = 7\n")
@@ -151,12 +155,14 @@ class tokenizer():
             f.write("EQUALS = '='\n")
             f.write("AND = '&'\n")
             f.write("GREATERCHAR = '<'\n")
-            f.write("tokens = []\n")
             
-            # load the tokens
+            # loads the pickle tokens
+            f.write(f"\n# pickle use")
             f.write(f"\nwith open('{name}Tokens', 'rb') as f:\n")
-            f.write("\ntokens = pickle.load(f)\n\n")
-            f.write("def tokenReturns(symbol):\n")
+            f.write("\ttokens = pickle.load(f)\n")
+            
+            # places the pickle tokens
+            f.write("\ndef tokenReturns(symbol):\n")
             
             # returns the token
             for element in self.cleanDefinitions:
@@ -164,8 +170,10 @@ class tokenizer():
                     func = self.bracketsIdentifier(element[2])
                     f.write(f"\tif symbol == '{element[0]}':\n\t\t{func}\n")
             
+            f.write("\n\treturn symbol")
+            
             # methods
-            f.write("\n\treturn symbol\n")
+            f.write("\n\n# iterating loop")
             f.write("\nfor token in tokens:\n")
             f.write("\tif(token[1] == '!Error'):\n")
             f.write("\t\tprint(f'→ Lexeme: {token[0]} | !No token found')\n")

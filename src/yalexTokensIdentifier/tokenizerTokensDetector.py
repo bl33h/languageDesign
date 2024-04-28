@@ -3,6 +3,11 @@
 # Author: Sara Echeverria
 
 import pickle
+
+# tokens list
+tokens = []
+
+# returns
 word = 'word'
 WORD = 'WORD'
 NUMBER = 7
@@ -23,11 +28,10 @@ RPAREN = ')'
 EQUALS = '='
 AND = '&'
 GREATERCHAR = '<'
-tokens = []
 
+# pickle use
 with open('tokenizerTokens', 'rb') as f:
-
-tokens = pickle.load(f)
+	tokens = pickle.load(f)
 
 def tokenReturns(symbol):
 	if symbol == 'delim':
@@ -83,6 +87,7 @@ def tokenReturns(symbol):
 
 	return symbol
 
+# iterating loop
 for token in tokens:
 	if(token[1] == '!Error'):
 		print(f'→ Lexeme: {token[0]} | !No token found')
