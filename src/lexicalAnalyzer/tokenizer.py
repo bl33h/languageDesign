@@ -8,9 +8,6 @@
 from directDfa.regexUtilities import getTransitionSymbols, getAcceptanceStates, getAcceptanceTokenStates
 from lexicalAnalyzer.tokenUtilities import *
 import pickle
-import sys
-
-sys.path.append('C:\\Users\\sarap\\OneDrive\\Escritorio\\languageDesign\\src')
 
 class tokenizer():
     def __init__(self, nameFile, inputFile):
@@ -29,8 +26,6 @@ class tokenizer():
         
         for definition in self.yalDefs:
             self.cleanDefinitions.append(definition.actualCleanDefinition())
-        
-        print(self.cleanDefinitions)
 
         # --- get the acceptance states and the tokens ---
         self.acceptedStates = getAcceptanceStates(self.unpYalexDirectDfa.acceptedStates, self.unpYalexDirectDfa.explicitTransitions)
@@ -181,24 +176,3 @@ class tokenizer():
             f.write("\t\telse:\n")
             f.write("\t\t\ttemp = token[0]\n")
             f.write("\t\tprint(f'→ Lexeme: {temp} | >Token: {tokenReturns(token[1])}')")
-
-# --- main ---
-name = 'tokenizer'     
-tokenizerReader = tokenizer(f'src/identifiedTokens/{name}', 'src/yalexFiles/entry.txt')
-listToks = tokenizerReader.simulate()
-
-# show the tokens
-print("------- Identified tokens -------")
-tokensText = tokenizerReader.tokensList(listToks)
-
-# save the tokens
-tokenList = tokenizerReader.currentTokens(listToks)
-with open(f'src/tokens/{name}Tokens', 'wb') as f:
-    pickle.dump(tokenList, f)
-
-# save the text tokens
-with open(f'src/tokens/{name}TextTokens', 'wb') as f:
-    pickle.dump(tokensText, f)
-    
-print()
-tokenizerReader.tokenizerBuilder(name)

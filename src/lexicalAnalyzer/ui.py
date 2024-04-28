@@ -7,6 +7,7 @@
 
 from tkinter import filedialog, scrolledtext, messagebox
 from directDfa.directDfaBuilder import *
+from lexicalAnalyzer.tokenizer import *
 from directDfa.regexUtilities import *
 from lexicalAnalyzer.parser import *
 from directDfa.syntaxTree import *
@@ -262,6 +263,28 @@ class simpleUserInt(tk.Tk):
                 pickle.dump(yalDefs, f)
 
             print("\n ✓Token identification and saving completed successfully.")
+            
+            name, _ = os.path.splitext(baseFileName)  
+            tokenizerReader = tokenizer(f'src/identifiedTokens/{name}', 'src/yalexFiles/entry.txt')
+            listToks = tokenizerReader.simulate()
+
+            # show the tokens
+            print("\n------- Identified tokens -------")
+            tokensText = tokenizerReader.tokensList(listToks)
+
+            # save the tokens
+            tokenList = tokenizerReader.currentTokens(listToks)
+            with open(f'src/tokens/{name}Tokens', 'wb') as f:
+                pickle.dump(tokenList, f)
+
+            # save the text tokens
+            with open(f'src/tokens/{name}TextTokens', 'wb') as f:
+                pickle.dump(tokensText, f)
+                
+            print()
+            tokenizerReader.tokenizerBuilder(name)
+            
+            print("✓Tokenizer Python file generated successfully.")
                 
         # error handling
         except Exception as e:
