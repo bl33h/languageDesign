@@ -333,6 +333,7 @@ class yalpParser():
         
         inState = None
         finState = None
+        print("\n------------------------ LR0 diagram ------------------------")
                     
         for k,v in finalStates.items():
             print(k, len(v))
@@ -458,4 +459,4 @@ for symbol in parserInstance.grammarSymbols:
     following_set = parserInstance.following(symbol)
     print(f"Following({symbol}): {following_set}")
 
-print("\n✓ LR0 automaton created successfully !\n")
+print("\n✓ LR0 diagram created successfully !\n")
