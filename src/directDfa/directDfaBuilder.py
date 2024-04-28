@@ -151,3 +151,29 @@ def displayDirectDfa(dfa):
         graph.edge(str(origin), str(destiny), label=str(explicitSymbols))
         
     graph.render(view=True)
+    
+# ------- display the LR0 automaton -------
+def displayLR0(dfa, metodo):
+    outputDir = 'LR0Output'
+    os.makedirs(outputDir, exist_ok=True)
+    dotFilePath = os.path.join(outputDir, 'LR0')
+    graph = Digraph('LR0', filename=dotFilePath, format='png')
+    graph.attr(rankdir='LR')
+
+    for state in dfa.states:
+        if state == dfa.initialState and state in dfa.acceptedStates:
+            graph.node(str(state), shape='doublecircle')
+            
+        if state == dfa.initialState:
+            graph.edge('start', str(state))
+            graph.node('start', shape='point')
+        elif state in dfa.acceptedStates:
+            graph.node(str(state), shape='doublecircle')
+        else:
+            graph.node(str(state), shape='circle')
+
+    for explicitTransitions in dfa.explicitTransitions:
+        origin, explicitSymbols, destiny = explicitTransitions.inState, explicitTransitions.symbol, explicitTransitions.fnState
+        graph.edge(str(origin), str(destiny), label=str(explicitSymbols))
+        
+    graph.render(view=True)

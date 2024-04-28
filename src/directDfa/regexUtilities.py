@@ -230,6 +230,44 @@ def getAcceptanceTokenStates(acceptedStates, transitions):
                     
     return acceptanceStates
 
+# ------- items -------
+class itemsInTheProductions():
+    def __init__(self, label, completeLabel=None):
+        self.label = label
+        self.info = completeLabel
+        self.terminal = False
+        self.dot = False
+        
+    def setType(self, isTerminal):
+        self.terminal = isTerminal
+        
+    def setFinal(self, isDot):
+        self.dot = isDot
+    
+    def __str__(self):
+        return f"{self.label}"
+    
+    def __repr__(self):
+        return str(self)
+
+# ------- actual productions -------
+class actualProductions():
+    def __init__(self, leftSide, rightSide):
+        self.ls = leftSide
+        self.rs = rightSide
+    
+    def __str__(self) -> str:
+        return f"{self.ls} → {' '.join([str(s) for s in self.rs])}"
+    
+    def __repr__(self):
+        return str(self)
+    
+    def __eq__(self, other):
+        if not isinstance(other, actualProductions):
+            return False
+        
+        return self.ls == other.ls and self.rs == other.rs
+
 # ------- error management -------
 def errorManagement (regex):
     # empty input

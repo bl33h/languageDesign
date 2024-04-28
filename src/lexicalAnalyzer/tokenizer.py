@@ -143,6 +143,7 @@ class tokenizer():
             f.write("TIMES = '*'\n")
             f.write("DOT = '.'\n")
             f.write("MINUS = '-'\n")
+            f.write("ID = 'ID'\n")
             f.write("PERCENTAGE = '%'\n")
             f.write("CHARACTER = '_'\n")
             f.write("DOLLAR = '$'\n")
