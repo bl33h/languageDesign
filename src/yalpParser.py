@@ -445,5 +445,17 @@ class yalpParser():
         return linesWithoutTokens
 
 name = 'lowYalYalp'
-a = yalpParser(f'yalpFiles/{name}.yalp', f'./identifiedTokens/{name}', name)
-a.read()
+parserInstance = yalpParser(f'yalpFiles/{name}.yalp', f'./identifiedTokens/{name}', name)
+parserInstance.read()
+parserInstance.getGrammarSymbols()
+print("\n------ First Sets ------")
+for symbol in parserInstance.grammarSymbols:
+    first_set = parserInstance.first(symbol)
+    print(f"First({symbol}): {first_set}")
+
+print("\n------ Following Sets ------")
+for symbol in parserInstance.grammarSymbols:
+    following_set = parserInstance.following(symbol)
+    print(f"Following({symbol}): {following_set}")
+
+print("\n✓ LR0 automaton created successfully !\n")
