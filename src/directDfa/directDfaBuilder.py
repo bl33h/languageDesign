@@ -156,21 +156,19 @@ def displayDirectDfa(dfa):
 def displayLR0(dfa, constructionMethod):
     outputDir = 'LR0Output'
     os.makedirs(outputDir, exist_ok=True)
-    dotFilePath = os.path.join(outputDir, 'LR0')
+    dotFilePath = os.path.join(outputDir, constructionMethod)
     graph = Digraph('LR0', filename=dotFilePath, format='png')
     graph.attr(rankdir='LR')
 
+    graph.node('start', shape='point')
+    graph.edge('start', str(dfa.initialState))
+
     for state in dfa.states:
-        if state == dfa.initialState and state in dfa.acceptedStates:
-            graph.node(str(state), shape='doublecircle')
-            
+        shape = 'doublecircle' if state in dfa.acceptedStates else 'circle'
+        graph.node(str(state), shape=shape)
+
         if state == dfa.initialState:
             graph.edge('start', str(state))
-            graph.node('start', shape='point')
-        elif state in dfa.acceptedStates:
-            graph.node(str(state), shape='doublecircle')
-        else:
-            graph.node(str(state), shape='circle')
 
     for explicitTransitions in dfa.explicitTransitions:
         origin, explicitSymbols, destiny = explicitTransitions.inState, explicitTransitions.symbol, explicitTransitions.fnState

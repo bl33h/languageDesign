@@ -311,6 +311,7 @@ class yalpParser():
         transitions = []
         items = [C]
         
+        # items
         for group in items:
             for symbol in self.grammarSymbols:
                 result = self.goTo(group, symbol)
@@ -331,16 +332,16 @@ class yalpParser():
                                     if v2 == result:
                                         transitions.append(explicitTransitions(k, symbol, k2))
         
-        lr0_descriptions = {}
+        # states & features
+        lr0Descriptions = {}
         
         for k, v in finalStates.items():
-            description_items = [str(el) for el in v if el is not None]  # List comprehension to filter out None
-            if description_items:  # If there are any items in the description
-                lr0_descriptions[k] = "\n".join(description_items)
-            # Note: States with no items won't have an entry in lr0_descriptions
+            itemsDescription = [str(el) for el in v if el is not None]
+            if itemsDescription:
+                lr0Descriptions[k] = "\n".join(itemsDescription)
         
-        inState = None
         finState = None
+        inState = None
         
         print("\n------------------------ LR0 diagram ------------------------")
                     
@@ -363,7 +364,7 @@ class yalpParser():
     
         lr0 = automatonInfo(inState, [finState], len(finalStates.keys()), transitions, list(finalStates.keys()))
         displayLR0(lr0, f"LR0{self.name}")
-        displayLR0Diagram(lr0, f"LR0{self.name}Diagram", lr0_descriptions)
+        displayLR0Diagram(lr0, f"LR0{self.name}Diagram", lr0Descriptions)
 
     # ------------------- brackets information function -------------------
     def bracketsInformation(self, text):

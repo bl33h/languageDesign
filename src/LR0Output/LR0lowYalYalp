@@ -1,7 +1,9 @@
 digraph LR0 {
 	rankdir=LR
-	start -> I0
 	start [shape=point]
+	start -> I0
+	I0 [shape=circle]
+	start -> I0
 	I1 [shape=circle]
 	I2 [shape=circle]
 	I3 [shape=doublecircle]
