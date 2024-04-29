@@ -220,8 +220,8 @@ class yalpParser():
     def closure(self, productions):
         dotItem = itemsInTheProductions('°')
         dotItem.setFinal(True)
-        J = productions
-        for prod in J:
+        finalSet = productions
+        for prod in finalSet:
             for i in range(len(prod.rs)):
                 if(prod.rs[i].dot):
                     if(i+1 < len(prod.rs)):
@@ -230,10 +230,10 @@ class yalpParser():
                                 if produ.ls.label == prod.rs[i+1].label:
                                     if(not any([v.dot for v in produ.rs])):
                                         produ.rs.insert(0, dotItem)
-                                    if produ not in J:
-                                        J.append(produ)
+                                    if produ not in finalSet:
+                                        finalSet.append(produ)
         
-        return J
+        return finalSet
     
     # ------------------- go to function -------------------
     def goTo(self, items, symbol):
