@@ -151,7 +151,7 @@ def displayDirectDfa(dfa):
         graph.edge(str(origin), str(destiny), label=str(explicitSymbols))
         
     graph.render(view=True)
-    
+
 # ------- display the LR0 automaton -------
 def displayLR0(dfa, constructionMethod):
     outputDir = 'LR0Output'
@@ -176,4 +176,42 @@ def displayLR0(dfa, constructionMethod):
         origin, explicitSymbols, destiny = explicitTransitions.inState, explicitTransitions.symbol, explicitTransitions.fnState
         graph.edge(str(origin), str(destiny), label=str(explicitSymbols))
         
+    graph.render(view=True)
+    
+# ------- display the LR0 diagram -------
+def displayLR0Diagram(dfa, constructionMethod, descriptions=None):
+    outputDir = 'LR0Output'
+    os.makedirs(outputDir, exist_ok=True)
+    dotFilePath = os.path.join(outputDir, constructionMethod)
+    graph = Digraph('LR0', filename=dotFilePath, format='png')
+    graph.attr(rankdir='LR')
+
+    # Create a starting point
+    graph.node('start', shape='point')
+    graph.edge('start', str(dfa.initialState))
+
+    for state in dfa.states:
+        # Initialize the label with the state name
+        label = f'{state}'
+
+        # Check if the state has a description and it's not None
+        if descriptions and state in descriptions and descriptions[state] is not None:
+            # Replace newlines with HTML line breaks for Graphviz
+            description = descriptions[state].replace('\n', '<BR/>')
+            # Append the description to the label
+            label += f'<BR/><BR/>{description}'
+
+        # Determine the shape of the node
+        shape = 'doublecircle' if state in dfa.acceptedStates else 'circle'
+
+        # Add the node to the graph with an HTML-like label
+        graph.node(str(state), label=f'<{label}>', shape=shape)
+
+    # Add edges between nodes
+    for transition in dfa.explicitTransitions:
+        if transition.symbol is not None:  # Make sure the transition symbol is not None
+            origin, symbol, destiny = transition.inState, transition.symbol, transition.fnState
+            graph.edge(str(origin), str(destiny), label=str(symbol))
+
+    # Render the graph to a file and optionally view it
     graph.render(view=True)

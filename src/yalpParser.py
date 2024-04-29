@@ -8,7 +8,7 @@
 # import sys
 # sys.path.append('C:\\Users\\sarap\\OneDrive\\Escritorio\\languageDesign\\src')
 
-from directDfa.directDfaBuilder import displayLR0
+from directDfa.directDfaBuilder import displayLR0, displayLR0Diagram
 from directDfa.regexUtilities import *
 import pickle
 
@@ -301,7 +301,7 @@ class yalpParser():
 
         return followingSet
     
-    # ------------------- new final states function -------------------
+   # ------------------- new final states function -------------------
     def newFinalStates(self, increased):
         self.getGrammarSymbols()
         statesNumber = 0
@@ -315,24 +315,33 @@ class yalpParser():
             for symbol in self.grammarSymbols:
                 result = self.goTo(group, symbol)
                 
-                if(result != []):
+                if result != []:
                     if result not in finalStates.values():
                         items.append(result)
                         statesNumber += 1
                         finalStates[f"I{statesNumber}"] = result
                         
-                        for k,v in finalStates.items():
+                        for k, v in finalStates.items():
                             if v == group:
                                 transitions.append(explicitTransitions(k, symbol, f"I{statesNumber}"))
                     else:
-                        for k,v in finalStates.items():
+                        for k, v in finalStates.items():
                             if v == group:
-                                for k2,v2 in finalStates.items():
+                                for k2, v2 in finalStates.items():
                                     if v2 == result:
                                         transitions.append(explicitTransitions(k, symbol, k2))
         
+        lr0_descriptions = {}
+        
+        for k, v in finalStates.items():
+            description_items = [str(el) for el in v if el is not None]  # List comprehension to filter out None
+            if description_items:  # If there are any items in the description
+                lr0_descriptions[k] = "\n".join(description_items)
+            # Note: States with no items won't have an entry in lr0_descriptions
+        
         inState = None
         finState = None
+        
         print("\n------------------------ LR0 diagram ------------------------")
                     
         for k,v in finalStates.items():
@@ -351,9 +360,10 @@ class yalpParser():
                 print(el)
                 print("_"*50)
             print("\n")
-        
+    
         lr0 = automatonInfo(inState, [finState], len(finalStates.keys()), transitions, list(finalStates.keys()))
         displayLR0(lr0, f"LR0{self.name}")
+        displayLR0Diagram(lr0, f"LR0{self.name}Diagram", lr0_descriptions)
 
     # ------------------- brackets information function -------------------
     def bracketsInformation(self, text):
@@ -459,4 +469,4 @@ for symbol in parserInstance.grammarSymbols:
     following_set = parserInstance.following(symbol)
     print(f"Following({symbol}): {following_set}")
 
-print("\n✓ LR0 diagram created successfully !\n")
+print("\n✓ LR0 automaton & diagram created successfully !\n")
