@@ -1,28 +1,16 @@
 /* low grammar config */
 /* following the SLR grammar*/
-/* E -> E + T | T */
-/* T → T * F | F */
-/* F → ( E ) | id */
+/* E -> E + id | id */
 
 %token ID
 %token PLUS
-%token TIMES
-%token LPAREN RPARENs
-%token ws
+%token WS
 
-IGNORE ws
+IGNORE WS
 
 %%
 
 expression:
-    expression PLUS term
-  | term
-;
-term:
-    term TIMES factor
-  | factor
-;
-factor:
-    LPAREN expression RPAREN
+    expression PLUS ID
   | ID
 ;

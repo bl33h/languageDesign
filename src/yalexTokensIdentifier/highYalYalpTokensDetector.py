@@ -31,22 +31,36 @@ AND = '&'
 GREATERCHAR = '<'
 
 # pickle use
-with open('lowYalYalpTokens', 'rb') as f:
+with open('highYalYalpTokens', 'rb') as f:
 	tokens = pickle.load(f)
 
 def tokenReturns(symbol):
+	if symbol == 'delim':
+		None
+	if symbol == 'ws':
+		return WHITESPACE
 	if symbol == 'letter':
 		None
 	if symbol == 'digit':
 		None
+	if symbol == 'digits':
+		None
 	if symbol == 'id':
 		return ID
-	if symbol == '':
-		None
-	if symbol == '[':
-		/* Ignore whitespace */
+	if symbol == 'number':
+		return NUMBER
 	if symbol == '+':
 		return PLUS
+	if symbol == '-':
+		return MINUS
+	if symbol == '*':
+		return TIMES
+	if symbol == '/':
+		return DIV
+	if symbol == '(':
+		return LPAREN
+	if symbol == ')':
+		return RPAREN
 
 	return symbol
 

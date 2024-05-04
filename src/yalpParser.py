@@ -456,7 +456,7 @@ class yalpParser():
         self.tokensVeri = list(set(alltokens) - undefined)
         return linesWithoutTokens
 
-name = 'hardYalYalp'
+name = 'highYalYalp'
 parserInstance = yalpParser(f'yalpFiles/{name}.yalp', f'./identifiedTokens/{name}', name)
 parserInstance.read()
 parserInstance.getGrammarSymbols()
