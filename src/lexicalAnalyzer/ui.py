@@ -7,6 +7,7 @@
 
 from tkinter import filedialog, scrolledtext, messagebox
 from directDfa.directDfaBuilder import *
+from syntaxAnalyzer.yalpParser import *
 from lexicalAnalyzer.tokenizer import *
 from directDfa.regexUtilities import *
 from lexicalAnalyzer.parser import *
