@@ -1,4 +1,4 @@
-/* first grammar config */
+/* low grammar config */
 /* following the SLR grammar*/
 /* E -> E + T | T */
 /* T → T * F | F */
@@ -7,7 +7,10 @@
 %token ID
 %token PLUS
 %token TIMES
-%token LPAREN RPAREN
+%token LPAREN RPARENs
+%token ws
+
+IGNORE ws
 
 %%
 

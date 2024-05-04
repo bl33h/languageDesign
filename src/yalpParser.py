@@ -437,7 +437,7 @@ class yalpParser():
                     repeatedTokens[tok] = count
                 
         if undefined:
-            print("✘Yalp tokens are also in the Yalex file, not all of them are defined.\n")
+            print("✘Not all of the Yalp tokens are defined in the Yalex file.\n")
             for el in undefined:
                 print(f"!The {el} token is not defined in the Yalex file.")
             print()
@@ -456,7 +456,7 @@ class yalpParser():
         self.tokensVeri = list(set(alltokens) - undefined)
         return linesWithoutTokens
 
-name = 'lowYalYalp'
+name = 'hardYalYalp'
 parserInstance = yalpParser(f'yalpFiles/{name}.yalp', f'./identifiedTokens/{name}', name)
 parserInstance.read()
 parserInstance.getGrammarSymbols()
