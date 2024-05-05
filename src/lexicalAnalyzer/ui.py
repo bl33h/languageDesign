@@ -466,7 +466,7 @@ class syntaxAnalyzerUi(tk.Tk):
             print("\n ✓Token identification and saving completed successfully.")
             
             name, _ = os.path.splitext(baseFileName)  
-            tokenizerReader = tokenizer(f'./identifiedTokens/{name}', './yalexFiles/entry.txt')
+            tokenizerReader = tokenizer(f'src/identifiedTokens/{name}', 'src/yalexFiles/entry.txt')
             listToks = tokenizerReader.simulate()
 
             # show the tokens
@@ -510,10 +510,9 @@ class syntaxAnalyzerUi(tk.Tk):
         try:
             print("\n\nvalidating the tokens...")
             # remove the yal extension from the current file
-            name = os.path.basename(self.currentOpenFile)
             baseFileName = os.path.basename(self.currentOpenFile)
             noExtensionFile, _ = os.path.splitext(baseFileName)
-            parserInstance = yalpParser(f'src/yalpFiles/{noExtensionFile}.yalp', f'src/identifiedTokens/{noExtensionFile}', name)
+            parserInstance = yalpParser(f'src/yalpFiles/{noExtensionFile}.yalp', f'src/identifiedTokens/{noExtensionFile}', noExtensionFile)
             parserInstance.read()
             parserInstance.getGrammarSymbols()
             print("\n------ First Sets ------")

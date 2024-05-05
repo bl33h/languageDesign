@@ -1,0 +1,14 @@
+digraph LR0 {
+	rankdir=LR
+	start [shape=point]
+	start -> I0
+	I0 [label=<I0<BR/><BR/>expression' → ° expression<BR/>expression → ° expression PLUS ID<BR/>expression → ° ID> shape=circle]
+	I1 [label=<I1<BR/><BR/>expression → ID °> shape=circle]
+	I2 [label=<I2<BR/><BR/>expression' → expression °<BR/>expression → expression ° PLUS ID> shape=doublecircle]
+	I3 [label=<I3<BR/><BR/>expression → expression PLUS ° ID> shape=circle]
+	I4 [label=<I4<BR/><BR/>expression → expression PLUS ID °> shape=circle]
+	I0 -> I1 [label=ID]
+	I0 -> I2 [label=expression]
+	I2 -> I3 [label=PLUS]
+	I3 -> I4 [label=ID]
+}
