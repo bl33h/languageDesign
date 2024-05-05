@@ -20,7 +20,7 @@ This toolkit integrates lexical and syntax analysis, parsing of regular expressi
 
 ## Features
 - **Token Validation**: The **yalpParser** module parses `.yalp` files containing user-defined lexical rules and structures, verifies tokens against these rules, and provides feedback on validity. Features include:
-  - Parsing `.yalp` files to extract and process lexical rules into recognizable tokens.
+  - Parsing `.yal` files to extract and process lexical rules into recognizable tokens.
   - Validating tokens by comparing them to the defined patterns.
   - Reporting errors when tokens don't match specified patterns.
 
