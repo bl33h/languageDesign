@@ -38,7 +38,7 @@ def tokenReturns(symbol):
 	if symbol == 'delim':
 		None
 	if symbol == 'ws':
-		return ws
+		return WHITESPACE
 	if symbol == 'letter':
 		None
 	if symbol == 'digit':

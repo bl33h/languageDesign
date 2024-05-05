@@ -452,19 +452,3 @@ class yalpParser():
             
         self.tokensVeri = list(set(alltokens) - undefined)
         return linesWithoutTokens
-
-# name = 'highYalYalp'
-# parserInstance = yalpParser(f'src/yalpFiles/{name}.yalp', f'src/identifiedTokens/{name}', name)
-# parserInstance.read()
-# parserInstance.getGrammarSymbols()
-# print("\n------ First Sets ------")
-# for symbol in parserInstance.grammarSymbols:
-#     first_set = parserInstance.first(symbol)
-#     print(f"First({symbol}): {first_set}")
-
-# print("\n------ Following Sets ------")
-# for symbol in parserInstance.grammarSymbols:
-#     following_set = parserInstance.following(symbol)
-#     print(f"Following({symbol}): {following_set}")
-
-# print("\n✓ LR0 automaton & diagram created successfully !\n")

@@ -10,6 +10,7 @@
 %token TIMES
 %token DIV
 %token NUMBER
+%token WHITESPACE
 %token LPAREN RPAREN
 
 expression:
@@ -27,3 +28,4 @@ factor:
   | ID
   | NUMBER
 ;
+

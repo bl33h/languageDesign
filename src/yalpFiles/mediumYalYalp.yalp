@@ -1,17 +1,15 @@
 /* medium grammar config */
 /* following the SLR grammar*/
-/* E -> E + T | T */
-/* T → T * F | F */
+/* E → E + T | T */
+/* T → T ∗ F | F */
 /* F → ( E ) | id */
 
 %token ID
 %token PLUS
 %token TIMES
 %token LPAREN RPAREN
-%token ws
-
-IGNORE ws
-
+%token WHITESPACE
+IGNORE WHITESPACE
 %%
 
 expression:
@@ -26,3 +24,5 @@ factor:
     LPAREN expression RPAREN
   | ID
 ;
+
+
