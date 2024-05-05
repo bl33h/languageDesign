@@ -35,9 +35,9 @@ Both YAPar and YALex files are crucial in defining the syntax and lexical struct
 - **YALEX Files:** Specify the lexical rules and structures that the analyzer will use to recognize tokens.
 
 **Examples:**
-- **high.yalp**: Defines complex rules.
-- **medium.yalp**: Contains moderate rule complexity.
-- **low.yalp**: Features simpler rules for testing.
+- **highYalYalp.yalp**: Defines complex rules.
+- **mediumYalYal.yalp**: Contains moderate rule complexity.
+- **lowYalYal.yalp**: Features simpler rules for testing.
 
 ## How To Use
 To clone and run this application, you'll need [Git](https://git-scm.com), [Python](https://www.python.org/downloads/), and [Graphviz](https://graphviz.org) installed on your computer. From your command line:
