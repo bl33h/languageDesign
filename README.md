@@ -35,9 +35,9 @@ Both YAPar and YALex files are crucial in defining the syntax and lexical struct
 - **YAPar Files:** Define the grammar and syntax rules, used to generate the syntax analyzer and the LR(0) diagram.
 
 **Examples:**
-- **highYalYalp.yal & *highYalYalp.yalp**: Both define complex rules.
-- **mediumYalYal.yal & *mediumYalYal.yalp**:  Both contain moderate rule complexity.
-- **lowYalYal.yal & *lowYalYal.yalp**:  Both feature simpler rules for testing.
+- *highYalYalp.yal & *highYalYalp.yalp**: Both define complex rules.
+- *mediumYalYal.yal & *mediumYalYal.yalp**:  Both contain moderate rule complexity.
+- *lowYalYal.yal & *lowYalYal.yalp**:  Both feature simpler rules for testing.
 
 ## How To Use
 To clone and run this application, you'll need [Git](https://git-scm.com), [Python](https://www.python.org/downloads/), and [Graphviz](https://graphviz.org) installed on your computer. From your command line:
