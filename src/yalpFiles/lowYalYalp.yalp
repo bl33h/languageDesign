@@ -4,9 +4,6 @@
 
 %token ID
 %token PLUS
-%token WS
-
-IGNORE WS
 
 %%
 

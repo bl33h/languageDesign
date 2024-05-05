@@ -5,7 +5,7 @@
 # Creation: 06/02/2024
 # Last modification: 05/04/2024
 
-from lexicalAnalyzer.ui import simpleUserInt
+from lexicalAnalyzer.ui import *
 import customtkinter as ct
 from tkinter import *
 
@@ -46,7 +46,10 @@ def showLexicalAnalyzerUI():
     app.mainloop()
     
 def showSyntaxAnalyzerUI():
-    pass
+    global win
+    win.destroy()
+    app = syntaxAnalyzerUi()
+    app.mainloop()
 
 if __name__ == '__main__':
     main()

@@ -7,7 +7,7 @@
 %token ID
 %token PLUS
 %token TIMES
-%token LPAREN RPARENs
+%token LPAREN RPAREN
 %token ws
 
 IGNORE ws

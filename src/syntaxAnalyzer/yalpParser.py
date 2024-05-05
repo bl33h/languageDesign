@@ -5,9 +5,6 @@
 # Creation: 27/04/2024
 # Last modification: 28/04/2024
 
-# import sys
-# sys.path.append('C:\\Users\\sarap\\OneDrive\\Escritorio\\languageDesign\\src')
-
 from directDfa.directDfaBuilder import displayLR0, displayLR0Diagram
 from directDfa.regexUtilities import *
 import pickle
@@ -456,18 +453,18 @@ class yalpParser():
         self.tokensVeri = list(set(alltokens) - undefined)
         return linesWithoutTokens
 
-name = 'highYalYalp'
-parserInstance = yalpParser(f'yalpFiles/{name}.yalp', f'./identifiedTokens/{name}', name)
-parserInstance.read()
-parserInstance.getGrammarSymbols()
-print("\n------ First Sets ------")
-for symbol in parserInstance.grammarSymbols:
-    first_set = parserInstance.first(symbol)
-    print(f"First({symbol}): {first_set}")
+# name = 'highYalYalp'
+# parserInstance = yalpParser(f'src/yalpFiles/{name}.yalp', f'src/identifiedTokens/{name}', name)
+# parserInstance.read()
+# parserInstance.getGrammarSymbols()
+# print("\n------ First Sets ------")
+# for symbol in parserInstance.grammarSymbols:
+#     first_set = parserInstance.first(symbol)
+#     print(f"First({symbol}): {first_set}")
 
-print("\n------ Following Sets ------")
-for symbol in parserInstance.grammarSymbols:
-    following_set = parserInstance.following(symbol)
-    print(f"Following({symbol}): {following_set}")
+# print("\n------ Following Sets ------")
+# for symbol in parserInstance.grammarSymbols:
+#     following_set = parserInstance.following(symbol)
+#     print(f"Following({symbol}): {following_set}")
 
-print("\n✓ LR0 automaton & diagram created successfully !\n")
+# print("\n✓ LR0 automaton & diagram created successfully !\n")
