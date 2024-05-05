@@ -29,7 +29,7 @@ This toolkit integrates lexical and syntax analysis, parsing of regular expressi
   - Syntax Analysis: Identifies valid or erroneous token sequences based on the predefined grammar.
 
 ## YAPAR & YALEX Files
-Both YAPar and YALP files are crucial in defining the syntax and lexical structures that the parser uses to generate the LR(0) diagram and validate tokens.
+Both YAPar and YALEX files are crucial in defining the syntax and lexical structures that the parser uses to generate the LR(0) diagram and validate tokens.
 
 - **YAPAR Files:** Define the grammar and syntax rules, used to generate the syntax analyzer and the LR(0) diagram.
 - **YALEX Files:** Specify the lexical rules and structures that the analyzer will use to recognize tokens.
