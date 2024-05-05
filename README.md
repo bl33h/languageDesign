@@ -10,7 +10,7 @@ This toolkit integrates lexical and syntax analysis, parsing of regular expressi
   <a href="#Files">Files</a> •
   <a href="#Features">Features</a> •
   <a href="#how-to-use">How To Use</a> •
-  <a href="#yapar-yalp-files">YAPar & YALP Files</a>
+  <a href="#yapar-yalp-files">YALex & YAPar Files</a>
 </p>
 
 ## Files
@@ -28,11 +28,11 @@ This toolkit integrates lexical and syntax analysis, parsing of regular expressi
   - Automata Visualization: The **directDfaBuilder** module builds deterministic finite automata from regular expressions and uses Graphviz to represent them visually.
   - Syntax Analysis: Identifies valid or erroneous token sequences based on the predefined grammar.
 
-## YAPAR & YALEX Files
+## YALex & YAPar Files
 Both YAPar and YALex files are crucial in defining the syntax and lexical structures that the parser uses to generate the LR(0) diagram and validate tokens.
 
-- **YAPAR Files:** Define the grammar and syntax rules, used to generate the syntax analyzer and the LR(0) diagram.
-- **YALEX Files:** Specify the lexical rules and structures that the analyzer will use to recognize tokens.
+- **YALex Files:** Specify the lexical rules and structures that the analyzer will use to recognize tokens.
+- **YAPar Files:** Define the grammar and syntax rules, used to generate the syntax analyzer and the LR(0) diagram.
 
 **Examples:**
 - **highYalYalp.yalp**: Defines complex rules.
