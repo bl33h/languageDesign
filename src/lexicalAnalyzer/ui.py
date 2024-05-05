@@ -517,13 +517,13 @@ class syntaxAnalyzerUi(tk.Tk):
             parserInstance.getGrammarSymbols()
             print("\n------ First Sets ------")
             for symbol in parserInstance.grammarSymbols:
-                first_set = parserInstance.first(symbol)
-                print(f"First({symbol}): {first_set}")
+                firstSet = parserInstance.first(symbol)
+                print(f"First({symbol}): {firstSet}")
 
             print("\n------ Following Sets ------")
             for symbol in parserInstance.grammarSymbols:
-                following_set = parserInstance.following(symbol)
-                print(f"Following({symbol}): {following_set}")
+                followingSet = parserInstance.following(symbol)
+                print(f"Following({symbol}): {followingSet}")
 
             print("\n✓ LR0 automaton & diagram created successfully !\n")
         
