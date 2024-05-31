@@ -319,7 +319,7 @@ class syntaxGenerator():
         transitions = []
         items = [C]
         movements = []
-        Nmovements = []
+        specificMov = []
         
         # items
         for group in items:
@@ -348,7 +348,7 @@ class syntaxGenerator():
                 if m[0] == y:
                     for x2,y2 in finalStates.items():
                         if m[2] == y2:
-                            Nmovements.append((x, m[1], x2))
+                            specificMov.append((x, m[1], x2))
                             break
         
         # states & features
@@ -391,7 +391,7 @@ class syntaxGenerator():
         
         action.append('$')    
         
-        actions = self.get_actions_list(action, finalStates, Nmovements, finState)
+        actions = self.get_actions_list(action, finalStates, specificMov, finState)
         gotos = self.gotoList(goto, transitions)
         
         columnsActions = {}
