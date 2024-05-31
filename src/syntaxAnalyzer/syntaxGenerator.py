@@ -692,9 +692,13 @@ class syntaxGenerator():
             prettyT.add_column("Actions", Actions)
 
             prettyT.align = "c"
-            prettyT.title ="SLR1 Table [Simulation]"
+            prettyT.title = "SLR1 Table [Simulation]"
+
+            # max column width
+            prettyT.max_width = 25
+
             print(prettyT)
-            
+
             with open(f'src/slr1Tables/{self.name}ParsingTable.txt', 'w', encoding="utf-8") as f:
                 f.write(prettyT.get_string())
 
