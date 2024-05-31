@@ -489,7 +489,6 @@ class syntaxGenerator():
         for nState, states in statesR.items():
             for state in states:
                 if state.rs[-1].dot:
-                    # print(nState, state, self.follow(state.ls.label))
                     prodVeri = actualProductions(state.ls, state.rs[:-1])
                     if(nState != fnState):
                         for x,y in self.dicProds.items():
@@ -497,7 +496,6 @@ class syntaxGenerator():
                                 for m, n in zip(y.rs, prodVeri.rs):
                                     if(len(y.rs) == len(prodVeri.rs)):
                                         if m.label == n.label:
-                                            # print(nState, state, x)
                                             followL = self.following(state.ls.label)
                                             actions_reduce.append((nState, followL, 'r'+str(x)))
                                             break
