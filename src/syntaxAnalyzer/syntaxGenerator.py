@@ -450,13 +450,13 @@ class syntaxGenerator():
             finalColumnG[x] = newColumn
 
         prettyT = PrettyTable()
-        prettyT.add_column(Style.BRIGHT + Fore.GREEN + "State" + Style.RESET_ALL, list(finalStates.keys()))
+        prettyT.add_column("State", list(finalStates.keys()))
             
         for elA in action:
-            prettyT.add_column(Style.BRIGHT + Fore.MAGENTA + elA + Style.RESET_ALL, finalColumnA[elA])
+            prettyT.add_column(elA, finalColumnA[elA])
 
         for elG in goto:
-            prettyT.add_column(Style.BRIGHT + Fore.CYAN + elG + Style.RESET_ALL, finalColumnG[elG])         
+            prettyT.add_column(elG, finalColumnG[elG])      
 
         prettyT.align = "c"
         prettyT.title ="SLR1 Table"
