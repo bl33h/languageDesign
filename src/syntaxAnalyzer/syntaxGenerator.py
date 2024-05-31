@@ -459,7 +459,7 @@ class syntaxGenerator():
             prettyT.add_column(Style.BRIGHT + Fore.CYAN + elG + Style.RESET_ALL, finalColumnG[elG])         
 
         prettyT.align = "c"
-        prettyT.title = Style.BRIGHT + "SLR1 Table" + Style.RESET_ALL
+        prettyT.title ="SLR1 Table"
         print(prettyT)
         
         with open(f'src/slr1Tables/{self.name}ParsingTable.txt', 'w', encoding="utf-8") as f:
