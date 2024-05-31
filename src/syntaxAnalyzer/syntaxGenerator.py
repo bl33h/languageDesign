@@ -201,9 +201,8 @@ class syntaxGenerator():
         print("\n------ Final productions ------")
         for x in self.finalProductions:
             print(x)
-        print()
-                     
-        return self.newFinalStates(newIncreasedP)
+        print()     
+        return self.newFinalStates(newIncreasedP)    
     
     # ------------------- grammar symbols function -------------------
     def getGrammarSymbols(self):
@@ -393,7 +392,7 @@ class syntaxGenerator():
         action.append('$')    
         
         actions = self.get_actions_list(action, finalStates, Nmovements, finState)
-        gotos = self.get_goto_list(goto, transitions)
+        gotos = self.gotoList(goto, transitions)
         
         columnsActions = {}
         for elA in action:
@@ -505,7 +504,7 @@ class syntaxGenerator():
         
         return (actions_shift, actions_reduce)
         
-    def get_goto_list(self, goto, transitions):
+    def gotoList(self, goto, transitions):
         gotos_l = []
         
         for trans in transitions:
