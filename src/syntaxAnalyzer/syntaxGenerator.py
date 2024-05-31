@@ -643,7 +643,7 @@ class syntaxGenerator():
             stackStates.append(f'I{first_Action[1:]}')
         elif first_Action[0] == 'r':
             getProd = self.dicProds[int(first_Action[1:])]
-            Actions.append(f'Reduce by {getProd}')
+            Actions.append(f'Reduced by {getProd}')
             for x in range(len(getProd.rs)):
                 stackSymbols.pop(0)
             stackSymbols.append(getProd.ls.label)
@@ -684,6 +684,7 @@ class syntaxGenerator():
             for x in Actions:
                 print("-",x[:-1]+allStackInput[0][0])
         else:
+            
             prettyT = PrettyTable()
             prettyT.add_column("State", [x for x in range(len(Actions))])
             prettyT.add_column("Stack", allStacksStates)
@@ -695,7 +696,7 @@ class syntaxGenerator():
             prettyT.title = "SLR1 Table [Simulation]"
 
             # max column width
-            prettyT.max_width = 25
+            prettyT.max_width = 27
 
             print(prettyT)
 
