@@ -684,14 +684,14 @@ class syntaxGenerator():
                 print("-",x[:-1]+allStackInput[0][0])
         else:
             prettyT = PrettyTable()
-            prettyT.add_column(Style.BRIGHT + Fore.WHITE + "State Number" + Fore.RESET + Style.RESET_ALL, [x for x in range(len(Actions))])
-            prettyT.add_column(Style.BRIGHT + Fore.GREEN + "Stack" + Fore.RESET + Style.RESET_ALL, allStacksStates)
-            prettyT.add_column(Style.BRIGHT + Fore.BLUE + "Symbols" + Fore.RESET + Style.RESET_ALL, allStackSymbols)
-            prettyT.add_column(Style.BRIGHT + Fore.CYAN + "Input" + Fore.RESET + Style.RESET_ALL, allStackInput)
-            prettyT.add_column(Style.BRIGHT + Fore.MAGENTA + "Actions [Shift/Reduce/Error]" + Fore.RESET + Style.RESET_ALL, Actions)
+            prettyT.add_column("State", [x for x in range(len(Actions))])
+            prettyT.add_column("Stack", allStacksStates)
+            prettyT.add_column("Symbols", allStackSymbols)
+            prettyT.add_column("Input", allStackInput)
+            prettyT.add_column("Actions", Actions)
 
             prettyT.align = "c"
-            prettyT.title = Style.BRIGHT + "SLR1 Table [Simulation]" + Style.RESET_ALL
+            prettyT.title ="SLR1 Table [Simulation]"
             print(prettyT)
             
             with open(f'src/slr1Tables/{self.name}ParsingTable.txt', 'w', encoding="utf-8") as f:
