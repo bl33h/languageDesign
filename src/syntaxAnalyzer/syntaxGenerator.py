@@ -467,8 +467,8 @@ class syntaxGenerator():
         return self.simulate(list(finalStates.keys()), actions, gotos, finState)
             
     def get_actions_list(self, action, statesR, gotosM, fnState):
-        actions_shift = []
-        actions_reduce = []
+        shiftAct = []
+        reducingAct = []
         
         for nState, states in statesR.items():
             for symbol in action:
@@ -479,38 +479,42 @@ class syntaxGenerator():
                                 for gotoM in gotosM:
                                     if(gotoM[0] == nState and gotoM[1] == symbol):
                                         # print((nState, symbol, 'S'+gotoM[2][1:]))
-                                        actions_shift.append((nState, symbol, 'S'+gotoM[2][1:]))
+                                        shiftAct.append((nState, symbol, 'S'+gotoM[2][1:]))
                                         break
         
         self.dicProds = {}
         for el in range(1,len(self.prods)+1):
             self.dicProds[el] = self.prods[el-1]      
             
+        printed = False
         for nState, states in statesR.items():
             for state in states:
                 if state.rs[-1].dot:
                     prodVeri = actualProductions(state.ls, state.rs[:-1])
                     if(nState != fnState):
+                        if not printed:
+                            print("\n------ SLR Table & Simulation ------")
+                            printed = True
                         for x,y in self.dicProds.items():
                             if (y.ls.label == prodVeri.ls.label):
                                 for m, n in zip(y.rs, prodVeri.rs):
                                     if(len(y.rs) == len(prodVeri.rs)):
                                         if m.label == n.label:
                                             followL = self.following(state.ls.label)
-                                            actions_reduce.append((nState, followL, 'r'+str(x)))
+                                            reducingAct.append((nState, followL, 'r'+str(x)))
                                             break
-        
-        return (actions_shift, actions_reduce)
+
+        return (shiftAct, reducingAct)
         
     def gotoList(self, goto, transitions):
-        gotos_l = []
+        gotoL = []
         
         for trans in transitions:
             for el in goto:
                 if trans.symbol == el:
-                    gotos_l.append((trans.inState, trans.symbol, trans.fnState))
+                    gotoL.append((trans.inState, trans.symbol, trans.fnState))
         
-        return gotos_l
+        return gotoL
     
     # ------------------- brackets information function -------------------
     def bracketsInformation(self, text):
