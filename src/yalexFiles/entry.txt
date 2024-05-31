@@ -1,6 +1,1 @@
-¿ VAR4VAR4 num = 777&
-if (num < 71 or num == 72):
-    num & = 72
-else:
-    num = 75
-777asd ¿
+A0 + B1 

@@ -6,6 +6,7 @@
 # Last modification: 05/04/2024
 
 from tkinter import filedialog, scrolledtext, messagebox
+from syntaxAnalyzer.syntaxGenerator import *
 from directDfa.directDfaBuilder import *
 from syntaxAnalyzer.yalpParser import *
 from lexicalAnalyzer.tokenizer import *
@@ -319,6 +320,7 @@ class syntaxAnalyzerUi(tk.Tk):
         analyzeMenu = tk.Menu(barMenu, tearoff=0)
         analyzeMenu.add_command(label="Identify Yal Tokens", command=self.identifyTokens)
         analyzeMenu.add_command(label="Validate Yal & Yalp Tokens", command=self.tokensValidator)
+        analyzeMenu.add_command(label="Create SLR Table & Simulation", command=self.syntaxGenerator)
         barMenu.add_cascade(label="Options", menu=analyzeMenu)
 
         # main paned window
@@ -526,6 +528,42 @@ class syntaxAnalyzerUi(tk.Tk):
                 print(f"Following({symbol}): {followingSet}")
 
             print("\n✓ LR0 automaton & diagram created successfully !\n")
+        
+        # error handling
+        except Exception as e:
+            print(f"\nan error occurred: {e}")
+            
+        finally:
+            # restore original stdout and stderr
+            sys.stdout = originalStdout
+            sys.stderr = originalStderr
+    
+    def syntaxGenerator(self):
+        if not self.currentOpenFile:
+            messagebox.showwarning("Warning", "Please open and save a file first.")
+            return
+        
+        # redirect stdout and stderr
+        originalStdout = sys.stdout
+        originalStderr = sys.stderr
+        sys.stdout = textRedirector(self.outputA)
+        sys.stderr = textRedirector(self.outputA)
+
+        try:
+            print("\n\ncreating SLR table & simulation...")
+            # remove the yal extension from the current file
+            baseFileName = os.path.basename(self.currentOpenFile)
+            noExtensionFile, _ = os.path.splitext(baseFileName)
+            parserInstance = syntaxGenerator(f'src/yalpFiles/{noExtensionFile}.yalp', f'src/identifiedTokens/{noExtensionFile}', f'src/tokens/{noExtensionFile}TextTokens', noExtensionFile)
+            result = parserInstance.read()
+            parserInstance.getGrammarSymbols()
+            
+            print()
+            if type(result) == tuple:
+                print(f"→ The file is ✘rejected (not accepted)\nConflict with {result[0]} for the following actions {','.join(result[1])}")
+            else:
+                print("→ The file is", result)
+            print()
         
         # error handling
         except Exception as e:

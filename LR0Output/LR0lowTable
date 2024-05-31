@@ -1,0 +1,18 @@
+digraph LR0 {
+	rankdir=LR
+	start [shape=point]
+	start -> I0
+	I0 [shape=circle]
+	I1 [shape=circle]
+	I2 [shape=doublecircle]
+	I3 [shape=circle]
+	I4 [shape=circle]
+	I5 [shape=circle]
+	I6 [shape=circle]
+	I0 -> I1 [label=ID]
+	I0 -> I2 [label=expression]
+	I2 -> I3 [label=WHITESPACE]
+	I3 -> I4 [label=PLUS]
+	I4 -> I5 [label=WHITESPACE]
+	I5 -> I6 [label=ID]
+}

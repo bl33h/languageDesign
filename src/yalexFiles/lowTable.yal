@@ -1,0 +1,14 @@
+(* this is a syntactic analyzer *)
+let letter = ['A'-'Z''a'-'z']
+let digit = ['0'-'9']
+let id = letter (letter | digit)*
+let delim = [' ''\t''\n']
+let ws = delim+
+
+rule tokens = 
+  | ws           { return WHITESPACE }
+  | '+'          { return PLUS }
+  | id           { return ID }
+
+(* any trailer *)
+

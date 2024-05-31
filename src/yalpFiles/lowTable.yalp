@@ -1,13 +1,14 @@
-/* low grammar config */
+/* low table grammar config */
 /* following the SLR grammar*/
 /* E -> E + id | id */
 
 %token ID
 %token PLUS
+%token WHITESPACE
 
 %%
 
 expression:
-    expression PLUS ID
+    expression WHITESPACE PLUS WHITESPACE ID
   | ID
 ;
