@@ -1,0 +1,15 @@
+(* this is a syntax-lexical analyzer *)
+
+let delim = [' ''\t''\n']
+let ws = delim+
+let letter = ['A'-'Z''a'-'z']
+let digit = ['0'-'9']
+let id = letter(letter|digit)*
+
+rule tokens = 
+    ws        { return WHITESPACE }
+  | '*'       { return TIMES }
+  | id        { return ID }
+  | '='       { return EQUALS }
+
+(* any trailer *)

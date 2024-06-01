@@ -1,0 +1,25 @@
+/* S -> L = R */
+/* S -> R */
+/* L -> *R */
+/* L -> id */
+/* R -> L */
+
+%token WHITESPACE
+%token EQUALS
+%token TIMES
+%token ID
+IGNORE WHITESPACE
+
+%%
+
+s:
+    l EQUALS r
+  | r
+;
+l:
+    TIMES r
+  | ID
+;
+r:
+  l
+;

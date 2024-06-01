@@ -15,5 +15,3 @@ rule tokens =
   | ')'       { return 'RPAREN' }
 
   (* any trailer *)
-
-
