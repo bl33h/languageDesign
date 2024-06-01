@@ -1,4 +1,4 @@
-(* high table grammar config *)
+(* med table grammar config *)
 
 let delim = [' ''\t''\n']
 let ws = delim+
