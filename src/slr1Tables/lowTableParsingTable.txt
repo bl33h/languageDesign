@@ -3,21 +3,21 @@
 +-------+-----------------------------+-----------------------------+-----------------------------+-----------------------------+
 | State |            Stack            |           Symbols           |            Input            |           Actions           |
 +-------+-----------------------------+-----------------------------+-----------------------------+-----------------------------+
-|   0   |            ['I0']           |            ['$']            |     ['ID', 'WHITESPACE',    |         Shift to I1         |
+|   0   |            ['I0']           |            ['$']            |     ['ID', 'WHITESPACE',    |         SHIFT to S1         |
 |       |                             |                             | 'PLUS', 'WHITESPACE', 'ID', |                             |
 |       |                             |                             |             '$']            |                             |
-|   1   |         ['I0', 'I1']        |         ['$', 'ID']         |    ['WHITESPACE', 'PLUS',   |  Reduce by expression → ID  |
+|   1   |         ['I0', 'I1']        |         ['$', 'ID']         |    ['WHITESPACE', 'PLUS',   |  REDUCED by expression → ID |
 |       |                             |                             |   'WHITESPACE', 'ID', '$']  |                             |
-|   2   |         ['I0', 'I2']        |     ['$', 'expression']     |    ['WHITESPACE', 'PLUS',   |         Shift to I3         |
+|   2   |         ['I0', 'I2']        |     ['$', 'expression']     |    ['WHITESPACE', 'PLUS',   |         SHIFT to S3         |
 |       |                             |                             |   'WHITESPACE', 'ID', '$']  |                             |
-|   3   |      ['I0', 'I2', 'I3']     |     ['$', 'expression',     |    ['PLUS', 'WHITESPACE',   |         Shift to I4         |
+|   3   |      ['I0', 'I2', 'I3']     |     ['$', 'expression',     |    ['PLUS', 'WHITESPACE',   |         SHIFT to S4         |
 |       |                             |        'WHITESPACE']        |          'ID', '$']         |                             |
-|   4   |   ['I0', 'I2', 'I3', 'I4']  |     ['$', 'expression',     |  ['WHITESPACE', 'ID', '$']  |         Shift to I5         |
+|   4   |   ['I0', 'I2', 'I3', 'I4']  |     ['$', 'expression',     |  ['WHITESPACE', 'ID', '$']  |         SHIFT to S5         |
 |       |                             |    'WHITESPACE', 'PLUS']    |                             |                             |
-|   5   |   ['I0', 'I2', 'I3', 'I4',  |     ['$', 'expression',     |         ['ID', '$']         |         Shift to I6         |
+|   5   |   ['I0', 'I2', 'I3', 'I4',  |     ['$', 'expression',     |         ['ID', '$']         |         SHIFT to S6         |
 |       |            'I5']            |    'WHITESPACE', 'PLUS',    |                             |                             |
 |       |                             |        'WHITESPACE']        |                             |                             |
-|   6   |   ['I0', 'I2', 'I3', 'I4',  |     ['$', 'expression',     |            ['$']            |    Reduce by expression →   |
+|   6   |   ['I0', 'I2', 'I3', 'I4',  |     ['$', 'expression',     |            ['$']            |   REDUCED by expression →   |
 |       |         'I5', 'I6']         |    'WHITESPACE', 'PLUS',    |                             |  expression WHITESPACE PLUS |
 |       |                             |     'WHITESPACE', 'ID']     |                             |        WHITESPACE ID        |
 |   7   |         ['I0', 'I2']        |     ['$', 'expression']     |            ['$']            |            accept           |

@@ -3,12 +3,11 @@
 # Author: Sara Echeverria
 # Version: I
 # Creation: 15/05/2024
-# Last modification: 31/05/2024
+# Last modification: 01/06/2024
 
 import copy
 import pickle
 from prettytable import PrettyTable
-from colorama import Fore, Style
 from directDfa.regexUtilities import *
 from lexicalAnalyzer.tokenizer import *
 from directDfa.directDfaBuilder import *
@@ -638,11 +637,11 @@ class syntaxGenerator():
         fistAct = self.actionChecker(actions, stackStates[-1], stackInput[0], fnState)
         stackSymbols.append(stackInput.pop(0))
         if fistAct[0] == 'S':
-            Actions.append(f'Shift to I{fistAct[1:]}')
+            Actions.append(f'SHIFT to S{fistAct[1:]}')
             stackStates.append(f'I{fistAct[1:]}')
         elif fistAct[0] == 'r':
             getProd = self.dicProds[int(fistAct[1:])]
-            Actions.append(f'Reduced by {getProd}')
+            Actions.append(f'REDUCED by {getProd}')
             for x in range(len(getProd.rs)):
                 stackSymbols.pop(0)
             stackSymbols.append(getProd.ls.label)
@@ -651,14 +650,14 @@ class syntaxGenerator():
             allStacksStates.append(stackStates.copy())
             allStackSymbols.append(stackSymbols.copy())
             allStackInput.append(stackInput.copy())
-            new_Action = self.actionChecker(actions, stackStates[-1], stackInput[0], fnState)
-            if new_Action[0] == 'S':
+            newAction = self.actionChecker(actions, stackStates[-1], stackInput[0], fnState)
+            if newAction[0] == 'S':
                 stackSymbols.append(stackInput.pop(0))
-                Actions.append(f'Shift to I{new_Action[1:]}')
-                stackStates.append(f'I{new_Action[1:]}')
+                Actions.append(f'SHIFT to S{newAction[1:]}')
+                stackStates.append(f'I{newAction[1:]}')
                 
-            elif new_Action[0] == 'r':
-                getProd = self.dicProds[int(new_Action[1:])]
+            elif newAction[0] == 'r':
+                getProd = self.dicProds[int(newAction[1:])]
                 Actions.append(f'REDUCED by {getProd}')
                 
                 for x in range(len(getProd.rs)):
@@ -670,12 +669,12 @@ class syntaxGenerator():
                     if(goto[0] == stackStates[-1] and goto[1] == stackSymbols[-1]):
                         stackStates.append(goto[2])
                         break
-            elif new_Action == 'accept':
+            elif newAction == 'accept':
                 Actions.append('accept')
                 result = "✔accepted"
                 break
             else:
-                Actions.append(new_Action)
+                Actions.append(newAction)
                 break
             
         if any([len(Actions) > len(x) for x in [allStacksStates, allStackInput, allStackSymbols]]) or any([len(Actions) < len(x) for x in [allStacksStates, allStackInput, allStackSymbols]]):
@@ -705,9 +704,9 @@ class syntaxGenerator():
         return result
 
     def actionChecker(self, actions, state, symbol, fnState):
-        for shift in actions[0]:
-            if(shift[0] == state and shift[1] == symbol):
-                return shift[2]
+        for SHIFT in actions[0]:
+            if(SHIFT[0] == state and SHIFT[1] == symbol):
+                return SHIFT[2]
             
         for reduce in actions[1]:
             if(reduce[0] == state and symbol in reduce[1]):
