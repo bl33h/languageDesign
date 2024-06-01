@@ -24,5 +24,3 @@ factor:
     LPAREN expression RPAREN
   | ID
 ;
-
-

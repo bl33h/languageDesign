@@ -1,3 +1,4 @@
+/* non SLR grammar */
 /* S -> L = R */
 /* S -> R */
 /* L -> *R */

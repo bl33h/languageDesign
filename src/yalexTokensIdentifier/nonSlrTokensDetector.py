@@ -31,7 +31,7 @@ AND = '&'
 GREATERCHAR = '<'
 
 # pickle use
-with open('wrongGrammarTokens', 'rb') as f:
+with open('nonSlrTokens', 'rb') as f:
 	tokens = pickle.load(f)
 
 def tokenReturns(symbol):
@@ -45,10 +45,10 @@ def tokenReturns(symbol):
 		None
 	if symbol == 'id':
 		return ID
-	if symbol == '=':
-		return EQUALS
 	if symbol == '*':
 		return TIMES
+	if symbol == '=':
+		return EQUALS
 
 	return symbol
 
