@@ -714,4 +714,4 @@ class syntaxGenerator():
         if state == fnState and symbol == "$":
             return "accept"
         
-        return f"!SyntaxError in [{state}] with {symbol}."
+        return f"!Error in [{state}] with {symbol}."

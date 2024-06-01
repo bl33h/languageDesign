@@ -5,12 +5,13 @@ let capLetter = ['A'-'Z']
 let lowerCaseLetter = ['a'-'z']
 let digit = ['0'-'9']
 let lowerLetter = lowerCaseLetter*
-let capitalLetter= capLetter*
+let capitalLetter = capLetter*
 let number = digit+
 let ws = delim+
+let id = (lowerCaseLetter | capLetter)+ (lowerCaseLetter | capLetter | digit)*
 
 rule tokens =
-  | ws            { return WHITESPACE }
+  | ws            { /* ignore whitespace */ }
   | '+'           { return PLUS }
   | '*'           { return TIMES }
   | '.'           { return DOT }
@@ -20,7 +21,7 @@ rule tokens =
   | '$'           { return DOLLAR }
   | '/'           { return DIVIDE }
   | "%token"      { return TOKEN }
-  | lowerLetter   { return word }
+  | lowerLetter   { return WORD }
   | capitalLetter { return WORD }
   | number        { return NUMBER }
   | ":"           { return TWOPOINTS }
@@ -29,7 +30,8 @@ rule tokens =
   | ')'           { return RPAREN }
   | '='           { return EQUALS }
   | '&'           { return AND }
-  | '<'           { return SMALLERCHAR }
-  | '<'           { return GREATERCHAR }
-      
+  | '<'           { return LESS }
+  | '>'           { return GREATER }
+  | id            { return ID }
+
 (* any trailer *)

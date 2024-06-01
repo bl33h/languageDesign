@@ -31,64 +31,28 @@ AND = '&'
 GREATERCHAR = '<'
 
 # pickle use
-with open('tokenizerTokens', 'rb') as f:
+with open('highTableTokens', 'rb') as f:
 	tokens = pickle.load(f)
 
 def tokenReturns(symbol):
 	if symbol == 'delim':
 		None
-	if symbol == 'capLetter':
+	if symbol == 'ws':
 		None
-	if symbol == 'lowerCaseLetter':
+	if symbol == 'letter':
 		None
 	if symbol == 'digit':
 		None
-	if symbol == 'lowerLetter':
-		return WORD
-	if symbol == 'capitalLetter':
-		return WORD
-	if symbol == 'number':
-		return NUMBER
-	if symbol == 'ws':
-		/* ignore whitespace */
 	if symbol == 'id':
 		return ID
-	if symbol == '':
-		None
 	if symbol == '+':
 		return PLUS
 	if symbol == '*':
 		return TIMES
-	if symbol == '.':
-		return DOT
-	if symbol == '-':
-		return MINUS
-	if symbol == '%':
-		return PERCENTAGE
-	if symbol == '_':
-		return CHARACTER
-	if symbol == '$':
-		return DOLLAR
-	if symbol == '/':
-		return DIVIDE
-	if symbol == '%token':
-		return TOKEN
-	if symbol == ':':
-		return TWOPOINTS
-	if symbol == ';':
-		return FINISHDECLARATION
 	if symbol == '(':
 		return LPAREN
 	if symbol == ')':
 		return RPAREN
-	if symbol == '=':
-		return EQUALS
-	if symbol == '&':
-		return AND
-	if symbol == '<':
-		return LESS
-	if symbol == '>':
-		return GREATER
 
 	return symbol
 

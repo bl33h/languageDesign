@@ -1,8 +1,8 @@
 /* high grammar config */
 /* following the SLR grammar*/
-/* E → E + T | E - T | T */
-/* T → T ∗ F | T / F | F */
-/* F → ( E ) | id | number */
+/* E -> E + T | E - T | T */
+/* T -> T ∗ F | T / F | F */
+/* F -> ( E ) | id | number */
 
 %token ID
 %token PLUS

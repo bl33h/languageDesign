@@ -1,0 +1,17 @@
+(* high table grammar config *)
+
+let delim = [' ''\t''\n']
+let ws = delim+
+let letter = ['A'-'Z''a'-'z']
+let digit = ['0'-'9']
+let id = letter(letter|digit)*
+
+rule tokens = 
+    ws
+  | id        { return ID }
+  | '+'       { return PLUS }
+  | '*'       { return TIMES }
+  | '('       { return LPAREN }
+  | ')'       { return RPAREN }
+
+(* any trailer *)
