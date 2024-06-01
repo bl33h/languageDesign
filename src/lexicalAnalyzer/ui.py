@@ -560,9 +560,9 @@ class syntaxAnalyzerUi(tk.Tk):
             
             print()
             if type(result) == tuple:
-                print(f"→ The file is ✘rejected (not accepted)\nConflict with {result[0]} for the following actions {','.join(result[1])}")
+                print(f"→ The text string in the file is ✘rejected (not accepted)\nConflict with {result[0]} for the following actions {','.join(result[1])}")
             else:
-                print("→ The file is", result)
+                print("→ The text string in the file is", result)
             print()
         
         # error handling
