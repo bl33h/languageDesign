@@ -620,7 +620,7 @@ class syntaxGenerator():
         stackStates = [states[0]]
         stackSymbols = ['$']
         stackInput = []
-        Actions = []
+        actionsArray = []
         
         for tok in tokensLectura:
             stackInput.append(tok[1])
@@ -637,11 +637,11 @@ class syntaxGenerator():
         fistAct = self.actionChecker(actions, stackStates[-1], stackInput[0], fnState)
         stackSymbols.append(stackInput.pop(0))
         if fistAct[0] == 'S':
-            Actions.append(f'SHIFT to S{fistAct[1:]}')
+            actionsArray.append(f'SHIFT to S{fistAct[1:]}')
             stackStates.append(f'I{fistAct[1:]}')
         elif fistAct[0] == 'r':
             getProd = self.dicProds[int(fistAct[1:])]
-            Actions.append(f'REDUCED by {getProd}')
+            actionsArray.append(f'REDUCED by {getProd}')
             for x in range(len(getProd.rs)):
                 stackSymbols.pop(0)
             stackSymbols.append(getProd.ls.label)
@@ -653,12 +653,12 @@ class syntaxGenerator():
             newAction = self.actionChecker(actions, stackStates[-1], stackInput[0], fnState)
             if newAction[0] == 'S':
                 stackSymbols.append(stackInput.pop(0))
-                Actions.append(f'SHIFT to S{newAction[1:]}')
+                actionsArray.append(f'SHIFT to S{newAction[1:]}')
                 stackStates.append(f'I{newAction[1:]}')
                 
             elif newAction[0] == 'r':
                 getProd = self.dicProds[int(newAction[1:])]
-                Actions.append(f'REDUCED by {getProd}')
+                actionsArray.append(f'REDUCED by {getProd}')
                 
                 for x in range(len(getProd.rs)):
                     stackSymbols.pop(-1)
@@ -670,25 +670,25 @@ class syntaxGenerator():
                         stackStates.append(goto[2])
                         break
             elif newAction == 'accept':
-                Actions.append('accept')
+                actionsArray.append('accept')
                 result = "✔accepted"
                 break
             else:
-                Actions.append(newAction)
+                actionsArray.append(newAction)
                 break
             
-        if any([len(Actions) > len(x) for x in [allStacksStates, allStackInput, allStackSymbols]]) or any([len(Actions) < len(x) for x in [allStacksStates, allStackInput, allStackSymbols]]):
+        if any([len(actionsArray) > len(x) for x in [allStacksStates, allStackInput, allStackSymbols]]) or any([len(Actions) < len(x) for x in [allStacksStates, allStackInput, allStackSymbols]]):
             print()
-            for x in Actions:
+            for x in actionsArray:
                 print("-",x[:-1]+allStackInput[0][0])
         else:
             
             prettyT = PrettyTable()
-            prettyT.add_column("State", [x for x in range(len(Actions))])
+            prettyT.add_column("State", [x for x in range(len(actionsArray))])
             prettyT.add_column("Stack", allStacksStates)
             prettyT.add_column("Symbols", allStackSymbols)
             prettyT.add_column("Input", allStackInput)
-            prettyT.add_column("Actions", Actions)
+            prettyT.add_column("Actions", actionsArray)
 
             prettyT.align = "c"
             prettyT.title = "SLR1 Table [Simulation]"
@@ -704,9 +704,9 @@ class syntaxGenerator():
         return result
 
     def actionChecker(self, actions, state, symbol, fnState):
-        for SHIFT in actions[0]:
-            if(SHIFT[0] == state and SHIFT[1] == symbol):
-                return SHIFT[2]
+        for shift in actions[0]:
+            if(shift[0] == state and shift[1] == symbol):
+                return shift[2]
             
         for reduce in actions[1]:
             if(reduce[0] == state and symbol in reduce[1]):
