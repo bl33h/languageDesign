@@ -37,14 +37,24 @@ with open('highTableTokens', 'rb') as f:
 def tokenReturns(symbol):
 	if symbol == 'delim':
 		None
-	if symbol == 'ws':
+	if symbol == 'capLetter':
 		None
-	if symbol == 'letter':
+	if symbol == 'lowerCaseLetter':
 		None
 	if symbol == 'digit':
 		None
+	if symbol == 'lowerLetter':
+		None
+	if symbol == 'capitalLetter':
+		None
+	if symbol == 'number':
+		return NUMBER
+	if symbol == 'ws':
+		None
 	if symbol == 'id':
 		return ID
+	if symbol == '':
+		None
 	if symbol == '+':
 		return PLUS
 	if symbol == '*':
@@ -53,6 +63,16 @@ def tokenReturns(symbol):
 		return LPAREN
 	if symbol == ')':
 		return RPAREN
+	if symbol == '<':
+		return GREATER
+	if symbol == '>':
+		return GREATER
+	if symbol == '=':
+		return EQUALS
+	if symbol == ';':
+		return SEMICOLON
+	if symbol == 'if':
+		return IF
 
 	return symbol
 
