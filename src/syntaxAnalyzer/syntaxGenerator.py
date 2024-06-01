@@ -635,14 +635,13 @@ class syntaxGenerator():
         allStackSymbols.append(stackSymbols.copy())
         allStackInput.append(stackInput.copy())
 
-        # Se agrega el primer simbolo
-        first_Action = self.actionChecker(actions, stackStates[-1], stackInput[0], fnState)
+        fistAct = self.actionChecker(actions, stackStates[-1], stackInput[0], fnState)
         stackSymbols.append(stackInput.pop(0))
-        if first_Action[0] == 'S':
-            Actions.append(f'Shift to I{first_Action[1:]}')
-            stackStates.append(f'I{first_Action[1:]}')
-        elif first_Action[0] == 'r':
-            getProd = self.dicProds[int(first_Action[1:])]
+        if fistAct[0] == 'S':
+            Actions.append(f'Shift to I{fistAct[1:]}')
+            stackStates.append(f'I{fistAct[1:]}')
+        elif fistAct[0] == 'r':
+            getProd = self.dicProds[int(fistAct[1:])]
             Actions.append(f'Reduced by {getProd}')
             for x in range(len(getProd.rs)):
                 stackSymbols.pop(0)
@@ -660,7 +659,7 @@ class syntaxGenerator():
                 
             elif new_Action[0] == 'r':
                 getProd = self.dicProds[int(new_Action[1:])]
-                Actions.append(f'Reduce by {getProd}')
+                Actions.append(f'REDUCED by {getProd}')
                 
                 for x in range(len(getProd.rs)):
                     stackSymbols.pop(-1)
@@ -671,8 +670,8 @@ class syntaxGenerator():
                     if(goto[0] == stackStates[-1] and goto[1] == stackSymbols[-1]):
                         stackStates.append(goto[2])
                         break
-            elif new_Action == 'Accept':
-                Actions.append('Accept')
+            elif new_Action == 'accept':
+                Actions.append('accept')
                 result = "✔accepted"
                 break
             else:
@@ -706,17 +705,15 @@ class syntaxGenerator():
         return result
 
     def actionChecker(self, actions, state, symbol, fnState):
-        # Se revisan shifts
         for shift in actions[0]:
             if(shift[0] == state and shift[1] == symbol):
                 return shift[2]
             
-        # Se revisan reduces
         for reduce in actions[1]:
             if(reduce[0] == state and symbol in reduce[1]):
                 return reduce[2]
             
         if state == fnState and symbol == "$":
-            return "Accept"
+            return "accept"
         
         return f"!SyntaxError in [{state}] with {symbol}."

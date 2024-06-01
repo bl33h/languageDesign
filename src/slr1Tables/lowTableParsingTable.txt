@@ -20,5 +20,5 @@
 |   6   |   ['I0', 'I2', 'I3', 'I4',  |     ['$', 'expression',     |            ['$']            |    Reduce by expression →   |
 |       |         'I5', 'I6']         |    'WHITESPACE', 'PLUS',    |                             |  expression WHITESPACE PLUS |
 |       |                             |     'WHITESPACE', 'ID']     |                             |        WHITESPACE ID        |
-|   7   |         ['I0', 'I2']        |     ['$', 'expression']     |            ['$']            |            Accept           |
+|   7   |         ['I0', 'I2']        |     ['$', 'expression']     |            ['$']            |            accept           |
 +-------+-----------------------------+-----------------------------+-----------------------------+-----------------------------+
