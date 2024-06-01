@@ -477,7 +477,6 @@ class syntaxGenerator():
                             if state.rs[i].dot and state.rs[i+1].label == symbol:
                                 for gotoM in gotosM:
                                     if(gotoM[0] == nState and gotoM[1] == symbol):
-                                        # print((nState, symbol, 'S'+gotoM[2][1:]))
                                         shiftAct.append((nState, symbol, 'S'+gotoM[2][1:]))
                                         break
         
@@ -492,7 +491,7 @@ class syntaxGenerator():
                     prodVeri = actualProductions(state.ls, state.rs[:-1])
                     if(nState != fnState):
                         if not printed:
-                            print("\n------ SLR Table & Simulation ------")
+                            print("\n------------ SLR Table & Simulation ------------")
                             printed = True
                         for x,y in self.dicProds.items():
                             if (y.ls.label == prodVeri.ls.label):
@@ -600,7 +599,7 @@ class syntaxGenerator():
             if tok in undefined or tok not in alltokens:
                 continue
             else:
-                print(f"!The {tok} is IGNORED")   
+                print(f"!The {tok} token is IGNORED")   
             
         self.tokensVeri = list(set(alltokens) - undefined)
         return linesWithoutTokens
@@ -637,11 +636,11 @@ class syntaxGenerator():
         fistAct = self.actionChecker(actions, stackStates[-1], stackInput[0], fnState)
         stackSymbols.append(stackInput.pop(0))
         if fistAct[0] == 'S':
-            actionsArray.append(f'SHIFT to S{fistAct[1:]}')
+            actionsArray.append(f'[SHIFT] to I{fistAct[1:]}')
             stackStates.append(f'I{fistAct[1:]}')
         elif fistAct[0] == 'r':
             getProd = self.dicProds[int(fistAct[1:])]
-            actionsArray.append(f'REDUCED by {getProd}')
+            actionsArray.append(f'[REDUCED] by {getProd}')
             for x in range(len(getProd.rs)):
                 stackSymbols.pop(0)
             stackSymbols.append(getProd.ls.label)
@@ -653,12 +652,12 @@ class syntaxGenerator():
             newAction = self.actionChecker(actions, stackStates[-1], stackInput[0], fnState)
             if newAction[0] == 'S':
                 stackSymbols.append(stackInput.pop(0))
-                actionsArray.append(f'SHIFT to S{newAction[1:]}')
+                actionsArray.append(f'[SHIFT] to I{newAction[1:]}')
                 stackStates.append(f'I{newAction[1:]}')
                 
             elif newAction[0] == 'r':
                 getProd = self.dicProds[int(newAction[1:])]
-                actionsArray.append(f'REDUCED by {getProd}')
+                actionsArray.append(f'[REDUCED] by {getProd}')
                 
                 for x in range(len(getProd.rs)):
                     stackSymbols.pop(-1)
@@ -677,7 +676,7 @@ class syntaxGenerator():
                 actionsArray.append(newAction)
                 break
             
-        if any([len(actionsArray) > len(x) for x in [allStacksStates, allStackInput, allStackSymbols]]) or any([len(Actions) < len(x) for x in [allStacksStates, allStackInput, allStackSymbols]]):
+        if any([len(actionsArray) > len(x) for x in [allStacksStates, allStackInput, allStackSymbols]]) or any([len(actionsArray) < len(x) for x in [allStacksStates, allStackInput, allStackSymbols]]):
             print()
             for x in actionsArray:
                 print("-",x[:-1]+allStackInput[0][0])
