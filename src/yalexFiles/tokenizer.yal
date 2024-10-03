@@ -1,0 +1,37 @@
+(* this is a lexical analyzer *)
+
+let delim = [' ''\n']
+let capLetter = ['A'-'Z']
+let lowerCaseLetter = ['a'-'z']
+let digit = ['0'-'9']
+let lowerLetter = lowerCaseLetter*
+let capitalLetter = capLetter*
+let number = digit+
+let ws = delim+
+let id = (lowerCaseLetter | capLetter)+ (lowerCaseLetter | capLetter | digit)*
+
+rule tokens =
+  | ws            { /* ignore whitespace */ }
+  | '+'           { return PLUS }
+  | '*'           { return TIMES }
+  | '.'           { return DOT }
+  | '-'           { return MINUS }
+  | '%'           { return PERCENTAGE }
+  | '_'           { return CHARACTER }
+  | '$'           { return DOLLAR }
+  | '/'           { return DIVIDE }
+  | "%token"      { return TOKEN }
+  | lowerLetter   { return WORD }
+  | capitalLetter { return WORD }
+  | number        { return NUMBER }
+  | ":"           { return TWOPOINTS }
+  | ";"           { return FINISHDECLARATION }
+  | '('           { return LPAREN }
+  | ')'           { return RPAREN }
+  | '='           { return EQUALS }
+  | '&'           { return AND }
+  | '<'           { return LESS }
+  | '>'           { return GREATER }
+  | id            { return ID }
+
+(* any trailer *)

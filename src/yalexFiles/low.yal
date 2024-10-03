@@ -1,0 +1,11 @@
+(* this is a lexical analyzer *)
+
+let letter = ['A'-'C']
+let digit = ['0']
+let id = (letter|digit)
+
+rule tokens = 
+    id        { return ID }
+  | '+'     { return PLUS }            
+
+(* any trailer *)

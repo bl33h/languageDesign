@@ -1,0 +1,22 @@
+(* this is a lexical analyzer *)
+
+let delim = [' ''\t''\n']
+let ws = delim+
+let letter = ['a'-'d']
+let str = (_)*
+let digit = ['0'-'2']
+let digits = digit+
+let id = letter(str)*
+let number = digits(['+''-'])
+
+rule tokens = 
+    ws
+  | id        { return ID }
+  | number    { return NUMBER }
+  | ';'       { return SEMICOLON }
+  | ":="      { return ASSIGNOP }
+  | '/'       { return DIV }
+  | '('       { return LPAREN }
+  | ')'       { return RPAREN }
+
+(* any trailer *)

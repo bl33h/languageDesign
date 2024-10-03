@@ -1,0 +1,54 @@
+/* high table grammar config */
+/* following the SLR grammar*/
+/* E → E + T | T */
+/* T → T * F | F */
+/* F → ( E ) | id */
+
+%token ID
+%token PLUS
+%token TIMES
+%token LPAREN RPAREN
+%token IF
+%token GREATER
+%token EQUALS
+%token NUMBER
+%token SEMICOLON
+
+%%
+statements:
+    statement
+  | statements statement
+;
+
+statement:
+    assignment SEMICOLON
+  | if_statement
+;
+
+assignment:
+    ID EQUALS expression
+;
+
+expression:
+    expression PLUS term
+  | term
+;
+
+term:
+    term TIMES factor
+  | factor
+;
+
+factor:
+    LPAREN expression RPAREN
+  | ID
+  | NUMBER
+;
+
+if_statement:
+    IF LPAREN condition RPAREN assignment SEMICOLON
+;
+
+condition:
+    expression GREATER expression
+;

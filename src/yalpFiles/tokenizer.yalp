@@ -1,0 +1,29 @@
+%token ID NUMBER PLUS MINUS TIMES DIVIDE LPAREN RPAREN EQUALS LESS GREATER
+
+%%
+
+expression:
+    expression PLUS term                 /* E -> E + T */
+    | expression MINUS term              /* E -> E - T */
+    | term                               /* E -> T */
+    ;
+
+term:
+    term TIMES factor                    /* T -> T * F */
+    | term DIVIDE factor                 /* T -> T / F */
+    | factor                             /* T -> F */
+    ;
+
+factor:
+    LPAREN expression RPAREN             /* F -> ( E ) */
+    | ID                                 /* F -> ID */
+    | NUMBER                             /* F -> NUMBER */
+    ;
+
+comparison:
+    expression EQUALS expression         /* C -> E == E */
+    | expression LESS expression         /* C -> E < E */
+    | expression GREATER expression      /* C -> E > E */
+    ;
+
+%%

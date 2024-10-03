@@ -1,0 +1,26 @@
+let delim = [' ''\n']
+let capLetter = ['A'-'Z']
+let lowerCaseLetter = ['a'-'z']
+let digit = ['0'-'9']
+let lowerLetter = lowerCaseLetter*
+let capitalLetter = capLetter*
+let number = digit+
+let ws = delim+
+let id = (lowerCaseLetter | capLetter)+ (lowerCaseLetter | capLetter | digit)*
+
+rule tokens =
+  | ws            
+  | '+'           { return PLUS }
+  | '*'           { return TIMES }
+  | '('           { return LPAREN }
+  | ')'           { return RPAREN }
+  | '<'           { return GREATER }
+  | '>'           { return GREATER }
+  | '='           { return EQUALS }
+  | ';'           { return SEMICOLON }
+  | "if"          { return IF }
+  | number        { return NUMBER }
+  | id            { return ID }
+
+
+(* any trailer *)

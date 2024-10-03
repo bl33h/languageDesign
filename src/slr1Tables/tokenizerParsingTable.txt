@@ -1,0 +1,30 @@
++-----------------------------------------------------------------------------------------------------------------+
+|                                             SLR1 Table [Simulation]                                             |
++-------+--------------------+------------------------+-----------------------------+-----------------------------+
+| State |       Stack        |        Symbols         |            Input            |           Actions           |
++-------+--------------------+------------------------+-----------------------------+-----------------------------+
+|   0   |       ['I0']       |         ['$']          |  ['ID', 'TIMES', 'NUMBER',  |        [SHIFT] to I1        |
+|       |                    |                        |     'DIVIDE', 'LPAREN',     |                             |
+|       |                    |                        |   'NUMBER', 'MINUS', 'ID',  |                             |
+|       |                    |                        | 'RPAREN', 'PLUS', 'NUMBER', |                             |
+|       |                    |                        |             '$']            |                             |
+|   1   |    ['I0', 'I1']    |      ['$', 'ID']       |     ['TIMES', 'NUMBER',     |   [REDUCED] by factor → ID  |
+|       |                    |                        |     'DIVIDE', 'LPAREN',     |                             |
+|       |                    |                        |   'NUMBER', 'MINUS', 'ID',  |                             |
+|       |                    |                        | 'RPAREN', 'PLUS', 'NUMBER', |                             |
+|       |                    |                        |             '$']            |                             |
+|   2   |    ['I0', 'I4']    |    ['$', 'factor']     |     ['TIMES', 'NUMBER',     |  [REDUCED] by term → factor |
+|       |                    |                        |     'DIVIDE', 'LPAREN',     |                             |
+|       |                    |                        |   'NUMBER', 'MINUS', 'ID',  |                             |
+|       |                    |                        | 'RPAREN', 'PLUS', 'NUMBER', |                             |
+|       |                    |                        |             '$']            |                             |
+|   3   |    ['I0', 'I5']    |     ['$', 'term']      |     ['TIMES', 'NUMBER',     |        [SHIFT] to I8        |
+|       |                    |                        |     'DIVIDE', 'LPAREN',     |                             |
+|       |                    |                        |   'NUMBER', 'MINUS', 'ID',  |                             |
+|       |                    |                        | 'RPAREN', 'PLUS', 'NUMBER', |                             |
+|       |                    |                        |             '$']            |                             |
+|   4   | ['I0', 'I5', 'I8'] | ['$', 'term', 'TIMES'] |     ['NUMBER', 'DIVIDE',    | !Error in [I8] with NUMBER. |
+|       |                    |                        |     'LPAREN', 'NUMBER',     |                             |
+|       |                    |                        |   'MINUS', 'ID', 'RPAREN',  |                             |
+|       |                    |                        |    'PLUS', 'NUMBER', '$']   |                             |
++-------+--------------------+------------------------+-----------------------------+-----------------------------+

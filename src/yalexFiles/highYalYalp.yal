@@ -1,0 +1,22 @@
+(* this is a syntactic analyzer *)
+
+let delim = ["\s\t\n"]
+let ws = delim+
+let letter = ['A'-'Z''a'-'z']
+let digit = ['0'-'9']
+let digits = digit+
+let id = letter(letter|digit)*
+let number = digits(.digits)?('E'['+''-']?digits)?
+
+rule tokens = 
+    ws        { return WHITESPACE }
+  | id        { return ID }
+  | number    { return NUMBER }
+  | '+'       { return PLUS }
+  | '-'       { return MINUS }
+  | '*'       { return TIMES }
+  | '/'       { return DIV }
+  | '('       { return LPAREN }
+  | ')'       { return RPAREN }       
+
+  (* any trailer *)

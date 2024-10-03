@@ -1,0 +1,13 @@
+/* low grammar config */
+/* following the SLR grammar*/
+/* E -> E + id | id */
+
+%token ID
+%token PLUS
+
+%%
+
+expression:
+    expression PLUS ID
+  | ID
+;
